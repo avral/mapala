@@ -1,0 +1,6 @@
+{% if True %}
+{%load mptt_tags %}{% full_tree_for_model pages.mastertag as nodes %}{% for genre,structure in nodes|tree_info %}{% if structure.new_level %} [{ {% else %} },{ {% endif %}
+"label": "{{ genre.name }}","value": "{{ genre.id}}","description": ""
+{% if not genre.is_leaf_node %}, "children": {% endif %}
+{% for level in structure.closed_levels %}}]{% endfor %}{% endfor %}
+{% endif %}

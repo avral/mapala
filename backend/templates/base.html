@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Mapala.net</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="/static/normalize.css">
+    <link href="https://fonts.googleapis.com/css?family=PT+Sans:400,700" rel="stylesheet">
+    <link rel="icon" type="image/png" href="../static/favicon.ico" />
+    <!-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> -->
+    <style>
+        body {
+            background: #4D7090;
+        }
+        #app {
+            position: relative;
+            top: 50%;
+            height: 100vh;
+            background: url('../static/mapala.gif') no-repeat center center;
+            background-size: 30%; 
+        }
+    </style>
+</head>
+    <body>
+        <div id="app">
+            <router-view></router-view>
+        </div>
+
+        <script src="/static/build.js"></script>
+        <!-- <!— CarrotQuest BEGIN —> -->
+        <script type="text/javascript">
+            (function(){
+              function Build(name, args){return function(){window.carrotquestasync.push(name, arguments);} }
+              if (typeof carrotquest === 'undefined') {
+                var s = document.createElement('script'); s.type = 'text/javascript'; s.async = true;
+                s.src = '//cdn.carrotquest.io/api.min.js';
+                var x = document.getElementsByTagName('head')[0]; x.appendChild(s);
+                window.carrotquest = {}; window.carrotquestasync = []; carrotquest.settings = {};
+                var m = ['connect', 'track', 'identify', 'auth', 'open', 'onReady', 'addCallback', 'removeCallback', 'trackMessageInteraction'];
+                for (var i = 0; i < m.length; i++) carrotquest[m[i]] = Build(m[i]);
+              }
+            })();
+          carrotquest.connect('10040-2d686a923f91bb2d1be7c7118d');
+        </script>
+        <!-- <!— CarrotQuest END —> -->
+        <!-- Yandex.Metrika counter -->
+        <script type="text/javascript" >
+            (function (d, w, c) {
+                (w[c] = w[c] || []).push(function() {
+                    try {
+                        w.yaCounter45354465 = new Ya.Metrika({
+                            id:45354465,
+                            clickmap:true,
+                            trackLinks:true,
+                            accurateTrackBounce:true,
+                            webvisor:true
+                        });
+                    } catch(e) { }
+                });
+
+                var n = d.getElementsByTagName("script")[0],
+                    s = d.createElement("script"),
+                    f = function () { n.parentNode.insertBefore(s, n); };
+                s.type = "text/javascript";
+                s.async = true;
+                s.src = "https://mc.yandex.ru/metrika/watch.js";
+
+                if (w.opera == "[object Opera]") {
+                    d.addEventListener("DOMContentLoaded", f, false);
+                } else { f(); }
+            })(document, window, "yandex_metrika_callbacks");
+        </script>
+        <noscript><div><img src="https://mc.yandex.ru/watch/45354465" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+        <!-- /Yandex.Metrika counter -->
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+          ga('create', 'UA-102840516-1', 'auto');
+          ga('send', 'pageview');
+
+        </script>
+    </body>
+    <!-- Разработка и поддержка: @avral -->
+</html>
