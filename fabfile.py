@@ -7,7 +7,6 @@ from fabric.context_managers import shell_env
 PROJECT_NAME = 'mapala'
 PROJECT_ROOT = '/var/www/%s' % PROJECT_NAME
 VENV_DIR = os.path.join(PROJECT_ROOT, '.env')
-REPO = 'git@gitlab.com:avral/%s.git' % PROJECT_NAME
 
 env.hosts = []
 
