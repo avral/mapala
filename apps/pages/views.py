@@ -196,7 +196,10 @@ def post_image(request):
     """
     Compress and save image
     """
-    file = request.FILES['file']
+    file = request.FILES.get('file')
+
+    if file is None:
+        return Response('No data for upload', status.HTTP_400_BAD_REQUEST)
 
     content_type = magic.from_buffer(file.read(), mime=True)
     file.seek(0)
