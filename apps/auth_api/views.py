@@ -57,8 +57,13 @@ class UserViewSet(viewsets.ModelViewSet):
         wif = request.data.get('wif')
 
         try:
-            rpc = BaseUpdater('golos').rpc
-            username = rpc.wallet.getAccountFromPrivateKey(wif)
+            # HACK Пока приходится чекать в базе тк. нет фикса от голоса
+            # rpc = BaseUpdater('golos').rpc
+            # username = rpc.wallet.getAccountFromPrivateKey(wif)
+
+            db = BlockChainDB('golos')
+            pubkey = PrivateKey(wif).pubkey
+            username = db.get_user_by_posting_key(pubkey).lower()
         except ValueError:
             raise ValidationError('Невалидный постинг ключ')
 
