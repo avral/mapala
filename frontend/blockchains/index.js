@@ -145,6 +145,7 @@ export default {
       for (let bc of res.body) {
         if (bc.activated) {
           bc.wif = this.getPostingKey(bc.name)
+          bc.blockchain_username = bc.blockchain_username.toLowerCase()
 
           try {
             PrivateKey.fromWif(bc.wif)
