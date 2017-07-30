@@ -2,6 +2,7 @@ import os
 import uuid
 import magic
 import logging
+import pprint
 from pistonapi.exceptions import RPCError
 from piston.steem import Steem
 
@@ -99,7 +100,9 @@ class PageViewSet(MultiSerializerViewSetMixin, viewsets.ModelViewSet):
         try:
             r = rpc.broadcast(tx)
         except RPCError as e:
-            logger.exception('Ошибка постинга в блокчейн')
+            logger.warning(
+                '%s: %s' % (e, pprint.pformat(tx['operations'][0][1]))
+            )
             return Response(str(e), status.HTTP_400_BAD_REQUEST)
 
         operation = r['operations'][0][1]
@@ -150,7 +153,9 @@ class CommentViewSet(viewsets.ModelViewSet):
         try:
             r = rpc.broadcast(tx)
         except RPCError as e:
-            logger.exception('Ошибка комментинга в блокчейн')
+            logger.warning(
+                '%s: %s' % (e, pprint.pformat(tx['operations'][0][1]))
+            )
             return Response(str(e), status.HTTP_400_BAD_REQUEST)
 
         operation = r['operations'][0][1]
