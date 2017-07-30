@@ -100,9 +100,11 @@ class PageViewSet(MultiSerializerViewSetMixin, viewsets.ModelViewSet):
         try:
             r = rpc.broadcast(tx)
         except RPCError as e:
-            logger.warning(
-                '%s: %s' % (e, pprint.pformat(tx['operations'][0][1]))
-            )
+            operation = tx['operations'][0][1]
+            operation['body'] = operation['body'][:100]
+
+            logger.warning('%s: %s' % (e, pprint.pformat(operation)))
+
             return Response(str(e), status.HTTP_400_BAD_REQUEST)
 
         operation = r['operations'][0][1]
