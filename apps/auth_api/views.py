@@ -179,11 +179,11 @@ class UserBlockChainViewSet(viewsets.ModelViewSet):
         existing_user_bc = self.queryset.filter(username=username).first()
 
         if existing_user_bc is not None:
-            username = existing_user_bc.user.username
+            user = existing_user_bc.user
 
-            if username != request.user.username:
-                return Response('user with this key exists: %s' % username,
-                                status.HTTP_400_BAD_REQUEST)
+            if user != request.user:
+                return Response('user with this key exists: %s'
+                                % user.username, status.HTTP_400_BAD_REQUEST)
 
         ins, _ = self.queryset.update_or_create(
             user=request.user,
