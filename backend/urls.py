@@ -48,7 +48,7 @@ if settings.DEBUG:
 
 def ssr(request):
     """ HACK Рендерим страничку для робота """
-    user_agent = request.META.get('HTTP_USER_AGENT', None)
+    user_agent = request.META.get('HTTP_USER_AGENT', '')
 
     if re.search(PRERENDER_UA_REGEX, user_agent, re.I) and user_agent:
         url = PRERENDER_PROXY + request.build_absolute_uri()
