@@ -64,7 +64,7 @@ class UserViewSet(viewsets.ModelViewSet):
             db = BlockChainDB('golos')
             pubkey = PrivateKey(wif).pubkey
             username = db.get_user_by_posting_key(pubkey).lower()
-        except ValueError:
+        except (ValueError, AssertionError, AttributeError):
             raise ValidationError('Невалидный постинг ключ')
 
         try:
