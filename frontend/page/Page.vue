@@ -166,6 +166,15 @@
               { property: 'og:image', content: res.body.meta.image[0] },
           ]
 
+          if (res.body.title == '#28 неделя. Отчёт pre-ICO MapalaNet') {
+              this.meta = [
+                  { property: 'og:title', content: res.body.title },
+                  { property: 'og:site_name', content: 'mapala.net' },
+                  { property: 'og:description', content: 'На прошедшей неделе сборы pre-ICO Mapala немного выросли. И по-прежнему лидирующие позиции в инвестировании занимает @aleks, выкупивший более 60% недельной эмиссии токенов. ' },
+                  { property: 'og:image', content: res.body.meta.image[0] },
+              ]
+          }
+
           // TODO почему функция лежит в Vue.options ?
           this.mark_view = Vue.options.filters.markdown(this.page.body)
         })
