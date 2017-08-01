@@ -72,11 +72,13 @@
     },
     metaInfo () {
       return {
-        meta: this.meta
+          title: this.title,
+          meta: this.meta
       }
     },
     data () {
       return {
+        title: 'mapala',
         navigate: {
           next: {},
           prev: {}
@@ -155,7 +157,8 @@
           this.page = res.body
           this.make_navigate()
           // this.scrollTop()
-          document.title = res.body.title
+//          document.title = res.body.title
+          this.title = res.body.title
           this.meta = [
               { property: 'og:title', content: res.body.title },
               { property: 'og:site_name', content: 'mapala.net' },
@@ -426,7 +429,7 @@
   .post_block .c_text img{
     /*max-height: 492px;*/
     max-width: 100%;
-    text-align: center;
+      -align: center;
     margin: 24px auto;
     width: auto;
   }
