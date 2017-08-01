@@ -424,7 +424,7 @@
   }
 
   .post_block .c_text img{
-    max-height: 492px;
+    /*max-height: 492px;*/
     max-width: 100%;
     text-align: center;
     margin: 24px auto;
