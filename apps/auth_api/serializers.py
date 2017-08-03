@@ -8,7 +8,7 @@ from apps.auth_api.models import User, BlockChain, UserBlockChain
 
 
 class UserRegiserBaseSerializer(serializers.Serializer):
-    username = serializers.CharField()
+    username = serializers.RegexField('^[\d\w.-]+$')
     password = serializers.CharField()
 
     def validate_username(self, data):
