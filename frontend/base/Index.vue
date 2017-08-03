@@ -78,6 +78,11 @@ import BlogMain from '../blog/BlogMain.vue'
 import blockchains from '../blockchains'
 
 export default {
+    metaInfo () {
+        return {
+            title: 'mapala.net'
+        }
+    },
     data() {
         return {
             auth: auth,

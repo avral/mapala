@@ -72,11 +72,13 @@
     },
     metaInfo () {
       return {
-        meta: this.meta
+          title: this.title,
+          meta: this.meta
       }
     },
     data () {
       return {
+        title: 'mapala',
         navigate: {
           next: {},
           prev: {}
@@ -155,13 +157,23 @@
           this.page = res.body
           this.make_navigate()
           // this.scrollTop()
-          document.title = res.body.title
+//          document.title = res.body.title
+          this.title = res.body.title
           this.meta = [
               { property: 'og:title', content: res.body.title },
               { property: 'og:site_name', content: 'mapala.net' },
               { property: 'og:description', content: res.body.body .substring(0,70) },
               { property: 'og:image', content: res.body.meta.image[0] },
           ]
+
+          if (res.body.title == '#28 неделя. Отчёт pre-ICO MapalaNet') {
+              this.meta = [
+                  { property: 'og:title', content: res.body.title },
+                  { property: 'og:site_name', content: 'mapala.net' },
+                  { property: 'og:description', content: 'На прошедшей неделе сборы pre-ICO Mapala немного выросли. И по-прежнему лидирующие позиции в инвестировании занимает @aleks, выкупивший более 60% недельной эмиссии токенов. ' },
+                  { property: 'og:image', content: res.body.meta.image[0] },
+              ]
+          }
 
           // TODO почему функция лежит в Vue.options ?
           this.mark_view = Vue.options.filters.markdown(this.page.body)
@@ -424,9 +436,9 @@
   }
 
   .post_block .c_text img{
-    max-height: 492px;
+    /*max-height: 492px;*/
     max-width: 100%;
-    text-align: center;
+      -align: center;
     margin: 24px auto;
     width: auto;
   }
