@@ -19,9 +19,9 @@ export default [
     },
     {
         path: '/ico',
-        // component: Ico,
-        component: IcoBlock,
-        /*children: [
+        component: Ico,
+        // component: IcoBlock,
+        children: [
             {
                 path: '',
                 name: 'ico',
@@ -37,7 +37,7 @@ export default [
                 name: 'investors',
                 component: InvestIco
             },
-        ]*/
+        ]
     },
     {
         path: '/:user?',

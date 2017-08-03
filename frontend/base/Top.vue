@@ -35,12 +35,9 @@
               Настройки
             </router-link>
 
-
-            <!-- Закрыто до возобновления работы шлюза
             <router-link class="m_item" :to="'/ico/'">
               ICO
             </router-link>
-            -->
 
             <!-- <a class="m_item" href="">FAQ</a> -->
 
