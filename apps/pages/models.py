@@ -2,7 +2,7 @@ from django.contrib.gis.db import models
 from django.contrib.postgres.fields import JSONField
 from mptt.models import MPTTModel, TreeForeignKey
 
-from backend.settings import LOCALE
+from backend import settings
 from apps.auth_api.models import User, BlockChain, UserBlockChain
 
 STATUS_CHOICES = (
@@ -35,7 +35,9 @@ class Image(models.Model):
 
 class PageOnBlockchainManager(models.GeoManager):
     def get_queryset(self):
-        return super().get_queryset().filter(blockchain__locale=LOCALE)
+        return super().get_queryset().filter(
+            blockchain__locale=settings.LOCALE
+        )
 
 
 class Page(models.Model):

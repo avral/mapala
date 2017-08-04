@@ -28,8 +28,8 @@ router.register('pages', page_views.PageViewSet, base_name='pages')
 router.register('users', auth_views.UserViewSet)
 router.register('comments', page_views.CommentViewSet)
 router.register('blockchains', auth_views.BlockChainViewSet)
-router.register('user-blockchains', auth_views.UserBlockChainViewSet)
-router.register('markers', page_views.MarkerViewSet)
+router.register('user-blockchains', auth_views.UserBlockChainViewSet, base_name='user_blockchains')
+router.register('markers', page_views.MarkerViewSet, base_name='markers')
 
 
 urlpatterns = []

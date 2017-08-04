@@ -55,7 +55,6 @@ class PageFilter(filters.FilterSet):
 
 
 class PageViewSet(MultiSerializerViewSetMixin, viewsets.ModelViewSet):
-    queryset = Page.on_bc.all().order_by('-created_at')
     filter_class = PageFilter
     filter_fields = 'author__username', 'has_point', 'created_at'
     lookup_value_regex = '[A-Za-z0-9.@_*-]+'
@@ -78,7 +77,7 @@ class PageViewSet(MultiSerializerViewSetMixin, viewsets.ModelViewSet):
         )
 
     def get_queryset(self):
-        qs = self.queryset
+        qs = Page.on_bc.order_by('-created_at')
 
         # HACK Так как для JSONField нет поддержки фильтрации
         # реализуем ее сдесть, для тегов
@@ -239,13 +238,12 @@ class MarkerViewSetPagination(PageNumberPagination):
 
 
 class MarkerViewSet(viewsets.ModelViewSet):
-    queryset = Page.on_bc.filter(has_point=True)
     serializer_class = MarkerSerializer
     filter_fields = 'author__username',
     pagination_class = MarkerViewSetPagination
 
     def get_queryset(self):
-        qs = self.queryset
+        qs = Page.on_bc.filter(has_point=True).order_by('id')
 
         bbox = self.request.GET.get('bbox')
 

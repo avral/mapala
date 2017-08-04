@@ -4,10 +4,8 @@ import pyodbc
 from collections import namedtuple
 
 
-from backend.settings import (
-    BLOCKCHAIN_DATABASES,
-    APP_FETCH_FROM
-)
+from backend import settings
+from apps.auth_api.models import BlockChain
 
 
 Post = namedtuple('Post', [
@@ -41,10 +39,10 @@ class BlockChainDB:
     # DOCS https://docs.microsoft.com/en-us/azure/sql-database/sql-database-connect-query-python
     params_tpl = 'DRIVER={};SERVER={};PORT=1443;DATABASE={};UID={};PWD={}'
 
-    def __init__(self, blockchain):
-        self.blockchain = blockchain
+    def __init__(self, locale=None):
+        self.blockchain = BlockChain.current().name
 
-        db_params = BLOCKCHAIN_DATABASES[blockchain]
+        db_params = settings.BLOCKCHAIN_DATABASES[self.blockchain]
         self.conn = pyodbc.connect(
             self.params_tpl.format(
                 db_params['driver'],
@@ -102,7 +100,7 @@ class BlockChainDB:
             AND permlink <> 'test'
         ORDER BY
             created ASC
-        """ % APP_FETCH_FROM
+        """ % settings.APP_FETCH_FROM
         cursor = self.conn.cursor()
         cursor.execute(query)
 
@@ -152,7 +150,7 @@ class BlockChainDB:
                     JSON_VALUE(json_metadata, '$.location.name') <> ''
                 )
             ) AND permlink <> 'test'
-        """ % APP_FETCH_FROM
+        """ % settings.APP_FETCH_FROM
 
         if last_update is not None:
             posts_sql += " AND created > '%s'" % last_update

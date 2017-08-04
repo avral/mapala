@@ -19,7 +19,7 @@ from rest_framework.decorators import (
     api_view
 )
 
-from backend.settings import BITSHARES_PASS, FRONTEND_APP_NAME
+from backend import settings
 from apps.common.utils import is_eng
 from apps.blockchains.sync import BaseUpdater
 from apps.blockchains.data_bases import BlockChainDB
@@ -61,7 +61,7 @@ class UserViewSet(viewsets.ModelViewSet):
             # rpc = BaseUpdater('golos').rpc
             # username = rpc.wallet.getAccountFromPrivateKey(wif)
 
-            db = BlockChainDB('golos')
+            db = BlockChainDB()
             pubkey = PrivateKey(wif).pubkey
             username = db.get_user_by_posting_key(pubkey).lower()
         except (ValueError, AssertionError, AttributeError):
@@ -155,9 +155,13 @@ class BlockChainViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class UserBlockChainViewSet(viewsets.ModelViewSet):
-    queryset = UserBlockChain.on_bc.all()
     serializer_class = UserBlockChainSerializer
     permission_classes = IsOwnerBlockchainOrReadOnly,
+
+    def get_queryset(self, request):
+        qs = UserBlockChain.on_bc.all()
+
+        return qs
 
     def create(self, request):
         wif = request.data.get('wif', '<non_valid>')
@@ -170,22 +174,22 @@ class UserBlockChainViewSet(viewsets.ModelViewSet):
             #   username = rpc.wallet.getAccountFromPrivateKey(wif).lower()
             # except (ValueError, AssertionError, AttributeError):
 
-            db = BlockChainDB('golos')
+            db = BlockChainDB()
             pubkey = PrivateKey(wif).pubkey
             username = db.get_user_by_posting_key(pubkey).lower()
         except (ValueError, AssertionError, AttributeError):
-            raise ValidationError('Невалидный постинг ключ')
+            raise ValidationError('Invalid posting key')
 
-        existing_user_bc = self.queryset.filter(username=username).first()
+        user_bc = UserBlockChain.on_bc.filter(username=username).first()
 
-        if existing_user_bc is not None:
-            user = existing_user_bc.user
+        if user_bc is not None:
+            user = user_bc.user
 
             if user != request.user:
                 return Response('user with this key exists: %s'
                                 % user.username, status.HTTP_400_BAD_REQUEST)
 
-        ins, _ = self.queryset.update_or_create(
+        ins, _ = UserBlockChain.on_bc.update_or_create(
             user=request.user,
             blockchain=blockchain,
             defaults={'username': username}
@@ -197,6 +201,9 @@ class UserBlockChainViewSet(viewsets.ModelViewSet):
 @api_view(['POST'])
 @permission_classes((AllowAny,))
 def register(request):
+    if settings.LOCALE == 'en':
+        raise ValueError('Registration for existing steemit accounts only')
+
     slz = UserRegiserSerializer(data=request.data)
 
     if slz.is_valid():
@@ -205,7 +212,7 @@ def register(request):
 
         # Регистрируем юзера в блокчейне, пока GOLOS
         api = Api('http://144.217.94.119:8093')
-        api('unlock', BITSHARES_PASS)
+        api('unlock', settings.BITSHARES_PASS)
 
         if api.user_exists(bc_username):
             raise ValidationError('Username exist in blockchain')
@@ -219,7 +226,7 @@ def register(request):
             'create_account_with_keys',
             'mapala',
             bc_username,
-            json.dumps({'app': FRONTEND_APP_NAME}),
+            json.dumps({'app': settings.FRONTEND_APP_NAME}),
             keys['owner'][0],
             keys['active'][0],
             keys['posting'][0],
@@ -263,7 +270,7 @@ def register_existing_user(request):
     slz = ExistUserRegiserSerializer(data=request.data)
 
     if slz.is_valid():
-        db = BlockChainDB('golos')
+        db = BlockChainDB()
 
         wif = slz.validated_data['wif']
         mapala_username = slz.validated_data['username']
@@ -297,8 +304,7 @@ def register_existing_user(request):
             UserBlockChain.objects.create(
                 username=username,
                 user=user,
-                # FIXME Реагет только под голос
-                blockchain=BlockChain.objects.get(name='golos')
+                blockchain=BlockChain.current()
             )
 
         # Хук для создания юзера на альфе
