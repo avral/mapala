@@ -4,7 +4,7 @@ from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.staticfiles.templatetags.staticfiles import static
 
-from backend.settings import LOCALE
+from backend import settings
 
 LOCALE_CHOICES = (
     ('ru', 'Русский'),
@@ -96,10 +96,17 @@ class BlockChain(models.Model):
     def __str__(self):
         return self.name
 
+    @classmethod
+    def current(cls):
+        """ Return current blockchain by locale """
+        return cls.objects.get(locale=settings.LOCALE)
+
 
 class UserBlockChainOnBlockchainManager(models.Manager):
     def get_queryset(self):
-        return super().get_queryset().filter(blockchain__locale=LOCALE)
+        return super().get_queryset().filter(
+            blockchain__locale=settings.LOCALE
+        )
 
 
 class UserBlockChain(models.Model):
