@@ -3,6 +3,7 @@ import logging
 from django.core.management.base import BaseCommand
 
 from apps.blockchains.sync import BaseUpdater
+from backend import settings
 
 logger = logging.getLogger('mapala.fetch_all')
 
@@ -12,7 +13,12 @@ class Command(BaseCommand):
         parser.add_argument('bc', nargs='?', type=str)
 
     def handle(self, *args, **options):
-        updater = BaseUpdater(options['bc'], db_connect=True)
+        # Detect locale by blockchain name
+        settings.LOCALE = {
+            'golos': 'ru', 'steemit': 'en'
+        }[options['bc']]
+
+        updater = BaseUpdater(db_connect=True)
 
         # Посты
         i = 0

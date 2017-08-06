@@ -39,7 +39,7 @@ class BlockChainDB:
     # DOCS https://docs.microsoft.com/en-us/azure/sql-database/sql-database-connect-query-python
     params_tpl = 'DRIVER={};SERVER={};PORT=1443;DATABASE={};UID={};PWD={}'
 
-    def __init__(self, locale=None):
+    def __init__(self):
         self.blockchain = BlockChain.current().name
 
         db_params = settings.BLOCKCHAIN_DATABASES[self.blockchain]

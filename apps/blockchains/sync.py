@@ -16,13 +16,9 @@ from apps.blockchains.data_bases import BlockChainDB
 
 class BaseUpdater:
     """ Class for update objects in Mpala database """
-    def __init__(self, blockchain, db_connect=False):
-        if isinstance(blockchain, str):
-            self.blockchain = BlockChain.objects.get(name=blockchain)
-        else:
-            self.blockchain = blockchain
-
-        self.db = BlockChainDB(self.blockchain.name) if db_connect else None
+    def __init__(self, db_connect=False):
+        self.blockchain = BlockChain.current()
+        self.db = BlockChainDB() if db_connect else None
         self.rpc = Steem(self.blockchain.wss)
 
     def comment(self, comment):
@@ -112,7 +108,7 @@ class BaseUpdater:
                     'created_at': self.aware(p.created),
                     'author': author,
                     'permlink': p.permlink,
-                    #'body': str(p.body),
+                    'body': p.body,
                     'meta': p.meta,
                     'total_payout_value': payout,
                     'total_pending_payout_value': pending_payout,
@@ -129,11 +125,6 @@ class BaseUpdater:
             post['defaults']['has_point'] = False
 
         post, _ = Page.objects.update_or_create(**post)
-
-        # Тестовый метод сохранения текста поста,
-        # Рандомно встречается битая кодировка
-        post.body = p.body
-        post.save()
 
         return post
 
@@ -209,7 +200,9 @@ class BaseUpdater:
                 blockchain=self.blockchain
             )
         except ObjectDoesNotExist:
-            user = User.objects.create(username=username + '_unactivated')
+            user = User.objects.create(
+                username='{}_unactivated_{}'.format(username,
+                                                    self.blockchain.name))
 
             UserBlockChain.objects.create(
                 username=username,
