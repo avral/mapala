@@ -165,8 +165,6 @@ class UserBlockChainViewSet(viewsets.ModelViewSet):
 
     def create(self, request):
         wif = request.data.get('wif', '<non_valid>')
-        blockchain = request.data.get('blockchain')
-        blockchain = BlockChain.objects.get(name=blockchain)
 
         try:
             # HACK не валидируем юзера в бч тк не исправили баг на голосе
@@ -180,20 +178,12 @@ class UserBlockChainViewSet(viewsets.ModelViewSet):
         except (ValueError, AssertionError, AttributeError):
             raise ValidationError('Invalid posting key')
 
-        user_bc = UserBlockChain.on_bc.filter(username=username).first()
-
-        if user_bc is not None:
-            user = user_bc.user
-
-            if user != request.user:
-                return Response('user with this key exists: %s'
-                                % user.username, status.HTTP_400_BAD_REQUEST)
-
         ins, _ = UserBlockChain.on_bc.update_or_create(
-            user=request.user,
-            blockchain=blockchain,
-            defaults={'username': username}
+            username=username, blockchain=BlockChain.current(),
+            defaults={'user': request.user}
         )
+
+        # TODO Если UserBlockChain был обновлен, удалять промежуточного юзера
 
         return Response(self.serializer_class(ins).data)
 
