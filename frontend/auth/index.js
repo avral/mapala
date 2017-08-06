@@ -13,7 +13,8 @@ export default {
   balance: '0 GOLOS',
 
   user: {
-    username: ' '
+    username: ' ',
+    locale: store.get('locale'),
   },
 
   refreshJWT() {
@@ -39,7 +40,9 @@ export default {
   },
 
   existngSignUp(context, creds, redirect) {
+    context.loading = true
     User.existngSignUp(creds).then(res => {
+      context.loading = false
       store.clearAll()
 
       store.set('jwt', res.body.token)
@@ -53,12 +56,15 @@ export default {
       if (redirect) { context.$router.push(redirect) }
 
     }, res => {
+      context.loading = false
       showErrors(res.body, context)
     })
   },
 
   signUp(context, creds, redirect) {
+    context.loading = true
     User.signUp(creds).then(res => {
+      context.loading = false
       store.clearAll()
 
       store.set('jwt', res.body.token)
@@ -80,6 +86,7 @@ export default {
       )
 
     }, res => {
+      context.loading = false
       showErrors(res.body, context)
     })
   },

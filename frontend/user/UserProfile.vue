@@ -12,41 +12,16 @@
 		</div>
 		<div class="bottom_bl" v-if="auth.user.username == user.username">
 			<router-link :to="{name: 'userWallet', params: {user: auth.user.username}}" class="but ic wal">
-				мой кошелек
+        {{ $t('my_wallett') }}
 			</router-link>
 
 			<i class="divd"></i>
 
 			<router-link :to="{name: 'userSettings', params: {user: auth.user.username}}" class="but ic set">
-				настройки
+        {{ $t('setting') }}
 			</router-link>
 		</div>
 
-	</div>
-
-  <!-- Смену языка убираем, в текущей версии только golos.io
-	<div v-if="auth.user.username == user.username" class="change_lang">
-		<div class="lab">язык сервиса</div>
-		<div class="ch">
-			<input type="radio" value="ru" id="rus" v-model="auth.user.locale">
-			<label for="rus" @click="changelang()">rus/golos</label>
-			<input type="radio" value="en" id="eng" v-model="auth.user.locale">
-			<label for="eng" @click="changelang()">eng/steem</label>
-		</div>
-	</div>
-  -->
-
-	<div v-if="has_not_pages" class="no_post">
-		<div v-if="auth.user.username != $route.params.user">
-			<p >Ой! <br>
-				У <span class="blue">@{{ $route.params.user }}</span> еще нет постов, но ты можешь посмотреть посты других людей
-			</p>
-			<router-link :to="{name: 'index'}" class="blue_btn">Смотреть</router-link>
-		</div>
-		<div v-else>
-			<p>У тебя еще нет постов</p>
-			<router-link :to="{name: 'add', params: {user: auth.user.username}}" v-if="auth.isAuth" class="blue_btn">Написать</router-link>
-		</div>
 	</div>
 </div>
 </template>
@@ -74,11 +49,6 @@ export default {
               this.user = res.body
           })
       },
-      changeLang(){
-        auth.update().then(res =>
-            bc.setBlockchain()
-        )
-      }
 	},
 	watch: {
       '$route'() {

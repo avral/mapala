@@ -9,9 +9,9 @@
         <div v-for="error in Object.keys(errors)">
             <i class="el-icon-warning"></i> {{error}}: {{errors[error][0]}}
         </div>
-        <button type="submit" class="submit-button">Войти</button>
+        <button type="submit" class="submit-button">{{ $t('log_in') }}</button>
 
-        <router-link class="forgot" :to="{name: 'resetPassword'}">Забыли пароль?</router-link>
+        <router-link class="forgot" :to="{name: 'resetPassword'}">{{ $t('forgot_password') }}</router-link>
     </form>
 </template>
 

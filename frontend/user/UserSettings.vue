@@ -45,22 +45,23 @@
         </div>
     -->
 
-    <div v-for="blockchain in blockchains.bc_list" class="inpt_w" v-bind:class="{keyError: keyInValid && blockchain.address_prefix == 'GLS'}">
+    <div class="inpt_w">
         <label>
-            {{ blockchain.name }}
-            <span v-if="blockchain.activated" class="blue">{{ blockchain.blockchain_username }}</span>
+            {{ blockchains.current.name }}
+            <span v-if="blockchains.current.activated" class="blue">{{ blockchains.current.blockchain_username }}</span>
         </label>
         <input
-            type="password"
-            :placeholder="blockchain.name + ' private posting key'"
-            @focus="showKey($event, blockchain)"
-            @blur="hideKey($event, blockchain)"
-            v-model="blockchain.wif"
-            :class="blockchain.key_valid && keyInValid ? 'icon_good' : 'icon_edit'">
-        <div v-if="keyInValid && blockchain.address_prefix == 'GLS'" class="el-form-item__error">Вы ввели публичный ключ. Добавьте, пожалуйста, ПРИВАТНЫЙ постинг ключ в настройках аккаунта. <a href="http://mapala.net/mapala/privet-beta-ili-kak-opublikovatx-post-na-novoij-mapala" target="_blank">Инструкция</a></div>
+            type="text"
+            :placeholder="blockchains.current.name + ' private posting key'"
+            @focus="showKey($event, blockchains.current)"
+            @blur="hideKey($event, blockchains.current)"
+            v-model="blockchains.current.wif" :class="blockchains.current.key_valid ? 'icon_good' : 'icon_edit'">
     </div>
+        <!--
+        <div v-if="keyInValid && blockchains.current.address_prefix == 'GLS'" class="el-form-item__error">Вы ввели публичный ключ. Добавьте, пожалуйста, ПРИВАТНЫЙ постинг ключ в настройках аккаунта. <a href="http://mapala.net/mapala/privet-beta-ili-kak-opublikovatx-post-na-novoij-mapala" target="_blank">Инструкция</a></div>
+        -->
 
-    <button class="submit" @click="update()">Обновить</button>
+    <button class="submit" @click="update()">{{ $t('update') }}</button>
 
         <!-- <div class="p_h">Привязать профили социальных сетей</div>
         <div class="socials">
@@ -105,16 +106,16 @@
             }
         },
         computed: {
-            keyInValid(){
-                return this.blockchains.checkGolosKey()
-            }
+            // keyInValid(){
+            //    return this.blockchains.checkGolosKey()
+            //}
         },
         methods: {
             updatePassword() {
                 if (!this.old_password) { return }
 
                     User.setPassword({old_password: this.old_password, new_password: this.new_password}).then(res => {
-                        this.$notify({title: 'Пароль изменен', message: res.body, type: 'success'})
+                        this.$notify({title: 'Password has been changed', message: res.body, type: 'success'})
                         this.old_password = ''
                     }, err => {
                         this.$notify({message: err.body[0], type: 'warning'})
@@ -133,17 +134,15 @@
                         bc.wif = ''
                         if (err.status == 404) {
                             this.$notify({
-                                title: 'Ошибка ключа:',
-                                message: `В блокчейне ${bc.name} нет пользователя с таким ключем`,
+                                title: 'Key error',
+                                message: `Has not user with this key in ${bc.name}`,
                                 type: 'warning'
                             })
                         }   else {
-                            this.$notify({title: 'Ошибка ключа:', message: err.body, type: 'warning'})
+                            this.$notify({title: 'Key error', message: err.body, type: 'warning'})
                         }
                     })
                 }
-
-                e.target.type = "password"
             },
             close() {
                 this.$router.go(-1)
@@ -155,7 +154,7 @@
             update() {
                 User.update({username: this.auth.user.username}, this.auth.user).then(res => {
                     this.auth.user = res.body
-                    this.$notify({title: 'Ок', message: 'Настройки обновлены', type: 'success'})
+                    this.$notify({title: 'Ок', message: 'Settings updated', type: 'success'})
                 }, res => {
                     this.error = res.data.error;
                     this.$notify({title: 'Warning', message: this.error, type: 'warning'})
@@ -176,19 +175,17 @@
                 User.setAvatar({username: this.auth.user.username}, formData).then(res => {
                   auth.user.avatar = res.body
                   this.switch_edit_avatar()
-                  this.$message({ type: 'info', message: 'Аватар обновлен' })
+                  this.$message({ type: 'info', message: 'Avatar has been updated' })
 
               }, res => {
                 this.error = res.data.error;
-                this.$message({ type: 'error', message: 'Что то пошло не так'})
+                this.$message({ type: 'error', message: 'Something was wrong..'})
             })
             },
 
             deleteAvatar(e) {
                 e.preventDefault()
             }
-        },
-        created() {
         },
     }
 </script>

@@ -15,18 +15,18 @@
                     <div class="av_wrap">
                         <img class="user_av" :src="auth.user.avatar">
                     </div>
-                    <div class="write_post">{{ $t("base.add") }}</div>
+                    <div class="write_post">{{ $t("add_post") }}</div>
                 </router-link>
 
                 <el-row v-if="auth.user.username != $route.params.user && !isMobile" type="flex" class="blog-nav" justify="space-between">
                     <el-col :span="11">
                         <router-link :to="{name: 'index'}">
-                            <el-button :plain="true" size="large" type="info">Блоги путешественников</el-button>
+                          <el-button :plain="true" size="large" type="info">{{ $t('travel_blogs') }}</el-button>
                         </router-link>
                     </el-col>
                     <el-col :span="11">
                         <router-link :to="'/mapala'">
-                            <el-button :plain="true" size="large" type="info">Блог Mapala</el-button>
+                          <el-button :plain="true" size="large" type="info">{{ $t('mapala_blogs') }}</el-button>
                         </router-link>
                     </el-col>
                 </el-row>
@@ -35,14 +35,14 @@
                     <el-row type="flex" class="blog-nav" justify="space-between">
                         <el-col :span="24">
                             <router-link :to="{name: 'index'}">
-                                <el-button :plain="true" size="large" type="info">Блоги путешественников</el-button>
+                                <el-button :plain="true" size="large" type="info">{{ $t('travel_blogs') }}</el-button>
                             </router-link>
                         </el-col>
                     </el-row>
                     <el-row v-if="auth.user.username != $route.params.user" type="flex" class="blog-nav" justify="space-between">
                         <el-col :span="24">
                             <router-link :to="'/mapala'">
-                                <el-button :plain="true" size="large" type="info">Блог Mapala</el-button>
+                                <el-button :plain="true" size="large" type="info">{{ $t('mapala_blogs') }}</el-button>
                             </router-link>
                         </el-col>
                     </el-row>

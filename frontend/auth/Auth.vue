@@ -1,8 +1,8 @@
 <template>
   <div class="login-form">
     <div class="two tab_headers">
-      <router-link :to="{name: 'login'}" class="tab_header">Вход</router-link>
-      <router-link :to="{name: 'signUp'}" class="tab_header">Регистрация</router-link>
+      <router-link :to="{name: 'login'}" class="tab_header">{{ $t('log_in') }}</router-link>
+      <router-link :to="{name: 'signUp'}" class="tab_header">{{ $t('sign_in') }}</router-link>
     </div>
     <div class="tabs">
       <component v-bind:is="currentTab"></component>
@@ -148,7 +148,7 @@
   background-image: url('../assets/icon-key.svg');
 }
 
-.submit-button{
+ .submit-button {
   border-radius: 6px;
   background-color: #6d9ee1;
   border: none;

@@ -14,6 +14,7 @@ import VueLazyload from 'vue-lazyload'
 import * as VueGoogleMaps from 'vue2-google-maps'
 import showdown from 'showdown'
 import VueScrollTo from 'vue-scrollto'
+import * as localStore from 'store'
 
 // animate.css
 import 'animate.css/animate.min.css'
@@ -41,8 +42,6 @@ Vue.use(Meta)
 
 // Vue.use(VueAxios, axios)
 // Vue.use(axios)
-
-
 
 Vue.use(VueLazyload, {
   preLoad: 1.3,
@@ -95,7 +94,23 @@ export const googleMapStyles = [
   }
 ]
 
+var VueI18n = require('vue-i18n')
+import locales from './locales'
+Vue.use(VueI18n)
+
+if (!localStore.get('locale')) {
+  localStore.set('locale', 'ru')
+}
+
+Vue.config.lang = localStore.get('locale')
+
+Object.keys(locales).forEach(function (lang) {
+  Vue.locale(lang, locales[lang])
+})
+
 Vue.http.interceptors.push((request, next) => {
+  request.headers.set('Locale', localStore.get('locale'))
+
   // Добавить хедер авторизации при наличии токена
   let jwt_header = auth.getAuthToken()
 
@@ -115,14 +130,6 @@ window.bind = function(func, context) {
   };
 }
 
-var VueI18n = require('vue-i18n')
-import locales from './locales'
-Vue.use(VueI18n)
-Vue.config.lang =  VueCookie.get('locale') ? VueCookie.get('locale') : 'ru'
-
-Object.keys(locales).forEach(function (lang) {
-  Vue.locale(lang, locales[lang])
-})
 
 router.beforeEach((to, from, next) => {
   //Первой идет проверка на то требователен ли url к наличию постинг ключа

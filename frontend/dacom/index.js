@@ -87,10 +87,4 @@ let auth = {
   },
 }
 
-//auth.init().then(() => {
-//  auth.login('avral96', 'P5Jcac1vcxBBhYanj3eUPU8MA94nZ2XjXUZ14KQX6DysH25f9BQL').then(() => {
-//    console.log(auth.authSig)
-//  })
-//})
-
 export default auth

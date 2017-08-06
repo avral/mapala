@@ -1,6 +1,6 @@
 <template>
   <div class="comments_block">
-    <div v-if="page.comments_count > page.comments.length" @click="fetchComments" class="show_previous">Показать предыдущие комментарии</div>
+    <div v-if="page.comments_count > page.comments.length" @click="fetchComments" class="show_previous">{{ $t('show_comments') }}</div>
 
     <div v-for="comment in page.comments" class="comment">
       <div class="user_av">
@@ -20,7 +20,7 @@
         <vue-markdown :source="comment.body"></vue-markdown>
       </div>
 
-      <div v-if="auth.isAuth" class="reply" @click="reply(comment)">Ответить</div>
+      <div v-if="auth.isAuth" class="reply" @click="reply(comment)">{{ $t('reply') }}</div>
     </div>
 
     <div class="write_comment" v-if="auth.isAuth">
@@ -33,12 +33,12 @@
              @keyup.enter="addComment"
              contenteditable="true"
              ref="text"></div>
-        <div v-show="!isEdit" @click="startComment" class="placeholder">Написать комментарий</div>
+        <div v-show="!isEdit" @click="startComment" class="placeholder">{{ $t('add_comment') }}</div>
       </div>
     </div>
 
     <div v-if="new_comment.parentPermlink" class="comment_for">
-      Комментарий для {{ new_comment.parentAuthor}}
+      {{ $t('comment_for') }} {{ new_comment.parentAuthor}}
       <span class="cancel" v-show="new_comment.parent_author" @click="cancelReply">X</span>
     </div>
 
@@ -105,7 +105,7 @@ export default {
       // FIXME Зарефакторить эту дичь. После релиза - обязательно, в натуре дичь полнейшая
       if (!bc.current.key_valid) {
         this.endEdit()
-        return this.$notify({message: `Необходимо добавить ключ ${bc.current.name} в настройках`, type: 'warning'})
+        return this.$notify({message: `Need set key for ${bc.current.name}`, type: 'warning'})
       }
 
       this.new_comment.body = this.$refs.text.innerText
@@ -114,7 +114,7 @@ export default {
 
       let err = ''
 
-      if (!new_comment.body.length) err = 'Комментрай не может быть пустым'
+      if (!new_comment.body.length) err = 'Comment can not be empty'
 
       if (err) return this.$notify({ message: err, type: 'warning'})
 

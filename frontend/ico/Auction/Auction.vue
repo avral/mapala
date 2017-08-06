@@ -1,17 +1,9 @@
 <template>
-    <!-- <el-tabs v-model="activeTab" v-if="mobile" class="aucstats" >
-        <el-tab-pane label="Bitcoin" name="btc">
-            <h4><sup v-html="stats.week.btc.icon"></sup>{{stats.week.btc.value}}</h4>
-        </el-tab-pane>
-        <el-tab-pane label="USD" name="usd">Config</el-tab-pane>
-    </el-tabs> -->
-    <!-- <div class="auc-block" v-else> -->
     <div class="auc-block" :class="{aucblMobile: mobile}">
         <h3>Аукцион</h3>
         <el-row type="flex" class="auc-cent" justify="center" :gutter="20">
             <el-col class="week-wraper" :span="8">
                 <auction-stat :stat="stats.week.btc" :isBold="true"></auction-stat>
-                <!-- <auction-stat :stat="stats.week.gbg"></auction-stat> -->
             </el-col>
             <el-col :span="8">
                 <auction-stat :stat="stats.full.usd" :isBold="true"></auction-stat>
@@ -19,7 +11,7 @@
             </el-col>
         </el-row>
         <router-link v-if="$route.name == 'ico'" :to="{name: 'auction'}">
-            <el-button class="auc-btn">Аукцион</el-button>
+          <el-button class="auc-btn">{{ $t('auction') }}</el-button>
         </router-link>
     </div>
 </template>

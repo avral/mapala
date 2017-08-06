@@ -16,7 +16,7 @@
 
             <div v-if="golosAlreadyReg">
                 <div class="inpt_w">
-                    <input type="text" placeholder="Golos.io private posting key" v-model="wif" class="inpt i-key"><label></label>
+                  <input type="text" placeholder="private posting key" v-model="wif" class="inpt i-key"><label></label>
                 </div>
             </div>
             <div v-else>
@@ -24,13 +24,13 @@
                     <input type="text" placeholder="Желаемый Golos.io username" v-model="bc_username" class="inpt i-user"><label></label>
                 </div>
             </div>
-
-            <div class="submit-button" @click="signUp">Зарегистрироваться</div>
+            <el-button class="submit-button" :loading="loading" @click="signUp">{{ $t('sign_in') }}</el-button>
         </div>
     </form>
 </template>
 
 <script>
+    import Vue from 'vue';
     import auth from '../auth'
     import bc from '../blockchains'
     import {User, http} from '../services'
@@ -38,12 +38,14 @@
     export default {
         data() {
             return {
+              bc: bc,
+              loading: false,
                 username: '',
                 password: '',
                 bc_username: '',
                 wif: '',
                 errors: [],
-                golosAlreadyReg: null
+                golosAlreadyReg: Vue.config.lang == 'ru' ? null : true
             }
         },
         methods: {
@@ -85,7 +87,7 @@
     },
     watch: {
         'username'() {
-            this.checkLogin()
+            // this.checkLogin()
         },
     }
 }

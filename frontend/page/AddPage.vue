@@ -9,10 +9,9 @@
                     </div>
                     <div class="name_block">
                         <div class="name">@{{ auth.user.username }}</div>
-                        <div class="date">Сегодня, 12:57</div>
                     </div>
                 </div>
-                <input class="write_header blank" placeholder="Заголовок статьи"
+                <input class="write_header blank" :placeholder="$t('titile_placeholder')"
                     :disabled="forEdit" type="text"
                     v-model="page.title"/>
                 <div class="search_location">
@@ -33,7 +32,7 @@
                         <i class="icon location"></i>
                         <i class="icon image" @click="imageUploadHandler"></i>
                     </div>
-                    <button @click="save" class="public_btn">Опубликовать</button>
+                    <button @click="save" class="public_btn">{{ $t('publish') }}</button>
                 </div>
             </div>
         </div>
@@ -64,7 +63,7 @@
                 },
                 editorOption: {
                     theme: 'snow',
-                    placeholder: 'Статья',
+                    placeholder: this.$t('article_title'),
                     bounds: '#write_text',
                     modules: {
                         toolbar: {
@@ -138,14 +137,14 @@
             save() {
                 if (!bc.current.key_valid) {
                     this.close()
-                    return this.$notify({message: `Необходимо добавить ключ ${bc.current.name} в настройках`, type: 'warning'})
+                    return this.$notify({message: `Need to append ${bc.current.name} posting key`, type: 'warning'})
                 }
 
                 let err = ''
 
-            if (!this.page.meta.location.name) err = 'Необходимо выбрать локацию'
-            if (!this.page.body.length) err = 'Контент не может быть пустым'
-            if (!this.page.title.length) err = 'Пустой заголовок поста'
+            if (!this.page.meta.location.name) err = 'Select location'
+            if (!this.page.body.length) err = 'Content can not be empty'
+            if (!this.page.title.length) err = 'Empty post title'
             if (err) return this.$notify({ message: err, type: 'warning'})
 
             this.close()
@@ -153,7 +152,7 @@
             let permlink = this.$route.params.permlink ? this.$route.params.permlink : bc.getPermlink(this.page.title)
                         steem.api.getContent(bc.current.blockchain_username, permlink, (err, res) => {
                             if (res.id != 0 && !this.forEdit) {
-                                return this.$notify({ message: 'У вас уже есть пост с таким заголовком', type: 'warning'})
+                                return this.$notify({ message: 'You already have a post with such a title', type: 'warning'})
                             } else {
                                 this.page.permlink = permlink
                                 bc.createPost(this, this.page).then(res => {
@@ -166,7 +165,7 @@
                                             location: {},
                                         },
                                     },
-                                    this.$notify({ message: '\n Публикация добавлена', type: 'success' })
+                                    this.$notify({ message: '\n Published', type: 'success' })
                                     if (!this.forEdit) {
                                         this.$store.commit('addPost', res.body)
                                     }

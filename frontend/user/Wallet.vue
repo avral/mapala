@@ -3,8 +3,8 @@
     <div class="pop_back" @click.self="close">
       <div class="wallet">
         <i class="refresh"></i>
-				<div class="in_wallet">В кошельке на {{ moment().format('DD.MM.YYYY') }}</div>
-        <div class="coins">{{wallet.personal_tokens}} Монет</div>
+				<div class="in_wallet">In wallet {{ moment().format('DD.MM.YYYY') }}</div>
+        <div class="coins">{{wallet.personal_tokens}} Tokens</div>
         <!-- <div class="currency">{{ balance.golos }} <i class="down"></i></div> -->
         <div class="currency">{{ balance.golos }}</div>
 				<div class="currency">{{ balance.gbg }}</div>

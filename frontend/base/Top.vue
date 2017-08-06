@@ -1,7 +1,16 @@
 <template>
   <div>
     <header class="main_header">
-      <router-link class="main_logo" v-bind:class="{ main_logoMobile: detectmob() }" :to="'/'" ><img src="../assets/MapalaLogo.png"><span>MAPALA</span></router-link>
+      <router-link class="main_logo" v-bind:class="{ main_logoMobile: detectmob() }" :to="'/'">
+        <img src="../assets/MapalaLogo.png"><span>MAPALA</span>
+      </router-link>
+
+      <div class="change_lang">
+        <input type="radio" value="ru" id="rus" v-model="locale">
+        <label for="rus" @click="cahngeLang('ru')">rus/golos</label>
+        <input type="radio" value="en" id="eng" v-model="locale">
+        <label for="eng" @click="cahngeLang('en')">eng/steem</label>
+      </div>
 
       <router-link v-if="auth.isAuth" :to="'/'+auth.user.username" >
         <div class="user">
@@ -16,23 +25,22 @@
       <div class="divider"></div>
 
       <router-link v-if="!auth.isAuth" class="login" :to="{name: 'login'}">
-        Вход
+        {{ $t('log_in') }}
       </router-link>
 
       <div v-on-click-outside="menuClose">
-        <!-- <div v-if="auth.isAuth" @click="menuOpen" class="open_menu" v-bind:class="{ open_menuMobile: detectmob() }">Меню</div> -->
-        <div v-if="auth.isAuth" @click="menuOpen" class="open_menu">Меню</div>
+        <div v-if="auth.isAuth" @click="menuOpen" class="open_menu">{{ $t('menu') }}</div>
         <div v-if="auth.isAuth" :class="{active : menu_opened, user_menuMobile: detectmob() }" class="user_menu">
 
           <router-link class="wal" :to="{name: 'userWallet', params: {user: auth.user.username}}" >
             <i class="purce"></i>
-            <span class="txt_i">Кошелек</span>
+            <span class="txt_i">{{ $t('my_wallett') }}</span>
             <span class="amount">{{ auth.balance }}</span>
           </router-link>
           <div class="divd"></div>
           <div class="mn">
             <router-link class="m_item" :to="{name: 'userSettings', params: {user: auth.user.username}}" >
-              Настройки
+              {{ $t('setting') }}
             </router-link>
 
             <router-link class="m_item" :to="'/ico/'">
@@ -41,9 +49,7 @@
 
             <!-- <a class="m_item" href="">FAQ</a> -->
 
-            <a href="" v-if="auth.isAuth" class="m_item" @click="logout">
-              {{ $t("base.logout") }}
-            </a>
+            <a href="" v-if="auth.isAuth" class="m_item" @click="logout">{{ $t("log_out") }}</a>
           </div>
         </div>
       </div>
@@ -55,8 +61,9 @@
 import Vue from 'vue';
 import auth from '../auth'
 import { icon } from 'vue-fontawesome'
-// import { mapActions } from 'vuex'
+import bc from '../blockchains'
 import {detectmob} from '../utils'
+import * as localStore from 'store'
 
 import { mixin as onClickOutside } from 'vue-on-click-outside'
 
@@ -65,10 +72,19 @@ export default {
  data() {
    return {
     auth: auth,
-    menu_opened:false,
+    menu_opened: false,
+    locale: 'ru',
    }
  },
- methods: {
+  methods: {
+    cahngeLang(locale) {
+      auth.user.locale = locale
+      this.locale = locale
+      localStore.set('locale', locale)
+      Vue.config.lang = localStore.get('locale')
+      this.$store.dispatch('authorPosts', this.$store.state.posts.author)
+      bc.setBlockchain()
+    },
    menuOpen () {
     this.menu_opened = !this.menu_opened
    },
@@ -97,6 +113,10 @@ export default {
        }
     }
  },
+  created() {
+    this.locale = Vue.config.lang
+  },
+
  components: {
   'vf-icon': icon,
  },
@@ -321,6 +341,50 @@ export default {
 .user_menu .amount{
   font: 700 24px 'PT Sans';
   text-align: center;
+}
+
+.change_lang{
+  margin-left: 80px;
+}
+
+.change_lang .lab{
+  font: 700 18px/58px 'PT Sans';
+  color: white;
+}
+
+.change_lang [type="radio"]{
+  display: none;
+}
+
+.change_lang label{
+  font: 700 14px/58px 'PT Sans';
+  letter-spacing: 0.3px;
+  color: white;
+  opacity: 0.5;
+  padding-left: 35px;
+  margin-left: 20px;
+  cursor: pointer;
+  position: relative;
+}
+
+.change_lang label:before{
+  width: 25px;
+  height: 25px;
+  position: absolute;
+  display: block;
+  content: '';
+  background-color: #eaeaea;
+  background-repeat: no-repeat;
+  border-radius: 50%;
+  top: -3px;
+  left: 0;
+}
+
+.change_lang [type="radio"]:checked + label{
+  opacity: 1;
+}
+.change_lang [type="radio"]:checked + label:before{
+  background-image: url(../assets/icon-checked-blue.svg);
 }
 
 </style>

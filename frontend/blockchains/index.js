@@ -1,7 +1,8 @@
+import Vue from 'vue'
 import slug from 'slug'
-import {Client} from 'steem-rpc'
 import steem from 'steem'
 import store from 'store'
+import {Client} from 'steem-rpc'
 import {ChainConfig, PrivateKey, TransactionBuilder} from 'esteem-lib'
 
 import auth from '../auth'
@@ -17,9 +18,12 @@ export default {
   app_tag: process.env.NODE_ENV == 'production' ? 'mapala': 'testing',
 
   init() {
-    steem.config.set('websocket', 'wss://ws.mapala.net')
-    steem.config.set('address_prefix', 'GLS')
-    steem.config.set('chain_id', '782a3039b478c839e4cb0c941ff4eaeb7df40bdd68bd441afd444b9da763de12')
+    BlockChain.get().then(res => {
+      for (let bc of res.body) {
+        this.blockchains[bc.name] = bc
+      }
+      this.setBlockchain()
+    })
   },
 
   getUser(username = null) {
@@ -111,7 +115,7 @@ export default {
     // HACK: На данный момент решено менять блокчейн по локали:
     // en -> steemil, ru -> golos
     if (blockchain === undefined) {
-      blockchain = auth.user.locale == 'ru' ? 'golos' : 'steemit'
+      blockchain = Vue.config.lang == 'ru' ? 'golos' : 'steemit'
     }
 
     this.current = this.blockchains[blockchain]
@@ -162,7 +166,9 @@ export default {
       }
 
       this.bc_list = bc_list
-      this.setBlockchain()
+      if (this.blockchains) {
+        this.setBlockchain()
+      }
       this.getUser().then(res => auth.balance = res.balance)
     })
   },

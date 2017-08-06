@@ -20,7 +20,7 @@
         <div class="t_col">
           <router-link class="edit"
           v-if="page.author.username == auth.user.username"
-          :to="{name: 'edit', params: {author: page.author.username, permlink: page.permlink}}">Редактировать</router-link>
+          :to="{name: 'edit', params: {author: page.author.username, permlink: page.permlink}}">{{ $t('edit') }}</router-link>
           <div class="close" @click="close"></div>
         </div>
       </div>
@@ -36,10 +36,9 @@
       </div>
       <div class="bottom_block">
         <div class="icons">
-          <div class="icon comment">{{ page.comments_count }} {{ numeral(page.comments_count) }}</div>
-          <a class="icon repost" @click="share(page)">Рассказать</a>
+          <div class="icon comment">{{ page.comments_count }} {{ $t('comment') }}</div>
+          <a class="icon repost" @click="share(page)">{{ $t('share') }}</a>
         </div>
-        <!-- <el-button v-if="auth.isAuth" :loading="loading" class="support" @click="vote(page)">Поддержать <span>₽ {{page.payout | toRub}}</span></el-button> -->
         <el-button-group class="support_block" :loading="loading" v-bind:class="{ isDisabled: !auth.isAuth }">
           <el-button v-if="auth.isAuth" @click="vote(page)"><img style="height: 12px" src="../assets/like.png"></el-button>
           <el-button v-else :plain="true" :disabled="true" icon="check"></el-button>
@@ -120,24 +119,23 @@
       vote (page) {
         if (!bc.current.key_valid) {
           // TODO Вынести проверку ключа в блокчейн модуль
-          return this.$notify({message: `Необходимо добавить ключ ${bc.current.name} в настройках`, type: 'warning'})
+          return this.$notify({message: `Need set key for ${bc.current.name}`, type: 'warning'})
         }
 
         this.loading = true
 
         bc.vote(page).then(res => {
           this.loading = false
-          this.$notify({message: `Голос принят`, type: 'success'})
+          this.$notify({message: `Success`, type: 'success'})
           Page.updatePost({author: page.blockchain_author, permlink: page.permlink}).then(res => {
             page.payout = res.body.payout
           })
         }, err => {
           this.loading = false
-          this.$notify({title: 'Ошибка голосования', message: err, type: 'warning'})
+          this.$notify({title: 'Upvote error', message: err, type: 'warning'})
         })
       },
       close() {
-        // this.$emit('close')
         this.$parent.closeModal()
       },
       fetchComments(page){

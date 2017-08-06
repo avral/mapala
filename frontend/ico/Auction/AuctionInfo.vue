@@ -1,22 +1,22 @@
 <template>
     <div v-if="mobile" style="padding-top: 40px" class="walletMobile">
-        <h3>Персональный BTC-адрес:</h3>
+        <h3>Прсональный BTC-адрес:</h3>
         <h4>{{btcAddress}}</h4>
         <el-tabs v-model="activeTab" v-if="this.wallet">
             <el-tab-pane label="BTC" name="btc">
-                <h2><span>Инвестиции:</span> {{wallet.personal_btc}} BTC</h2>
+              <h2><span>{{ $t('investments') }}:</span> {{wallet.personal_btc}} BTC</h2>
             </el-tab-pane>
             <el-tab-pane label="GBG" name="gbg">
-                <h2><span>Инвестиции:</span> {{wallet.personal_gbg}} GBG</h2>
+                <h2><span>{{ $t('investments') }}:</span> {{wallet.personal_gbg}} GBG</h2>
             </el-tab-pane>
             <el-tab-pane label="Токены" name="tokens">
-                <h2><span>Токены:</span> {{wallet.personal_tokens}} Mpl</h2>
+                <h2><span>{{ $t('investments') }}:</span> {{wallet.personal_tokens}} Mpl</h2>
             </el-tab-pane>
             <el-tab-pane label="Баунти" name="bounty">
-                <h2><span>Баунти:</span> {{wallet.personal_bounty}} Mpl</h2>
+                <h2><span>{{ $t('investments') }}:</span> {{wallet.personal_bounty}} Mpl</h2>
             </el-tab-pane>
             <el-tab-pane label="USD" name="usd">
-                <h2><span>Total USD:</span> {{wallet.total_personal_usd}} Mpl</h2>
+                <h2><span>{{ $t('investments') }}:</span> {{wallet.total_personal_usd}} Mpl</h2>
             </el-tab-pane>
         </el-tabs>
     </div>
@@ -24,7 +24,7 @@
         <el-row type="flex" class="auc-row" justify="center" :gutter="20">
             <el-col :span="8">
                 <el-card class="info-card big-card">
-                    <h3>Персональная информация</h3>
+                    <h3>{{ $t('investments') }}</h3>
                     <div class="stats" v-if="this.wallet">
                         <div class="stat">
                             <h4>Инвестиции:</h4>

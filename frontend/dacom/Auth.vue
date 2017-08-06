@@ -57,7 +57,7 @@ export default {
       dacom.login(this.signIn.accName, this.signIn.password).then(() => {
         let authSig = dacom.getAuthSig(this)
 
-        http.post('/auth/login/', {account: 'avral96', auth_sig: authSig}).then(res => {
+        http.post('/auth/login/', {account: this.signIn.accName, auth_sig: authSig}).then(res => {
           this.$notify({title: 'Succsess', message: res.body, type: 'success'})
         }, err => {
           this.$notify({title: 'Ошибка входа', message: err.body, type: 'warning'})
