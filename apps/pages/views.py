@@ -35,7 +35,6 @@ from apps.pages.serializers import (
 
 
 logger = logging.getLogger('mapala')
-storage = Storage()
 
 
 class PageFilter(filters.FilterSet):
@@ -217,6 +216,7 @@ def post_image(request):
     ext = file.name.split('.')[-1]
     filename = "%s.%s" % (uuid.uuid4(), ext)
 
+    storage = Storage()
     storage.put_object(
         container,
         filename,
