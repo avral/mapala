@@ -6,6 +6,7 @@ from piston.steem import Steem
 from piston.blockchain import Blockchain
 from django.core.management.base import BaseCommand
 
+from backend import settings
 from apps.blockchains.sync import BaseUpdater
 
 logger = logging.getLogger('mapala.fetch')
@@ -20,6 +21,7 @@ def get_block(steem, blockchain_name):
     if last_block is None:
         # Fitst app fetch
         last_block = Blockchain(steem).get_current_block_num()
+        print(last_block, settings.LOCALE)
 
     return int(last_block)
 
@@ -30,12 +32,14 @@ class Command(BaseCommand):
         parser.add_argument('block_num', nargs='?', type=int)
 
     def handle(self, *args, **options):
-        blockchain_name = options['bc']
+        settings.LOCALE = {
+            'golos': 'ru', 'steemit': 'en'
+        }[options['bc']]
 
-        updater = BaseUpdater(blockchain_name)
+        updater = BaseUpdater()
         steem = Steem(updater.blockchain.wss)
 
-        last_block = options['block_num'] or get_block(steem, blockchain_name)
+        last_block = options['block_num'] or get_block(steem, options['bc'])
 
         logger.info('Parse from %s block' % last_block)
 
@@ -64,4 +68,4 @@ class Command(BaseCommand):
 
             if last_block < block_num:
                 last_block = block_num
-                redis.set('%s_last_block' % blockchain_name, last_block)
+                redis.set('%s_last_block' % options['bc'], last_block)
