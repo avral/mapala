@@ -24,6 +24,7 @@ from apps.common.utils import is_eng
 from apps.blockchains.sync import BaseUpdater
 from apps.blockchains.data_bases import BlockChainDB
 from apps.blockchains.api import Api
+from apps.pages.models import Page, Comment
 from apps.auth_api.permissions import IsOwnerOrReadOnly, IsOwnerBlockchainOrReadOnly
 from apps.auth_api.models import User, BlockChain, UserBlockChain
 from apps.auth_api.utils import jwt_response_by_user
@@ -164,6 +165,11 @@ class UserBlockChainViewSet(viewsets.ModelViewSet):
         return qs
 
     def create(self, request):
+        """
+        Блокчейна привязывается к аккаунту только один раз.
+        Отвязать блокчейн от аккаунта или привязать к другому невозможно.
+        """
+        # TODO Поменять логику работы с поспами и их авторами.(ТЗ v2)
         wif = request.data.get('wif', '<non_valid>')
 
         try:
@@ -178,14 +184,48 @@ class UserBlockChainViewSet(viewsets.ModelViewSet):
         except (ValueError, AssertionError, AttributeError):
             raise ValidationError('Invalid posting key')
 
-        ins, _ = UserBlockChain.on_bc.update_or_create(
-            username=username, blockchain=BlockChain.current(),
-            defaults={'user': request.user}
+        bc_by_user = UserBlockChain.on_bc.filter(user=request.user).first()
+
+        if bc_by_user is not None:
+            if username != bc_by_user.username:
+                return Response(
+                    'You already have account: %s, set key for it' %
+                    bc_by_user.username, status.HTTP_400_BAD_REQUEST
+                )
+
+            return Response(self.serializer_class(bc_by_user).data)
+
+        user_bc = UserBlockChain.on_bc.filter(username=username).first()
+
+        if user_bc is not None:
+            user = user_bc.user
+
+            # тут проверка на uncativated
+            if user != request.user:
+                if '_unactivated' in user.username:
+                    # TODO Удалять промежуточных юзеров
+                    # Меняем автора с промежуточного юзера на текущего.
+                    Page.objects.filter(author=user_bc.user).update(author=request.user)
+                    Comment.objects.filter(author=user_bc.user).update(author=request.user)
+
+                    user_bc.user = request.user
+                    user_bc.save()
+                    return Response(self.serializer_class(bc_by_user).data)
+                else:
+                    return Response(
+                        'user with this key exists: %s' % user.username,
+                        status.HTTP_400_BAD_REQUEST
+                    )
+            else:
+                return Response(self.serializer_class(user_bc).data)
+
+        user_bc = UserBlockChain.objects.create(
+            user=request.user,
+            username=username,
+            blockchain=BlockChain.current()
         )
 
-        # TODO Если UserBlockChain был обновлен, удалять промежуточного юзера
-
-        return Response(self.serializer_class(ins).data)
+        return Response(self.serializer_class(user_bc).data)
 
 
 @api_view(['POST'])

@@ -200,7 +200,7 @@ class BaseUpdater:
                 blockchain=self.blockchain
             )
         except ObjectDoesNotExist:
-            user = User.objects.create(
+            user, _ = User.objects.get_or_create(
                 username='{}_unactivated_{}'.format(username,
                                                     self.blockchain.name))
 

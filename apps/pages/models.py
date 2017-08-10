@@ -76,7 +76,7 @@ class Page(models.Model):
 
     class Meta:
         app_label = 'pages'
-        unique_together = (('author', 'permlink'), )
+        unique_together = (('author', 'permlink', 'blockchain'), )
 
     def __str__(self):
         return self.title
@@ -102,7 +102,7 @@ class Comment(MPTTModel):
     body = models.TextField(null=True)
 
     class Meta:
-        unique_together = (('author', 'permlink'), )
+        unique_together = (('author', 'permlink', 'page'), )
 
     def __str__(self):
         return '%s - %s' % (self.author, self.body)
