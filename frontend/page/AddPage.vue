@@ -87,7 +87,6 @@
         },
         methods: {
             onPaste(e) {
-                console.log(123412451243)
                 if (e.defaultPrevented || !this.quill.isEnabled()) return;
                 let range = this.quill.getSelection();
                 let delta = new Delta().retain(range.index);
@@ -137,14 +136,14 @@
             save() {
                 if (!bc.current.key_valid) {
                     this.close()
-                    return this.$notify({message: `Need to append ${bc.current.name} posting key`, type: 'warning'})
+                    return this.$notify({message: this.$t('add_key_err', {bc: bc.current.name}), type: 'warning'})
                 }
 
                 let err = ''
 
-            if (!this.page.meta.location.name) err = 'Select location'
-            if (!this.page.body.length) err = 'Content can not be empty'
-            if (!this.page.title.length) err = 'Empty post title'
+            if (!this.page.meta.location.name) err = this.$t('select_location')
+            if (!this.page.body.length) err = this.$t('content_empty')
+            if (!this.page.title.length) err = this.$t('title_empty')
             if (err) return this.$notify({ message: err, type: 'warning'})
 
             this.close()
@@ -152,7 +151,7 @@
             let permlink = this.$route.params.permlink ? this.$route.params.permlink : bc.getPermlink(this.page.title)
                         steem.api.getContent(bc.current.blockchain_username, permlink, (err, res) => {
                             if (res.id != 0 && !this.forEdit) {
-                                return this.$notify({ message: 'You already have a post with such a title', type: 'warning'})
+                                return this.$notify({ message: this.$t('have_title'), type: 'warning'})
                             } else {
                                 this.page.permlink = permlink
                                 bc.createPost(this, this.page).then(res => {
@@ -165,7 +164,7 @@
                                             location: {},
                                         },
                                     },
-                                    this.$notify({ message: '\n Published', type: 'success' })
+                                    this.$notify({ message: $t('published'), type: 'success' })
                                     if (!this.forEdit) {
                                         this.$store.commit('addPost', res.body)
                                     }

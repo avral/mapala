@@ -36,7 +36,7 @@ export function showErrors (errors, context) {
     if (typeof(errors) == 'string') {
       context.$notify(
         {
-            title: 'Ошибка :',
+            title: 'Error :',
             message: errors,
             type: 'warning',
         })
@@ -55,7 +55,7 @@ export function showErrors (errors, context) {
           }
           context.$notify(
             {
-                title: 'Ошибка :',
+                title: 'Error :',
                 message: message,
                 type: 'warning',
                 offset: offset,

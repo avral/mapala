@@ -3,7 +3,7 @@
         <auction :mobile="mobile" :btc="ico.weekly_btc" :gbg="ico.weekly_gbg" :usd="ico.total_usd" :tokens="ico.total_tokens"></auction>
         <ico-stats :sections="sections"></ico-stats>
         <auction-info :mobile="mobile" :btcAddress="ico.btc_wallet"></auction-info>
-        <h1>Аукцион</h1>
+        <h1>{{ $t('auction') }}</h1>
         <invest-table :table-data="ico.data_provider.allModels"></invest-table>
     </div>
 </template>
@@ -40,15 +40,15 @@
             sections: function () {
                 var sections = [
                     {
-                        title: 'текущий курс',
+                        title: this.$t('current_rate'),
                         value: this.$parent.ico.current_rate + ' BTC/MPL'
                     },
                     {
-                        title: 'инвестиции',
+                        title: this.$t('investments'),
                         value: this.$parent.ico.total_btc.toFixed(6) + ' BTC'
                     },
                     {
-                        title: 'распределенные токены',
+                        title: this.$t('distributed_tokens'),
                         value: this.$parent.ico.total_tokens.toFixed() + ' MPL'
                     },
                 ]

@@ -162,7 +162,7 @@ export default {
   },
   //TODO Костыль, в ближайшее время перенести хранение ключей в VUEX, логику блокчейн в отдельный модуль, и хуки роутинга тоже отдельно!!!
   beforeRouteEnter (to, from, next) {
-    if (to.matched.some(record => record.meta.needPosting && !blockchains.bc_list[0].wif)) {
+    if (to.matched.some(record => record.meta.needPosting && !blockchains.current.wif)) {
         this.$alert(
             'Добавьте, пожалуйста, ПРИВАТНЫЙ постинг ключ в настройках аккаунта', {
               confirmButtonText: 'Хорошо'
@@ -177,7 +177,7 @@ export default {
     var user = to.params.user
     var userFrom = from.params.user
     if (to.matched.some(record => record.meta.isModal) || from.matched.some(record => record.meta.isModal)) {
-        if (to.matched.some(record => record.meta.needPosting && !blockchains.bc_list[0].wif)) {
+        if (to.matched.some(record => record.meta.needPosting && !blockchains.current.wif)) {
             this.$alert(
                 'Добавьте, пожалуйста, ПРИВАТНЫЙ постинг ключ в настройках аккаунта.', {
                   confirmButtonText: 'Хорошо'

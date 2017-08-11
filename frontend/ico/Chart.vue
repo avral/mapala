@@ -56,7 +56,7 @@
                         }
                     },
                     series: [{
-                        name: 'Средний курс',
+                        name: this.$t('average_rate'),
                         showInLegend: false, 
                         data: this.y
                     }]

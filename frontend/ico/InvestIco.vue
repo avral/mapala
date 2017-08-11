@@ -1,7 +1,7 @@
 <template>
     <div v-if="ico" class="icoInvest">
         <ico-stats :sections="sections"></ico-stats>
-        <h1>История инвестиций</h1>
+        <h1>{{ $t('investment_history') }}</h1>
         <!-- <invest-table :table-data="ico.data_provider.allModels"></invest-table> -->
         <invest-table :table-data="investors"></invest-table>
     </div>
@@ -36,11 +36,11 @@
             sections: function () {
                 var sections = [
                     {
-                        title: 'инвестиции',
+                        title: this.$t('investments'),
                         value: this.$parent.ico.total_btc.toFixed(6) + ' BTC'
                     },
                     {
-                        title: 'распределенные токены',
+                        title: this.$t('distributed_tokens'),
                         value: this.$parent.ico.total_tokens.toFixed() + ' MPL'
                     },
                 ]

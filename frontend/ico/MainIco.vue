@@ -1,7 +1,7 @@
 <template>
     <div v-if="ico" >
-        <h3 v-if="mobile">Инвестируй в первое применение технологии блокчейн для путешественников</h3>
-        <h1 v-else>Инвестируй в первое применение технологии блокчейн для путешественников</h1>
+      <h3 v-if="mobile">{{ $t('invest_blockchain') }}</h3>
+      <h1 v-else>{{ $t('invest_blockchain') }}</h1>
         <chart :x="ico.xaxis" :y="ico.yaxis"></chart>
         <ico-stats :sections="sections"></ico-stats>
         <el-row type="flex" class="auc-bg" justify="center" :gutter="20">
@@ -14,12 +14,12 @@
         <el-row class="ico-bottom" type="flex" justify="center" :gutter="20">
             <el-col :xs="12" :sm="12" :md="6" :lg="6">
                 <router-link :to="{name: 'investors'}">
-                    <h4 class="ico-hist">История<br>Pre-ICO</h4>
+                  <h4 class="ico-hist">{{ $t('history') }}<br>Pre-ICO</h4>
                 </router-link>
             </el-col>
             <el-col :xs="12" :sm="12" :md="6" :lg="6">
                 <router-link to="/mapala">
-                    <h4 class="ico-blog">Блог<br>Mapala</h4>
+                  <h4 class="ico-blog">{{ $t('blog') }}<br>Mapala</h4>
                 </router-link>
             </el-col>
         </el-row>
@@ -57,15 +57,15 @@
             sections: function () {
                 var sections = [
                     {
-                        title: 'текущий курс',
+                        title: this.$t('current_rate'),
                         value: this.$parent.ico.current_rate + ' BTC/MPL'
                     },
                     {
-                        title: 'инвестиции',
+                        title: this.$t('investments'),
                         value: this.$parent.ico.total_btc.toFixed(6) + ' BTC'
                     },
                     {
-                        title: 'распределенные токены',
+                        title: this.$t('distributed_tokens'),
                         value: this.$parent.ico.total_tokens.toFixed() + ' MPL'
                     },
                 ]

@@ -113,9 +113,8 @@
         methods: {
             updatePassword() {
                 if (!this.old_password) { return }
-
                     User.setPassword({old_password: this.old_password, new_password: this.new_password}).then(res => {
-                        this.$notify({title: 'Password has been changed', message: res.body, type: 'success'})
+                        this.$notify({title: this.$t('password_changed'), message: res.body, type: 'success'})
                         this.old_password = ''
                     }, err => {
                         this.$notify({message: err.body[0], type: 'warning'})
@@ -129,13 +128,13 @@
             hideKey(e, bc) {
                 if (bc.wif && !this.keyInValid) {
                     this.blockchains.setPostingKey(this, bc).then(res => {
-                        this.$notify({title: 'Ок', message: 'Ключ зарегистрирован', type: 'success'})
+                        this.$notify({title: 'Оk', message: this.$t('key_registered'), type: 'success'})
                     }, err => {
                         bc.wif = ''
                         if (err.status == 404) {
                             this.$notify({
                                 title: 'Key error',
-                                message: `Has not user with this key in ${bc.name}`,
+                                message: this.$t('has_not_user_with_key'),
                                 type: 'warning'
                             })
                         }   else {
@@ -154,7 +153,7 @@
             update() {
                 User.update({username: this.auth.user.username}, this.auth.user).then(res => {
                     this.auth.user = res.body
-                    this.$notify({title: 'Ок', message: 'Settings updated', type: 'success'})
+                    this.$notify({title: 'Ок', message: this.$t('settings_update'), type: 'success'})
                 }, res => {
                     this.error = res.data.error;
                     this.$notify({title: 'Warning', message: this.error, type: 'warning'})

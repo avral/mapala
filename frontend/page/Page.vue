@@ -119,20 +119,20 @@
       vote (page) {
         if (!bc.current.key_valid) {
           // TODO Вынести проверку ключа в блокчейн модуль
-          return this.$notify({message: `Need set key for ${bc.current.name}`, type: 'warning'})
+          return this.$notify({message: this.$t('add_key_err', {bc: bc.current.name}), type: 'warning'})
         }
 
         this.loading = true
 
         bc.vote(page).then(res => {
           this.loading = false
-          this.$notify({message: `Success`, type: 'success'})
+          this.$notify({message: this.$t('voted'), type: 'success'})
           Page.updatePost({author: page.blockchain_author, permlink: page.permlink}).then(res => {
             page.payout = res.body.payout
           })
         }, err => {
           this.loading = false
-          this.$notify({title: 'Upvote error', message: err, type: 'warning'})
+          this.$notify({title: this.$t('voting_error'), message: err, type: 'warning'})
         })
       },
       close() {

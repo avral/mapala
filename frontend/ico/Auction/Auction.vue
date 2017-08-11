@@ -1,6 +1,6 @@
 <template>
     <div class="auc-block" :class="{aucblMobile: mobile}">
-        <h3>Аукцион</h3>
+      <h3>{{ $t('auction') }}</h3>
         <el-row type="flex" class="auc-cent" justify="center" :gutter="20">
             <el-col class="week-wraper" :span="8">
                 <auction-stat :stat="stats.week.btc" :isBold="true"></auction-stat>
@@ -34,7 +34,7 @@ export default {
                 week: {
                     btc: {
                         value: this.btc,
-                        title: 'Поступления за неделю',
+                        title: this.$t('weekly_revenues'),
                         icon: '<i class="fa fa-btc" aria-hidden="true"></i>'
                     },
                     gbg: {
@@ -45,18 +45,17 @@ export default {
                 full: {
                     usd: {
                         value: this.usd,
-                        title: 'Всего',
+                        title: this.$t('in_total'),
                         icon: '<i class="fa fa-usd" aria-hidden="true"></i>',
 
                     },
                     tokens: {
                         value: 810000,
-                        title: 'токены на распределение',
+                        title: this.$t('tokens_distributed'),
                     }
                 }
             },
             activeTab: 'btc'
-
         }
     }
 }

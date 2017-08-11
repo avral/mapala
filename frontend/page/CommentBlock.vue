@@ -105,7 +105,7 @@ export default {
       // FIXME Зарефакторить эту дичь. После релиза - обязательно, в натуре дичь полнейшая
       if (!bc.current.key_valid) {
         this.endEdit()
-        return this.$notify({message: `Need set key for ${bc.current.name}`, type: 'warning'})
+        return this.$notify({message: this.$t('add_key_err', {bc: bc.current.name}), type: 'warning'})
       }
 
       this.new_comment.body = this.$refs.text.innerText
@@ -114,7 +114,7 @@ export default {
 
       let err = ''
 
-      if (!new_comment.body.length) err = 'Comment can not be empty'
+      if (!new_comment.body.length) err = this.$t('empty_comment')
 
       if (err) return this.$notify({ message: err, type: 'warning'})
 

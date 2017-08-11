@@ -15,32 +15,32 @@
                 </el-table-column>
                 <el-table-column
                   prop="name"
-                  label="Никнэйм"
+                  :label="$t('nickname')"
                   width="100">
                 </el-table-column>
                 <el-table-column
                   prop="updated_at"
-                  label="Дата, Время"
+                  :label="$t('date_time')"
                   width="180">
                 </el-table-column>
                 <el-table-column
                   prop="currency"
-                  label="Валюта"
+                  :label="$t('currency')"
                   width="90">
                 </el-table-column>
                 <el-table-column
                   prop="amount"
-                  label="Сумма, BTC">
+                  :label="$t('аmount_btc')">
                 </el-table-column>
                 <el-table-column
                   prop="bonuse"
-                  label="Бонус (%)"
+                  :label="$t('bonus')"
                   align="center"
                   width="110">
                 </el-table-column>
                 <el-table-column
                   prop="tokens"
-                  label="Токены">
+                  :label="$t('tokens')">
                 </el-table-column>
                 <el-table-column
                   label="Hash"

@@ -1,6 +1,6 @@
 <template>
     <div v-if="mobile" style="padding-top: 40px" class="walletMobile">
-        <h3>Прсональный BTC-адрес:</h3>
+      <h3>{{ $t('personal_btc') }}</h3>
         <h4>{{btcAddress}}</h4>
         <el-tabs v-model="activeTab" v-if="this.wallet">
             <el-tab-pane label="BTC" name="btc">
@@ -9,10 +9,10 @@
             <el-tab-pane label="GBG" name="gbg">
                 <h2><span>{{ $t('investments') }}:</span> {{wallet.personal_gbg}} GBG</h2>
             </el-tab-pane>
-            <el-tab-pane label="Токены" name="tokens">
+            <el-tab-pane :label="$t('tokens')" name="tokens">
                 <h2><span>{{ $t('investments') }}:</span> {{wallet.personal_tokens}} Mpl</h2>
             </el-tab-pane>
-            <el-tab-pane label="Баунти" name="bounty">
+            <el-tab-pane :label="$t('bounty')" name="bounty">
                 <h2><span>{{ $t('investments') }}:</span> {{wallet.personal_bounty}} Mpl</h2>
             </el-tab-pane>
             <el-tab-pane label="USD" name="usd">
@@ -27,16 +27,16 @@
                     <h3>{{ $t('investments') }}</h3>
                     <div class="stats" v-if="this.wallet">
                         <div class="stat">
-                            <h4>Инвестиции:</h4>
+                            <h4>{{ $t('investments') }}</h4>
                             <span>{{wallet.personal_btc}} BTC</span>
                             <span>{{wallet.personal_gbg}} GBG</span>
                         </div>
                         <div class="stat">
-                            <h4>Токены</h4>
+                          <h4>{{ $t('tokens') }}</h4>
                             <span>{{wallet.personal_tokens}} Mpl</span>
                         </div>
                         <div class="stat">
-                            <h4>Баунти</h4>
+                          <h4>{{ $t('bounty') }}</h4>
                             <span>{{wallet.personal_bounty}} Mpl</span>
                         </div>
                         <div class="stat">
@@ -50,7 +50,7 @@
                 <el-card v-for="card in cards" class="info-card small-card" :key=card.id v-if="btcAddress">
                     <h3>{{card.title}}</h3>
                     <span>{{card.body}}</span>
-                    <p><a href="javascript:void(0)" @click="showHowTo(card)">инструкция</a></p>
+                    <p><a href="javascript:void(0)" @click="showHowTo(card)">{{ $t('instruction') }}</a></p>
                 </el-card>
             </el-col>
             <el-dialog
@@ -93,12 +93,12 @@ export default {
 
                 // },
                 {
-                    title: 'Персональный BTC-адрес',
+                    title: this.$t('personal_btc'),
                     body: this.btcAddress,
                     howTo: 'BTC',
                     insructions: [
-                        'Отправьте желаемую сумму на этот биткоин-адрес: ' + this.btcAddress,
-                        'После 3-х подтверждений мы зачислим ваши средства и они будут отображаться в личном кабинете. Обычно это занимает 30-40 минут',
+                        this.$t('send_btc') + this.btcAddress,
+                        this.$t('after_confirmations'),
                     ]
                 }
             ],
