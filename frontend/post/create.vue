@@ -13,7 +13,6 @@
 
       async createPost (post) {
         try {
-          post.permlink = bc.getPermlink(post.title)
           await bc.createPost(this, post)
 
           this.resetPostForm()
