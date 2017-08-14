@@ -46,9 +46,9 @@
 </template>
 
 <script>
-import {Comment} from '../services'
-import auth from '../auth'
-import bc from '../blockchains'
+import {Comment} from '../../services/index'
+import auth from '../../auth/index'
+import bc from '../../blockchains/index'
 import VueMarkdown from 'vue-markdown'
 
 export default {
