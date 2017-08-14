@@ -12,10 +12,12 @@ class UserRegiserBaseSerializer(serializers.Serializer):
     password = serializers.CharField()
 
     def validate_username(self, data):
+        username = data.lower()
+
         if not is_eng(data):
             raise ValidationError('Username can contains only eng symbols')
 
-        if User.objects.filter(username=data).exists():
+        if User.objects.filter(username=username).exists():
             raise ValidationError('Username already exist')
 
         return data
