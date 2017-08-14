@@ -135,7 +135,7 @@ export default {
 
       this.page.comments.push(new_comment)
 
-      bc.createComment(new_comment).then(res => {
+      bc.createComment(this, new_comment).then(res => {
         // Убираем заглушку
         this.clearGag()
 
