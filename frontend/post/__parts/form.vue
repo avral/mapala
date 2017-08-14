@@ -184,7 +184,7 @@ export default {
 
   .write .close {
     position: absolute;
-    background: url(../assets/icon-close-black.svg) no-repeat center center;
+    background: url(../../assets/icon-close-black.svg) no-repeat center center;
     top: 20px;
     right: 20px;
     width: 40px;
@@ -248,7 +248,7 @@ export default {
     color: #7e8793;
     padding-left: 12px;
     position: relative;
-    background: url(../assets/icon-location-small.svg) no-repeat left 3px;
+    background: url(../../assets/icon-location-small.svg) no-repeat left 3px;
   }
 
   .write .write_header{
@@ -307,14 +307,14 @@ export default {
   }
 
   .write .icon.location{
-    background: url(../assets/icon-location.svg) no-repeat;
+    background: url(../../assets/icon-location.svg) no-repeat;
     width: 15px;
     height: 22px;
     margin-right: 50px;
   }
 
   .write .icon.image{
-    background: url(../assets/icon-image.svg) no-repeat;
+    background: url(../../assets/icon-image.svg) no-repeat;
     width: 22px;
     height: 18px;
   }
@@ -356,7 +356,7 @@ export default {
   .write .added_img .add{
     width: 100px;
     height: 100px;
-    background: url(../assets/icon-plus-gray.svg) no-repeat center center;
+    background: url(../../assets/icon-plus-gray.svg) no-repeat center center;
     box-sizing: border-box;
     border: 1px dashed #7e8793;
     border-radius: 4px;
@@ -377,7 +377,7 @@ export default {
   }
 
   .search_location [type="text"]{
-    background:  url(../assets/icon-search.svg) no-repeat 17px 12px;
+    background:  url(../../assets/icon-search.svg) no-repeat 17px 12px;
     border: 0;
     outline: 0;
     line-height: 41px;

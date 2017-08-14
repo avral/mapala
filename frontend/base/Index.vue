@@ -68,7 +68,7 @@ import MugenScroll from 'vue-mugen-scroll'
 import {Page, Comment, User} from '../services'
 
 import PostMap from '../base/PostMap.vue'
-import PostList from '../page/PostList.vue'
+import PostList from '../post/post-list.vue'
 import UserProfile from '../user/UserProfile.vue'
 import Auth from '../auth/Auth.vue'
 
