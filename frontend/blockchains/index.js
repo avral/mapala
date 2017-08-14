@@ -39,48 +39,71 @@ export default {
     return slug(text).toLowerCase()
   },
 
-  createPost(context, post) {
-    console.log('Posting to', this.app_tag)
-    let tr = new TransactionBuilder()
-    tr.add_type_operation("comment", {
-      parent_author: "",
-      parent_permlink: this.app_tag,
-      author: this.current.blockchain_username,
-      permlink: post.permlink,
-      title: post.title,
-      body: post.body,
-      json_metadata: this.getJsonMeta(post.meta),
-    })
+  checkValidKey(context, reject) {
+    if (!this.current.key_valid) {
+      reject(context.$t('add_key_err', {bc: this.current.name}))
+    }
+  },
 
-    let privKey = PrivateKey.fromWif(this.current.wif)
+  signTr(tr) {
+    tr.add_signer(PrivateKey.fromWif(this.current.wif))
+
     return new Promise((resolve, reject) => {
-      tr.add_signer(privKey)
       tr.finalize().then(() => {
         tr.sign()
-        Page.save({tx: tr.toObject(), blockchain: this.current.name}).then(res => resolve(res), err => reject(err.body))
-      })
+        resolve(tr.toObject())
+      }, err => reject(err))
     })
   },
 
-  createComment(comm) {
-    let tr = new TransactionBuilder()
-    tr.add_type_operation("comment", {
-      parent_author: comm.parentAuthor,
-      parent_permlink: comm.parentPermlink,
-      author: this.current.blockchain_username,
-      permlink: comm.permlink.replace('.', '-'),
-      title: '',
-      body: comm.body,
-      json_metadata: this.getJsonMeta(),
-    })
 
-    let privKey = PrivateKey.fromWif(this.current.wif)
+  createPost(context, post) {
     return new Promise((resolve, reject) => {
-      tr.add_signer(privKey)
-      tr.finalize().then(() => {
-        tr.sign()
-        Comment.save({tx: tr.toObject(), blockchain: this.current.name}).then(res => resolve(res), err => reject(err.body))
+      this.checkValidKey(context, reject)
+
+      let tr = new TransactionBuilder()
+      tr.add_type_operation("comment", {
+        parent_author: "",
+        parent_permlink: this.app_tag,
+        author: this.current.blockchain_username,
+        permlink: post.permlink,
+        title: post.title,
+        body: post.body,
+        json_metadata: this.getJsonMeta(post.meta),
       })
+
+      this.signTr(tr).then(tr => {
+        Page.save({tx: tr, blockchain: this.current.name})
+          .then(res => resolve(res), err => reject(err.body))
+        
+      }, err => reject(err))
+    })
+  },
+
+  updatePost(context, post) {
+    return this.createPost(context, post)
+  },
+
+  createComment(context, comm) {
+    return new Promise((resolve, reject) => {
+      this.checkValidKey(context, reject)
+
+      let tr = new TransactionBuilder()
+      tr.add_type_operation("comment", {
+        parent_author: comm.parentAuthor,
+        parent_permlink: comm.parentPermlink,
+        author: this.current.blockchain_username,
+        permlink: comm.permlink.replace('.', '-'),
+        title: '',
+        body: comm.body,
+        json_metadata: this.getJsonMeta(),
+      })
+
+      this.signTr(tr).then(tr => {
+        Comment.save({tx: tr, blockchain: this.current.name})
+          .then(res => resolve(res), err => reject(err.body))
+        
+      }, err => reject(err))
     })
   },
 
@@ -107,6 +130,12 @@ export default {
   getJsonMeta(meta = {}) {
     meta.app = 'mapala/1.0'
     meta.format = 'html'
+
+    if (meta.tags === undefined) {
+      meta.tags = [this.app_tag]
+    } else if (!meta.tags.includes(this.app_tag)) {
+      meta.tags.unshift(this.app_tag)
+    }
 
     return JSON.stringify(meta)
   },

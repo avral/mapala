@@ -23,6 +23,7 @@ import 'animate.css/animate.min.css'
 import 'font-awesome/css/font-awesome.css'
 import VueHighcharts from 'vue-highcharts'
 import axios from 'axios'
+import moment from 'moment'
 // import VueAxios from 'vue-axios'
 import Vuex from 'vuex'
 import { sync } from 'vuex-router-sync'
@@ -105,6 +106,7 @@ if (!localStore.get('locale')) {
 }
 
 Vue.config.lang = localStore.get('locale')
+moment.locale(localStore.get('locale'))
 
 Object.keys(locales).forEach(function (lang) {
   Vue.locale(lang, locales[lang])

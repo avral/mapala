@@ -61,8 +61,6 @@ class Page(models.Model):
     images = models.ManyToManyField(Image, blank=True)
     meta = JSONField(default={})
 
-    voters = models.ManyToManyField(User, related_name='pages_vote', blank=True)
-
     status = models.IntegerField(default=0, choices=STATUS_CHOICES)
 
     # TODO Сделать нормальный PointField
@@ -95,7 +93,6 @@ class Comment(MPTTModel):
     page = models.ForeignKey(Page, related_name='comments')
     permlink = models.CharField(max_length=512, null=True, blank=True)
     author = models.ForeignKey(User)
-    voters = models.ManyToManyField(User, related_name='voters', blank=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     status = models.IntegerField(default=1, choices=STATUS_CHOICES)

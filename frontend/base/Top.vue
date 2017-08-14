@@ -64,6 +64,7 @@ import { icon } from 'vue-fontawesome'
 import bc from '../blockchains'
 import {detectmob} from '../utils'
 import * as localStore from 'store'
+import moment from 'moment'
 
 import { mixin as onClickOutside } from 'vue-on-click-outside'
 
@@ -81,6 +82,7 @@ export default {
       auth.user.locale = locale
       this.locale = locale
       localStore.set('locale', locale)
+      moment.locale(localStore.get('locale'))
       Vue.config.lang = localStore.get('locale')
       this.$store.dispatch('authorPosts', this.$store.state.posts.author)
       bc.setBlockchain()
