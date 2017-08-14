@@ -196,7 +196,7 @@ class BaseUpdater:
     def get_author(self, username):
         try:
             user_bc = UserBlockChain.objects.get(
-                username=username,
+                username=username.lower(),
                 blockchain=self.blockchain
             )
         except ObjectDoesNotExist:
