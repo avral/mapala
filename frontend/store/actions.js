@@ -1,6 +1,5 @@
 import {Page, Comment, User} from '../services'
 
-
 export default {
   getModal ({commit}, data) {
     commit('showModal')

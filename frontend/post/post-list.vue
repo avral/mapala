@@ -23,9 +23,12 @@ export default {
       return this.$store.state.posts.loading
     }
   },
+  mounted () {
+    console.log(this.pages())
+  },
   components: {
     PostListItem
-  },
+  }
 }
 
 </script>

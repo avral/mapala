@@ -51,7 +51,7 @@ export default {
     state.isPostSaving = payload
   },
   resetPostForm (state) {
-    state.page = {
+    state.postForm = {
       title: '',
       body: '',
       meta: {
