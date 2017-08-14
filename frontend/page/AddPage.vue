@@ -67,7 +67,10 @@
                     bounds: '#write_text',
                     modules: {
                         toolbar: {
-                            container: [['bold', 'italic'], [{'header': 1 }, {'header': 2 }], [{ 'list': 'ordered'}, { 'list': 'bullet' }], [{ 'align': [] }], [{ 'script': 'sub'}, { 'script': 'super' }], ['link'], ['video'], ['image'], ['blockquote'], ['clean']],
+                            container: [['bold', 'italic'], [{'header': 1 }, {'header': 2 }],
+                              [{ 'list': 'ordered'}, { 'list': 'bullet' }], [{ 'align': [] }],
+                              [{ 'script': 'sub'}, { 'script': 'super' }], ['link'], ['video'], 
+                              ['image'], ['blockquote'], ['clean']],
                             handlers: {
                                 image: this.imageHandler
                             }
@@ -164,7 +167,7 @@
                                             location: {},
                                         },
                                     },
-                                    this.$notify({ message: $t('published'), type: 'success' })
+                                    this.$notify({ message: this.$t('published'), type: 'success' })
                                     if (!this.forEdit) {
                                         this.$store.commit('addPost', res.body)
                                     }
