@@ -26,7 +26,7 @@ export default {
       if (!res.body.next) {
         commit('noPage', true)
       }
-        
+
       commit('toglePostLoading')
     })
   },
@@ -37,22 +37,22 @@ export default {
     commit('setGte', range.gte)
     return dispatch('setPosts')
   },
-  setTags ({dispatch, commit, state}, tag) {
+  setTags ({ dispatch, commit, state }, tag) {
     commit('resetRange')
     commit('resetPage')
     commit('setTags', tag)
 
-    var params = {
+    const params = {
       tag: tag
     }
 
     return dispatch('setPosts', params)
   },
-  nextPosts ({dispatch, commit, state}) {
+  nextPosts ({ dispatch, commit, state }) {
     commit('nextPage')
     return dispatch('setPosts')
   },
-  authorPosts ({dispatch, commit, state}, author) {
+  authorPosts ({ dispatch, commit, state }, author) {
     commit('resetRange')
     commit('resetPage')
     commit('resetTags')

@@ -46,5 +46,18 @@ export default {
     },
     toglePostLoading (state) {
         state.posts.loading = !state.posts.loading
+    },
+  setPostSavingStateTo (state, payload) {
+    state.isPostSaving = payload
+  },
+  resetPostForm (state) {
+    state.page = {
+      title: '',
+      body: '',
+      meta: {
+        images: [],
+        location: {}
+      }
     }
+  }
 }

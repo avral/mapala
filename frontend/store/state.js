@@ -19,5 +19,14 @@ export default {
         },
         tags: null,
     },
+    isPostSaving: false,
+    postForm: {
+      title: '',
+      body: '',
+      meta: {
+        image: [],
+        location: {}
+      }
+    },
     mobile: MD,
 }
