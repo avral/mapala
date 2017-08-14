@@ -1,29 +1,27 @@
 <template>
   <div v-if="modal.show" class="pop_back" @click.self="closeModal">
-    <transition 
+    <transition
     name="custom-classes-transition"
     enter-active-class="animated fadeIn"
     leave-active-class="animated fadeOut"
     mode="out-in"
     >
-      <!-- <component v-bind:is="modal.data"></component> -->
       <router-view name="modal"></router-view>
   </transition>
 </div>
 </template>
 
 <script>
-  import { mapState, mapMutations } from 'vuex'
+  import { mapState } from 'vuex'
   import Auth from '../auth/Auth.vue'
-  import Page from '../page/Page.vue'
-  import AddPage from '../page/AddPage.vue'
-  import EditPage from '../page/EditPage.vue'
+  import PostView from '../post/view.vue'
+  import CreatePost from '../post/create.vue'
+  import EditPost from '../post/edit.vue'
 
   export default {
-  // props: [content],
-  data() {
+  data () {
     return {
-      backTo: '/',
+      backTo: '/'
     }
   },
   computed: mapState([
@@ -36,7 +34,7 @@
   methods:{
     /**
      * Close modal window
-     * 
+     *
      */
      closeModal() {
       this.setBackPath ()
@@ -67,9 +65,9 @@
     },
     components: {
       Auth,
-      Page,
-      AddPage,
-      EditPage
+      PostView,
+      CreatePost,
+      EditPost
     }
   }
 </script>

@@ -44,7 +44,7 @@ import auth from '../auth'
 import {vkShare, commentsNumeral} from '../utils'
 
 import {Page} from '../services'
-import CommentsBlock from './CommentBlock.vue'
+import CommentsBlock from './comment/CommentBlock.vue'
 
 export default {
     props: ['page'],

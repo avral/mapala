@@ -145,10 +145,12 @@
             if (!this.page.body.length) err = this.$t('content_empty')
             if (!this.page.title.length) err = this.$t('title_empty')
             if (err) return this.$notify({ message: err, type: 'warning'})
+              //  TODO make frontend form validation
 
             this.close()
 
             let permlink = this.$route.params.permlink ? this.$route.params.permlink : bc.getPermlink(this.page.title)
+              // Divide edit/create logic
                         steem.api.getContent(bc.current.blockchain_username, permlink, (err, res) => {
                             if (res.id != 0 && !this.forEdit) {
                                 return this.$notify({ message: this.$t('have_title'), type: 'warning'})
@@ -174,7 +176,7 @@
                                 })
                             }
                         })
-                        
+
                     },
                     setPlace(place) {
                         this.page.meta.location.name = place.formatted_address

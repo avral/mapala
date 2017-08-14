@@ -1,4 +1,4 @@
-<template> 
+<template>
   <!-- <div class="full_post pop_back" @click.self="close"> -->
   <!-- <div> -->
     <div class="post_block" v-loading.body="!page.body">
@@ -60,7 +60,7 @@
 
   import Top from '../base/Top.vue'
   import auth from '../auth'
-  import CommentsBlock from './CommentBlock.vue'
+  import CommentsBlock from './comment/CommentBlock.vue'
   import {Page,  Comment} from '../services'
 
   export default {
@@ -103,7 +103,7 @@
     computed: {
       /**
        * TODO перенести в отдельную vue директиву
-       * 
+       *
        * parce url to <img>
        * @return <img> tag
        */
