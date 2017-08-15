@@ -79,11 +79,14 @@ class PageViewSet(MultiSerializerViewSetMixin, viewsets.ModelViewSet):
         qs = Page.on_bc.order_by('-created_at')
 
         # HACK Так как для JSONField нет поддержки фильтрации
-        # реализуем ее сдесть, для тегов
         tag = self.request.GET.get('tag')
+        group = self.request.GET.get('group')
 
         if tag is not None:
             qs = qs.filter(meta__tags__contains=tag)
+
+        if group is not None:
+            qs = qs.filter(meta__group=group)
 
         return qs
 
