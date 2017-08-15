@@ -1,20 +1,21 @@
 <template lang="pug">
-  post-form(isEditForm="false", @createPost="createPost(post)")
+  post-form(:isEditForm="false", @createPost="createPost")
 </template>
 
 <script>
   import PostForm from './__parts/form.vue'
   import bc from '../blockchains'
-  import { mapMutations } from 'vuex'
+  import { mapMutations, mapState } from 'vuex'
 
   export default {
-    methods: {
-      ...mapMutations('resetPostForm'),
+    computed: mapState(['postForm']),
 
-      async createPost (post) {
+    methods: {
+      ...mapMutations(['resetPostForm', 'setPostSavingStateTo']),
+
+      async createPost () {
         try {
-          post.permlink = bc.getPermlink(post.title)
-          await bc.createPost(this, post)
+          await bc.createPost(this, this.postForm)
 
           this.resetPostForm()
           this.$parent.closeModal()
@@ -23,6 +24,8 @@
         } catch (error) {
           this.$notify({ message: error, type: 'warning' })
         }
+
+        this.setPostSavingStateTo(false)
       }
     },
     components: {

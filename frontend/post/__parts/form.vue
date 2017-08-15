@@ -11,28 +11,46 @@
             div.name
               | @{{ auth.user.username }}
 
-        input.write_header.blank(
-          :placeholder="$t('titile_placeholder')"
-          v-model="postForm.title",
-          disabled="isEditForm",
-          v-validate:postForm.title="'required|min:2'"
-        )
+        span.form-group__message(v-if="!$v.postForm.title.required && $v.postForm.title.$dirty")
+          | {{ $t('field_is_required') }}
+
+        span.form-group__message(v-if="!$v.postForm.title.minLength")
+          | {{ $t('title_must_have_at_least') }} 2 {{ $t('letters') }}.
+
+        div.title_heading__Wrapper
+          input.write_header.blank(
+            :placeholder="$t('titile_placeholder')"
+            v-model="postForm.title",
+            @input="$v.postForm.title.$touch()",
+            :disabled="isEditForm"
+          )
+
+        span.form-group__message(
+          v-if="!$v.postForm.meta.location.name.required && $v.postForm.meta.location.name.$dirty"
+          )
+          | {{ $t('field_is_required') }}
+
         div.search_location
           gmap-autocomplete(
-          class="search_field",
-          :value="page.position_text",
-          @place_changed="setPlace"
+            class="search_field",
+            :value="postForm.position_text",
+            @place_changed="setPlace"
           )
 
           <!-- Image loader -->
           input(ref="inputImage", @change="uploadImage", hidden, type="file")
 
+
+        span.form-group__message(v-if="!$v.postForm.body.required && $v.postForm.body.$dirty")
+          | {{ $t('field_is_required') }}
+
         quill-editor.write_text(
           id="write_text",
-          v-model="page.body",
+          v-model="postForm.body",
           ref="myQuillEditor",
           :options="editorOption",
-          @paste="onPaste($event, current, 0)"
+          @paste="onPaste($event, current, 0)",
+          @input="$v.postForm.body.$touch()"
         )
 
         div.bottom_block
@@ -51,6 +69,7 @@ import auth from '../../auth'
 import { Page, Image } from '../../services'
 import { quillEditor } from 'vue-quill-editor'
 import { mapState, mapMutations } from 'vuex'
+import { required, minLength } from 'vuelidate/lib/validators'
 
 export default {
   props: ['isEditForm'],
@@ -74,21 +93,60 @@ export default {
           clipboard: {
             matchVisual: false
           }
-        },
+        }
       },
-      image_loading: false
+      image_loading: false,
+
+      dynamicTags: ['Tag 1', 'Tag 2', 'Tag 3'],
+      inputVisible: false,
+      newTagInputValue: ''
     }
   },
   computed: {
-    ...mapState(['isPostSaving', 'postForm']),
+    ...mapState(['isPostSaving', 'postForm', 'modal']),
 
     editor () {
       return this.$refs.myQuillEditor.quill
     }
   },
+  validations: {
+    postForm: {
+      title: {
+        required,
+        minLength: minLength(2)
+      },
+      body: {
+        required
+      },
+      meta: {
+        location: {
+          name: { required }
+        }
+      }
+    }
+  },
   methods: {
+    ...mapMutations(['setPostSavingStateTo', 'hideModal', 'redirectBackPath']),
 
-    ...mapMutations('setPostSavingStateTo'),
+    handleClose (tag) {
+      this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1)
+    },
+
+    showInput () {
+      this.inputVisible = true
+      this.$nextTick(_ => {
+        this.$refs.saveTagInput.$refs.input.focus()
+      })
+    },
+
+    handleAddingNewTag () {
+      const newTagInputValue = this.newTagInputValue
+      if (newTagInputValue) {
+        this.postForm.meta.tags.push(newTagInputValue)
+      }
+      this.inputVisible = false
+      this.newTagInputValue = ''
+    },
 
     onPaste (e) {
       if (e.defaultPrevented || !this.quill.isEnabled()) {
@@ -111,7 +169,8 @@ export default {
       this.editor.insertEmbed(range.index, 'image', value, Quill.sources.USER)
     },
     close () {
-      this.$parent.closeModal()
+      this.hideModal()
+      this.$router.push(this.modal.redirectBackPath)
     },
     imageUploadHandler () {
       this.$refs.inputImage.click()
@@ -141,16 +200,20 @@ export default {
     submit () {
       if (this.isFormValid()) {
         this.setPostSavingStateTo(true)
-
         if (this.isEditForm) {
-          this.$emit('updatePost', this.postForm)
+          this.$emit('updatePost')
         } else {
-          this.$emit('createPost', this.postForm)
+          this.$emit('createPost')
         }
+      } else {
+        this.showErrors()
       }
     },
+    showErrors () {
+      this.$v.postForm.$touch()
+    },
     isFormValid () {
-      this.$validator.validateAll().catch(() => false)
+      return !this.$v.postForm.$invalid
     },
     setPlace (place) {
       this.postForm.meta.location.name = place.formatted_address
@@ -170,6 +233,9 @@ export default {
       })
     }
   },
+  mounted () {
+    console.log(this.isEditForm)
+  },
   components: {
     quillEditor
   }
@@ -184,7 +250,7 @@ export default {
 
   .write .close {
     position: absolute;
-    background: url(../assets/icon-close-black.svg) no-repeat center center;
+    background: url(../../assets/icon-close-black.svg) no-repeat center center;
     top: 20px;
     right: 20px;
     width: 40px;
@@ -248,18 +314,18 @@ export default {
     color: #7e8793;
     padding-left: 12px;
     position: relative;
-    background: url(../assets/icon-location-small.svg) no-repeat left 3px;
+    background: url(../../assets/icon-location-small.svg) no-repeat left 3px;
   }
 
   .write .write_header{
-    margin: 0 0 13px;
-    font-size: 26px;
+    font-size: 22px;
     font-weight: 700;
     letter-spacing: -0.5px;
     color: #20262d;
     outline: 0;
     border: 0;
-    width: 100%;
+    width: 95%;
+    margin: 5px 5px 5px 15px;
   }
 
   .write .write_header.blank::before {
@@ -307,14 +373,14 @@ export default {
   }
 
   .write .icon.location{
-    background: url(../assets/icon-location.svg) no-repeat;
+    background: url(../../assets/icon-location.svg) no-repeat;
     width: 15px;
     height: 22px;
     margin-right: 50px;
   }
 
   .write .icon.image{
-    background: url(../assets/icon-image.svg) no-repeat;
+    background: url(../../assets/icon-image.svg) no-repeat;
     width: 22px;
     height: 18px;
   }
@@ -356,7 +422,7 @@ export default {
   .write .added_img .add{
     width: 100px;
     height: 100px;
-    background: url(../assets/icon-plus-gray.svg) no-repeat center center;
+    background: url(../../assets/icon-plus-gray.svg) no-repeat center center;
     box-sizing: border-box;
     border: 1px dashed #7e8793;
     border-radius: 4px;
@@ -377,7 +443,7 @@ export default {
   }
 
   .search_location [type="text"]{
-    background:  url(../assets/icon-search.svg) no-repeat 17px 12px;
+    background:  url(../../assets/icon-search.svg) no-repeat 17px 12px;
     border: 0;
     outline: 0;
     line-height: 41px;
@@ -428,5 +494,45 @@ export default {
     left: 0;
     top: 0;
     z-index: -1;
+  }
+
+  span.form-group__message {
+    font-size: .75rem;
+    line-height: 1;
+    margin-top: -1.6875rem;
+    margin-bottom: .9375rem;
+    color: #F57F8B;
+    text-align: right;
+  }
+
+  .el-tag+.el-tag {
+    margin-left: 10px;
+  }
+  .button-new-tag {
+    margin-left: 10px;
+    height: 24px;
+    line-height: 22px;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  .title_heading__Wrapper {
+    margin: 0 0 13px;
+    max-width: 866px;
+    border: solid 1px rgba(72, 84, 101, 0.2);
+    border-radius: 6px;
+  }
+
+  .ql-toolbar.ql-snow + .ql-container.ql-snow {
+    margin: 15px;
+  }
+
+  .ql-toolbar.ql-snow {
+    border-bottom: solid 1px rgba(72, 84, 101, 0.2) !important;
+  }
+
+  div#write_text {
+    border-radius: 6px;
+    border: solid 1px rgba(72, 84, 101, 0.2);
   }
 </style>

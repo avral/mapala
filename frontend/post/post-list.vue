@@ -1,22 +1,18 @@
 <template>
   <!-- <div v-loading.body="loading"> -->
   <div>
-    <PageItem v-for="page in pages" :page="page" :key="page.id"></PageItem>
+    <post-list-item v-for="page in pages" :page="page" :key="page.id"></post-list-item>
     <div v-loading.body="loading"></div>
   </div>
 </template>
 
 
 <script>
-import PageItem from './PageItem.vue'
+import PostListItem from './post-list-item.vue'
 
 export default {
-  // props: ['pages'],
-
   data () {
     return {
-      // TODO Седлать ожидание подгрузки постов
-      // loading: this.$parent.loading,
     }
   },
   computed: {
@@ -28,8 +24,8 @@ export default {
     }
   },
   components: {
-    PageItem
-  },
+    PostListItem
+  }
 }
 
 </script>
