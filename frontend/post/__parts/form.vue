@@ -11,28 +11,45 @@
             div.name
               | @{{ auth.user.username }}
 
+        span.form-group__message(v-if="!$v.postForm.title.required && $v.postForm.title.$dirty")
+          | Field is required
+
+        span.form-group__message(v-if="!$v.postForm.title.minLength")
+          | Title must have at least {{ $v.postForm.title.minLength }} letters.
+
         input.write_header.blank(
           :placeholder="$t('titile_placeholder')"
           v-model="postForm.title",
-          disabled="isEditForm",
-          v-validate:postForm.title="'required|min:2'"
+          @input="$v.postForm.title.$touch()",
+          :disabled="isEditForm"
         )
+
+        <!--span.form-group__message(-->
+          <!--v-if="!$v.postForm.meta.location.name.required && $v.postForm.meta.location.name.$dirty"-->
+          <!--)-->
+          <!--| Locations is required-->
+
         div.search_location
           gmap-autocomplete(
-          class="search_field",
-          :value="page.position_text",
-          @place_changed="setPlace"
+            class="search_field",
+            :value="postForm.position_text",
+            @place_changed="setPlace"
           )
 
           <!-- Image loader -->
           input(ref="inputImage", @change="uploadImage", hidden, type="file")
 
+
+        span.form-group__message(v-if="!$v.postForm.body.required && $v.postForm.body.$dirty")
+          | Body is required
+
         quill-editor.write_text(
           id="write_text",
-          v-model="page.body",
+          v-model="postForm.body",
           ref="myQuillEditor",
           :options="editorOption",
-          @paste="onPaste($event, current, 0)"
+          @paste="onPaste($event, current, 0)",
+          @input="$v.postForm.body.$touch()"
         )
 
         div.bottom_block
@@ -51,6 +68,7 @@ import auth from '../../auth'
 import { Page, Image } from '../../services'
 import { quillEditor } from 'vue-quill-editor'
 import { mapState, mapMutations } from 'vuex'
+import { required, minLength } from 'vuelidate/lib/validators'
 
 export default {
   props: ['isEditForm'],
@@ -74,7 +92,7 @@ export default {
           clipboard: {
             matchVisual: false
           }
-        },
+        }
       },
       image_loading: false
     }
@@ -86,9 +104,19 @@ export default {
       return this.$refs.myQuillEditor.quill
     }
   },
+  validations: {
+    postForm: {
+      title: {
+        required,
+        minLength: minLength(2)
+      },
+      body: {
+        required
+      }
+    }
+  },
   methods: {
-
-    ...mapMutations('setPostSavingStateTo'),
+    ...mapMutations(['setPostSavingStateTo']),
 
     onPaste (e) {
       if (e.defaultPrevented || !this.quill.isEnabled()) {
@@ -141,16 +169,20 @@ export default {
     submit () {
       if (this.isFormValid()) {
         this.setPostSavingStateTo(true)
-
         if (this.isEditForm) {
-          this.$emit('updatePost', this.postForm)
+          this.$emit('updatePost')
         } else {
-          this.$emit('createPost', this.postForm)
+          this.$emit('createPost')
         }
+      } else {
+        this.showErrors()
       }
     },
+    showErrors () {
+      this.$v.postForm.$touch()
+    },
     isFormValid () {
-      this.$validator.validateAll().catch(() => false)
+      return !this.$v.postForm.$invalid
     },
     setPlace (place) {
       this.postForm.meta.location.name = place.formatted_address
@@ -169,6 +201,9 @@ export default {
         this.postForm.meta.location.lng = res.body.position.longitude
       })
     }
+  },
+  mounted () {
+    console.log(this.isEditForm)
   },
   components: {
     quillEditor
@@ -428,5 +463,14 @@ export default {
     left: 0;
     top: 0;
     z-index: -1;
+  }
+
+  span.form-group__message {
+    font-size: .75rem;
+    line-height: 1;
+    margin-top: -1.6875rem;
+    margin-bottom: .9375rem;
+    color: #F57F8B;
+    text-align: right;
   }
 </style>

@@ -3,6 +3,7 @@ const MD = new MobileDetect(window.navigator.userAgent)
 console.log(MD.mobile())
 
 export default {
+  mobile: MD,
   modal: {
     show: false,
     data: null
@@ -19,7 +20,9 @@ export default {
     },
     tags: null
   },
+
   isPostSaving: false,
+
   postForm: {
     title: '',
     body: '',
@@ -27,6 +30,5 @@ export default {
       image: [],
       location: {}
     }
-  },
-  mobile: MD
+  }
 }

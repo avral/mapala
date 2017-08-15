@@ -1,5 +1,5 @@
 <template lang="pug">
-  post-form(isEditForm="true", @updatePost="updatePost(data)")
+  post-form(:isEditForm="true", @updatePost="updatePost(data)")
 </template>
 
 <script>
@@ -8,7 +8,6 @@ import bc from '../blockchains'
 
 export default {
   methods: {
-
     async updatePost (data) {
       try {
         await bc.updatePost(this, data)

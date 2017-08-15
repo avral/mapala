@@ -15,7 +15,7 @@ import * as VueGoogleMaps from 'vue2-google-maps'
 import showdown from 'showdown'
 import VueScrollTo from 'vue-scrollto'
 import * as localStore from 'store'
-import VeeValidate from 'vee-validate'
+import Vuelidate from 'vuelidate'
 
 // animate.css
 import 'animate.css/animate.min.css'
@@ -41,7 +41,7 @@ Vue.use(VueLazyload)
 Vue.use(VueHighcharts)
 Vue.use(VueScrollTo)
 Vue.use(Meta)
-Vue.use(VeeValidate)
+Vue.use(Vuelidate)
 
 // Vue.use(VueAxios, axios)
 // Vue.use(axios)

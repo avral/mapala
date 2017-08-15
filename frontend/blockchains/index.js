@@ -57,25 +57,24 @@ export default {
   },
 
 
-  createPost(context, post) {
+  createPost (context, post) {
     return new Promise((resolve, reject) => {
       this.checkValidKey(context, reject)
+      const tr = new TransactionBuilder()
 
-      let tr = new TransactionBuilder()
-      tr.add_type_operation("comment", {
-        parent_author: "",
+      tr.add_type_operation('comment', {
+        parent_author: '',
         parent_permlink: this.app_tag,
         author: this.current.blockchain_username,
         permlink: post.permlink,
         title: post.title,
         body: post.body,
-        json_metadata: this.getJsonMeta(post.meta),
+        json_metadata: this.getJsonMeta(post.meta)
       })
 
       this.signTr(tr).then(tr => {
-        Page.save({tx: tr, blockchain: this.current.name})
+        Page.save({ tx: tr, blockchain: this.current.name })
           .then(res => resolve(res), err => reject(err.body))
-        
       }, err => reject(err))
     })
   },
@@ -102,7 +101,7 @@ export default {
       this.signTr(tr).then(tr => {
         Comment.save({tx: tr, blockchain: this.current.name})
           .then(res => resolve(res), err => reject(err.body))
-        
+
       }, err => reject(err))
     })
   },
