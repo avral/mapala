@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'backend',
     'apps.pages',
     'apps.auth_api',
+    'apps.groups',
     'pagedown',
     'tagulous',
     'mptt',
