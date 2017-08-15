@@ -1,6 +1,10 @@
 // ready translated locales
 export default {
   en: {
+    letters: 'letters',
+    title_must_have_at_least: 'Title must have at least',
+    field_is_required: 'Field is required',
+    add_new_post_tag: '+ Add new post tag',
     Wallet: 'Wallet',
     add_comment: 'Add a comment',
     add_post: 'Add  a post',
@@ -97,18 +101,22 @@ export default {
     nickname: 'nickname',
     date_time: 'date and time',
     currency: 'currency',
-    аmount_btc: 'amount BTC',
+    amount_btc: 'amount BTC',
     bonus: 'bonus (%)',
     investment_history: 'investment history',
     history: 'History',
-    blog: 'Blog',
+    blog: 'Blog'
   },
   ru: {
+    letters: 'символов',
+    title_must_have_at_least: 'Заголовк должен состоять минимум из ',
+    field_is_required: 'Это поле обязательное',
+    add_new_post_tag: 'Добавить тег',
     blog: 'Блог',
     history: 'История',
     investment_history: 'история инвестиций',
     bonus: 'Бонус (%)',
-    аmount_btc: 'сумма BTC',
+    amount_btc: 'сумма ВТС',
     currency: 'валюта',
     date_time: 'дата и время',
     nickname: 'никнейм',

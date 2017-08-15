@@ -6,7 +6,8 @@ export default {
   mobile: MD,
   modal: {
     show: false,
-    data: null
+    data: null,
+    redirectBackPath: ''
   },
   posts: {
     data: [],
@@ -28,7 +29,10 @@ export default {
     body: '',
     meta: {
       image: [],
-      location: {}
+      location: {
+        name: ''
+      },
+      tags: []
     }
   }
 }

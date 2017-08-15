@@ -12,13 +12,13 @@
 </template>
 
 <script>
-  import { mapState } from 'vuex'
-  import Auth from '../auth/Auth.vue'
-  import PostView from '../post/view.vue'
-  import CreatePost from '../post/create.vue'
-  import EditPost from '../post/edit.vue'
+import { mapState, mapMutations } from 'vuex'
+import Auth from '../auth/Auth.vue'
+import PostView from '../post/view.vue'
+import CreatePost from '../post/create.vue'
+import EditPost from '../post/edit.vue'
 
-  export default {
+export default {
   data () {
     return {
       backTo: '/'
@@ -27,47 +27,48 @@
   computed: mapState([
     'modal',
     'route'
-    ]),
-  created() {
-    this.setBackPath ()
+  ]),
+  created () {
+    this.setBackPath()
   },
-  methods:{
+  methods: {
+
+    ...mapMutations(['redirectBackPath']),
+
     /**
      * Close modal window
      *
      */
-     closeModal() {
-      this.setBackPath ()
+    closeModal () {
+      this.setBackPath()
       this.$store.commit('hideModal')
       this.$router.push(this.backTo)
     },
-      /**
-       * set redirect path
-       */
-       setBackPath() {
-        if (this.checkModal()) {
-          this.backTo = this.route.from.fullPath
-        }
-        return
-      },
-      /**
-       * Check modal window
-       * @return boolean
-       */
-       checkModal() {
-        let routeFrom = this.route.from
+    /**
+     * set redirect path
+     */
+    setBackPath () {
+      if (this.checkModal()) {
+        this.backTo = this.route.from.fullPath
 
-        if (!routeFrom.meta.isModal) {
-          return true
-        }
-        return false
+        this.redirectBackPath(this.route.from.fullPath)
       }
     },
-    components: {
-      Auth,
-      PostView,
-      CreatePost,
-      EditPost
+    /**
+     * Check modal window
+     * @return boolean
+     */
+    checkModal () {
+      const routeFrom = this.route.from
+
+      return !routeFrom.meta.isModal
     }
+  },
+  components: {
+    Auth,
+    PostView,
+    CreatePost,
+    EditPost
   }
+}
 </script>
