@@ -15,9 +15,11 @@ export default {
   current: {},
   bc_list: [],
   blockchains: {},
-  app_tag: process.env.NODE_ENV == 'production' ? 'mapala': 'testing',
+  app_tag: (process.env.NODE_ENV == 'production'
+            && !window.location.host.includes('develop')) ? 'mapala': 'testing',
 
   init() {
+    console.log('App tag: ', this.app_tag)
     BlockChain.get().then(res => {
       for (let bc of res.body) {
         this.blockchains[bc.name] = bc
