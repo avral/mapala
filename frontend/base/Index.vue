@@ -164,7 +164,7 @@ export default {
   beforeRouteEnter (to, from, next) {
     if (to.matched.some(record => record.meta.needPosting && !blockchains.current.wif)) {
         this.$alert(
-            'Добавьте, пожалуйста, ПРИВАТНЫЙ постинг ключ в настройках аккаунта', {
+            this.$t('add_key'), {
               confirmButtonText: 'Хорошо'
             }
           )
@@ -179,7 +179,7 @@ export default {
     if (to.matched.some(record => record.meta.isModal) || from.matched.some(record => record.meta.isModal)) {
         if (to.matched.some(record => record.meta.needPosting && !blockchains.current.wif)) {
             this.$alert(
-                'Добавьте, пожалуйста, ПРИВАТНЫЙ постинг ключ в настройках аккаунта.', {
+              this.$t('add_key'), {
                   confirmButtonText: 'Хорошо'
                 }
               )

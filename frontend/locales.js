@@ -106,9 +106,11 @@ export default {
     bonus: 'bonus (%)',
     investment_history: 'investment history',
     history: 'History',
-    blog: 'Blog'
+    blog: 'Blog',
+    add_key: 'Add, please, the PRIVATE posting key in your account settings',
   },
   ru: {
+    add_key: 'Добавьте, пожалуйста, ПРИВАТНЫЙ постинг ключ в настройках аккаунта',
     add_post_to_group: 'Добавить пост в ',
     letters: 'символов',
     title_must_have_at_least: 'Заголовк должен состоять минимум из ',
