@@ -22,7 +22,10 @@ export default {
     tags: null
   },
 
-  group: {},
+  group: {
+    logo: '',
+    title: ''
+  },
 
   isPostSaving: false,
 

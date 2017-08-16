@@ -5,15 +5,15 @@
 
 
         <div class="group_avatar">
-          <p>Ростов на Дону</p>
+          <p>{{ group.title }}</p>
         </div>
 
         <router-link :to="{ name: 'add', params: { user: auth.user.username }}"
-                     v-if="auth.isAuth"
                      class="add_post_to_group">
 
           <div class="av_wrap">
-            <img class="user_av" :src="auth.user.avatar">
+            <img v-if="auth.isAuth" class="user_av" :src="auth.user.avatar">
+            <img v-else class="user_av" src="../assets/icon-profile-w.svg">
           </div>
           <div class="write_post">{{ $t("add_post_to_group") }} RND</div>
         </router-link>
@@ -33,7 +33,7 @@
 <script>
   import auth from '../auth'
   import MugenScroll from 'vue-mugen-scroll'
-  import { mapActions } from 'vuex'
+  import { mapActions, mapState } from 'vuex'
   import PostMap from '../base/PostMap.vue'
   import PostList from '../post/post-list.vue'
   import UserProfile from '../user/UserProfile.vue'
@@ -56,7 +56,7 @@
       }
     },
     methods: {
-      ...mapActions(['fetch_group_posts']),
+      ...mapActions(['fetch_group_info']),
 
       nextPosts () {
         this.$store.dispatch('nextPosts')
@@ -85,6 +85,9 @@
     },
 
     computed: {
+
+      ...mapState(['group']),
+
       loading () {
         return this.$store.state.posts.loading
       },
@@ -139,8 +142,7 @@
       }
     },
     created () {
-      console.log('test from created hook')
-      this.fetch_group_posts()
+      this.fetch_group_info(this.$route.nane)
     },
     components: {
       MugenScroll,
@@ -153,70 +155,70 @@
   }
 </script>
 
-<style>
-  .hideScroll {
-    overflow-y: hidden;
-  }
-  .blog-nav {
-    margin-bottom: 25px;
-    text-align: center;
-  }
-  .blog-nav button {
-    width: 100%;
-  }
-  .blog-nav .router-link-exact-active button {
-    border-color: #50bfff;
-    color: #50bfff;
-  }
-  .el-notification__content {
-    text-align: left;
-  }
-  .tapeMobile {
-    margin-left: 0!important;
-  }
+<style scoped>
+.hideScroll {
+  overflow-y: hidden;
+}
+.blog-nav {
+  margin-bottom: 25px;
+  text-align: center;
+}
+.blog-nav button {
+  width: 100%;
+}
+.blog-nav .router-link-exact-active button {
+  border-color: #50bfff;
+  color: #50bfff;
+}
+.el-notification__content {
+  text-align: left;
+}
+.tapeMobile {
+  margin-left: 0!important;
+}
 
-  .group_avatar {
-    display: flex;
-    justify-content: center;
-    background-image: url(http://rostov-na-donu.igid.ru/img/upload/photos/www.ultrastar.ru.jpg);
-    width: 100%;
-    height: 150px;
-    background-size: cover;
-    background-position-y: -30px;
-    border-radius: 10px 10px 0 0;
-    margin: 0 auto;
-    align-items: center;
-  }
+.group_avatar {
+  display: flex;
+  justify-content: center;
+  background-image: url(http://rostov-na-donu.igid.ru/img/upload/photos/www.ultrastar.ru.jpg);
+  width: 100%;
+  height: 150px;
+  background-size: cover;
+  background-position-y: -30px;
+  border-radius: 10px 10px 0 0;
+  margin: 0 auto;
+  align-items: center;
+}
 
-  .group_avatar p{
-    font-size: 29px;
-    font-weight: 600;
-    color: white;
-    text-shadow: 3px 2px 0px rgb(0, 0, 0);
-  }
+.group_avatar p {
+  font-size: 29px;
+  font-weight: 600;
+  color: white;
+  text-shadow: 3px 2px 0 rgb(0, 0, 0);
+}
 
-  .add_post_to_group {
-    width: 100%;
-    height: 60px;
-    border-radius: 0 0 6px 6px;
-    background-color: #ffffff;
-    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
-    border: solid 1px rgba(72, 84, 101, 0.2);
-    border-top: none !important;
-    padding: 0 16px;
-    display: flex;
-    align-items: center;
-    box-sizing: border-box;
-    margin-bottom: 20px;
-    cursor: pointer;
-    justify-content: center;
-    text-decoration: none;
-  }
-  .user_av {
-    margin-right: 8px;
-    width: 40px;
-    height: 40px;
-    overflow: hidden;
-    border-radius: 50%;
-  }
+.add_post_to_group {
+  width: 100%;
+  height: 60px;
+  border-radius: 0 0 6px 6px;
+  background-color: #ffffff;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+  border: solid 1px rgba(72, 84, 101, 0.2);
+  border-top: none !important;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  margin-bottom: 20px;
+  cursor: pointer;
+  justify-content: center;
+  text-decoration: none;
+}
+.user_av {
+  margin-right: 8px;
+  width: 40px;
+  height: 40px;
+  overflow: hidden;
+  border-radius: 50%;
+}
 </style>

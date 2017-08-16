@@ -16,16 +16,15 @@
       async createPost () {
         try {
           await bc.createPost(this, this.postForm)
+          this.setPostSavingStateTo(false)
 
-          this.resetPostForm()
           this.$parent.closeModal()
+          this.resetPostForm()
 
           this.$notify({ message: this.$t('published'), type: 'success' })
         } catch (error) {
           this.$notify({ message: error, type: 'warning' })
         }
-
-        this.setPostSavingStateTo(false)
       }
     },
     components: {

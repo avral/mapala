@@ -46,3 +46,5 @@ export const User = vue.resource('/api/users{/username}/', {}, {
 export const Image = vue.resource('/api/images{/id}/', {}, {
   'upload': { method: 'POST', url: '/post_image/' }
 })
+
+export const Group = vue.resource('/api/groups{/name}/')

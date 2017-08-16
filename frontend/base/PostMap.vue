@@ -176,5 +176,5 @@ export default {
     /*padding-right: 0 !important;*/
     /*text-align: center !important;*/
   }
-  
+
 </style>

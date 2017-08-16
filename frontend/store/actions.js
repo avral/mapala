@@ -1,4 +1,4 @@
-import { Page, Comment, User } from '../services'
+import { Page, Comment, User, Group } from '../services'
 
 export default {
   getModal ({commit}, data) {
@@ -66,7 +66,7 @@ export default {
     commit('toglePostLoading')
     const params = {}
     params.page = state.posts.page // Page, not post
-    params.group = 'rdn' // Дичь, убрать.
+    params.group = 'rnd' // Дичь, убрать.
 
     Page.get(params).then(res => {
       console.log(res)
@@ -80,6 +80,15 @@ export default {
         commit('noPage', true)
       }
       commit('toglePostLoading')
+    })
+  },
+  fetch_group_info ({ dispatch, commit }, group_name) {
+    Group.get({ name: group_name }).then((response) => {
+      console.log(response.data[0].title)
+      commit('SET_GROUP_LOGO', response.data[0].logo)
+      commit('SET_GROUP_TITLE', response.data[0].title)
+
+      dispatch('fetch_group_posts')
     })
   }
 }

@@ -62,5 +62,11 @@ export default {
   },
   redirectBackPath (state, path) {
     state.modal.redirectBackPath = path
+  },
+  SET_GROUP_LOGO (state, logo) {
+    state.group.logo = logo
+  },
+  SET_GROUP_TITLE (state, title) {
+    state.group.title = title
   }
 }

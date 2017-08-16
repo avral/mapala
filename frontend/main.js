@@ -58,7 +58,7 @@ Vue.http.headers.common['X-CSRFToken'] = VueCookie.get('csrftoken')
 Vue.use(VueGoogleMaps, {
   load: {
     key: 'AIzaSyBUggg4I6FWB6sHijJGpXvBDdoZKqi1J7Y',
-    libraries: 'places',
+    libraries: 'places'
   }
 })
 

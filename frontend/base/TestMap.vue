@@ -8,7 +8,7 @@
     ref="mmm"
 		map-type-id="terrain"
 		style="width: 100%; height: 640px">
-  
+
     <gmap-marker
       v-for="marker in markers"
       :key="marker.permlink"
@@ -56,13 +56,15 @@ export default {
 				content: '',
 			},
       mapOptions: {
+        scrollwheel: false,
         styles: googleMapStyles,
         minZoom: 2,
         mapTypeControl: true
       },
       center: {lat:10, lng:10},
       icon: `http://${location.host}/static/icon-marker-3.png`,
-		}
+      scrollwheel: false
+    }
 	},
 	methods: {
     test() {
@@ -119,8 +121,8 @@ export default {
       var maxY = allowedBounds.getNorthEast().lat();
       var minY = allowedBounds.getSouthWest().lat();
       var x = map.getCenter().lng();
-      var y = map.getCenter().lat(); 
-      
+      var y = map.getCenter().lat();
+
       if ((y < maxY && y > 0) || (y > minY && y < 0)) {
           return;
       }
