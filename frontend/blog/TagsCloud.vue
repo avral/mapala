@@ -1,6 +1,6 @@
 <template>
     <div class="tagCloud">
-        <a v-for="tag in tags" @click="setTags(tag.value)" href="javascript:void(0)">
+        <a v-if="lang == 'ru'" v-for="tag in tags" @click="setTags(tag.value)" href="javascript:void(0)">
             <span class="tag" v-bind:style="tag.style">{{tag.name}}</span>
         </a>
     </div>
@@ -8,10 +8,12 @@
 
 <script>
     import {detransliterate} from '../utils'
+    import Vue from 'vue';
 
     export default {
         data() {
             return {
+              lang: Vue.config.lang,
                 tags: [
                     {
                         name: 'Открытый код',
