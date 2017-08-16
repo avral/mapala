@@ -10,11 +10,21 @@ VENV_DIR = os.path.join(PROJECT_ROOT, '.env')
 
 env.hosts = []
 
+
 @task
 def production():
     env.hosts = ['root@158.69.210.48']
     env.environment = 'production'
     env.NODE_ENV = 'production'
+    env.brunch = 'master'
+
+
+@task
+def develop():
+    env.hosts = ['root@37.59.98.17']
+    env.environment = 'development'
+    env.NODE_ENV = 'development'
+    env.brunch = 'dev'
 
 
 @contextmanager
@@ -51,7 +61,7 @@ def fetch(blockchain):
 @task
 def deploy_only_back():
     with cd(PROJECT_ROOT):
-        run('git pull origin master --no-edit')
+        run('git pull origin %s --no-edit' % env.brunch)
         with source_virtualenv():
             run('source .env/bin/activate && pip install -r requirements.txt')
             run('./manage collectstatic --noinput')
@@ -68,7 +78,7 @@ def deploy():
     # sudo('chown -R %s:%s %s' % (env.user, env.user, PROJECT_ROOT))
 
     with cd(PROJECT_ROOT):
-        run('git pull origin master --no-edit')
+        run('git pull origin %s --no-edit' % env.brunch)
         with source_virtualenv():
             run('source .env/bin/activate && pip install -r requirements.txt')
             run('npm install')

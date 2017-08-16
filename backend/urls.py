@@ -17,6 +17,7 @@ from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token
 from backend.settings import PRERENDER_PROXY, PRERENDER_UA_REGEX
 from apps.auth import urls as auth_urls
 from apps.pages import views as page_views
+from apps.groups import views as groups_views
 from apps.auth_api import views as auth_views
 
 
@@ -30,6 +31,7 @@ router.register('comments', page_views.CommentViewSet)
 router.register('blockchains', auth_views.BlockChainViewSet)
 router.register('user-blockchains', auth_views.UserBlockChainViewSet, base_name='user_blockchains')
 router.register('markers', page_views.MarkerViewSet, base_name='markers')
+router.register('groups', groups_views.GroupViewSet)
 
 
 urlpatterns = []
