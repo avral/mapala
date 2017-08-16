@@ -56,8 +56,24 @@ export default {
     })
   },
 
+  async postExists(author, permlink) {
+    const data = await steem.api.getContent(author, permlink)
 
-  createPost (context, post) {
+    return !!data.id
+  },
+
+  async createPost (context, post) {
+    post.permlink = this.getPermlink(post.title)
+
+    if (await this.postExists(this.current.blockchain_username, post.permlink)) {
+      // TODO Добавить автоинкремент для пермлинка, если он повторяется
+      return Promise.reject('Post with this title already exists')
+    }
+
+    return this.updatePost(context, post)
+  },
+
+  updatePost(context, post) {
     return new Promise((resolve, reject) => {
       this.checkValidKey(context, reject)
       const tr = new TransactionBuilder()
@@ -77,10 +93,6 @@ export default {
           .then(res => resolve(res), err => reject(err.body))
       }, err => reject(err))
     })
-  },
-
-  updatePost(context, post) {
-    return this.createPost(context, post)
   },
 
   createComment(context, comm) {
