@@ -22,6 +22,8 @@ export default {
     tags: null
   },
 
+  group: {},
+
   isPostSaving: false,
 
   postForm: {

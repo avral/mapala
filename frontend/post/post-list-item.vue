@@ -74,7 +74,7 @@ export default {
                  return false;
                }
             },
-            share(page){
+            share (page) {
                 vkShare(page)
         },
         numeral(num){

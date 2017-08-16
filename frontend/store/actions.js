@@ -1,11 +1,11 @@
-import {Page, Comment, User} from '../services'
+import { Page, Comment, User } from '../services'
 
 export default {
   getModal ({commit}, data) {
     commit('showModal')
     commit('setModal', data)
   },
-  setPosts ({commit, state}, params = {}) {
+  setPosts ({ commit, state }, params = {}) {
     commit('toglePostLoading')
     commit('noPage', false)
 
@@ -29,7 +29,7 @@ export default {
       commit('toglePostLoading')
     })
   },
-  setRange ({dispatch, commit, state}, range) {
+  setRange ({ dispatch, commit, state }, range) {
     commit('resetPage')
     commit('resetTags')
     if (range.lte) {commit('setLte', range.lte)}
@@ -57,5 +57,29 @@ export default {
     commit('resetTags')
     commit('setAuthor', author)
     return dispatch('setPosts')
+  },
+
+  fetch_group_posts ({ commit, state }) {
+    commit('resetRange')
+    commit('resetPage')
+    commit('resetTags')
+    commit('toglePostLoading')
+    const params = {}
+    params.page = state.posts.page // Page, not post
+    params.group = 'rdn' // Дичь, убрать.
+
+    Page.get(params).then(res => {
+      console.log(res)
+      let posts = res.body.results
+      if (state.posts.page > 1) {
+        posts = state.posts.data.concat(posts)
+      }
+      commit('setPosts', posts)
+
+      if (!res.body.next) {
+        commit('noPage', true)
+      }
+      commit('toglePostLoading')
+    })
   }
 }

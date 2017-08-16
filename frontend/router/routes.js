@@ -10,9 +10,15 @@ import Ico from '../ico/Ico.vue'
 import MainIco from '../ico/MainIco.vue'
 import AucIco from '../ico/AucIco.vue'
 import InvestIco from '../ico/InvestIco.vue'
+import GroupIndex from '../base/group-index.vue'
 import IcoBlock from '../ico/IcoBlock.vue'
 
 export default [
+  {
+    path: '/rnd',
+    name: 'rnd',
+    component: GroupIndex
+  },
   {
     path: '/dacom',
     component: DacomAuth

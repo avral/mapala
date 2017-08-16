@@ -1,6 +1,7 @@
 // ready translated locales
 export default {
   en: {
+    add_post_to_group: 'Add a post to ',
     letters: 'letters',
     title_must_have_at_least: 'Title must have at least',
     field_is_required: 'Field is required',
@@ -108,6 +109,7 @@ export default {
     blog: 'Blog'
   },
   ru: {
+    add_post_to_group: 'Добавить пост в ',
     letters: 'символов',
     title_must_have_at_least: 'Заголовк должен состоять минимум из ',
     field_is_required: 'Это поле обязательное',

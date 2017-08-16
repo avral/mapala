@@ -199,7 +199,7 @@ export default {
         next()
     }
   },
-  created() {
+  created () {
     let user = this.$route.params.user
     this.authorPosts(user)
   },
