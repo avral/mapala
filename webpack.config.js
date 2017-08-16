@@ -91,9 +91,12 @@ if (process.env.NODE_ENV === 'production') {
   module.exports.devtool = '#source-map'
   module.exports.plugins = (module.exports.plugins || []).concat([
     new webpack.optimize.UglifyJsPlugin({
-      sourceMap: true,
+      sourceMap: false,
+      minimize: true,
       compress: {
-        warnings: false
+        drop_debugger: true,
+        warnings: false,
+        drop_console: true
       }
     }),
     new webpack.LoaderOptionsPlugin({
