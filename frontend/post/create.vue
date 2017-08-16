@@ -23,6 +23,7 @@
 
           this.$notify({ message: this.$t('published'), type: 'success' })
         } catch (error) {
+          this.setPostSavingStateTo(false)
           this.$notify({ message: error, type: 'warning' })
         }
       }
