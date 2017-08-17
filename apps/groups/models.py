@@ -6,6 +6,7 @@ class Group(models.Model):
     title = models.CharField(max_length=200, null=True)
     chat_link = models.CharField(max_length=200, null=True)
     logo = models.ImageField(upload_to='groups/', null=True, blank=True)
+    city = models.CharField(max_length=200, null=True)
 
     class Meta:
         verbose_name = 'group'
