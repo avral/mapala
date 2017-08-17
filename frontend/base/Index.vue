@@ -235,4 +235,83 @@ export default {
     .tapeMobile {
         margin-left: 0!important;
     }
+
+
+    .el-popover {
+      border-radius: 5px !important;
+      background-color: #5D7293 !important;
+      border: none;
+      justify-content: space-around !important;
+      display: flex;
+      padding: 10px;
+      padding-bottom: 20px;
+    }
+
+    .poster__Column {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      width: 80px;
+    }
+
+    .poster__Column h4 {
+      font-family: PTSans;
+      font-size: 12px;
+      font-weight: bold;
+      line-height: 1.5;
+      text-align: left;
+      color: #ec9eb5;
+      padding-left: 5px;
+    }
+
+    .el-popover .popper__arrow{
+      border-bottom-color: #5D7293 !important;
+    }
+
+    .el-popover .popper__arrow::after {
+      border-bottom-color: #5D7293 !important;
+    }
+
+    .el-transfer-panel__filter .el-input__inner {
+      height: 22px !important;
+      width: 80px !important;
+      display: inline-block;
+      box-sizing: border-box;
+      text-transform: lowercase !important;
+      border: solid 1px #7688a3 !important;
+      background: #465c7d !important;
+      font-size: 11px !important;
+      line-height: 18px !important;
+      border-radius: 5px !important;
+    }
+
+    .el-transfer-panel__filter .el-input__icon {
+      right: 0 !important;
+      color: #566c8d !important;
+    }
+
+    .el-transfer-panel__filter {
+      margin-top: 0 !important;
+      text-align: center;
+      padding: 0 !important;
+      width: auto !important;
+      font-size: 9px !important;
+      box-sizing: border-box;
+    }
+
+
+  .poster_city_link {
+    transition: .4s ease-out;
+    width: 100%;
+    cursor: pointer;
+    display: block;
+    border-radius: 5px;
+    text-align: left;
+    padding: 3px 0 3px 5px;
+    text-decoration: none;
+    color: #8DAFE1 !important;
+  }
+  .poster_city_link:hover {
+    background-color: #4c6282;
+  }
 </style>
