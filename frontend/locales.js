@@ -43,7 +43,7 @@ export default {
     settings_update: 'Settings updated',
     share: 'Share',
     show_comments: 'Show previous comments',
-    sign_in: 'Sign in',
+    sign_in: 'Sign up',
     steemit_availability: 'Do you have an account at Steemit.com?',
     steemit_key: 'steemit private posting key',
     today: 'Today',
