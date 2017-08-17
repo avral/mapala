@@ -1,4 +1,5 @@
 import logging
+import pprint
 
 from piston.steem import Steem
 from piston.post import Post
@@ -12,6 +13,9 @@ from backend.settings import APP_FETCH_FROM
 from apps.auth_api.models import UserBlockChain, BlockChain, User
 from apps.pages.models import Page, Comment
 from apps.blockchains.data_bases import BlockChainDB
+
+
+logger = logging.getLogger('mapala.fetch')
 
 
 class BaseUpdater:
@@ -32,6 +36,8 @@ class BaseUpdater:
                 if post.parent_permlink == APP_FETCH_FROM:
                     created_post = self.upgrade_post(post)
                     if created_post is not None:
+                        # Временно, для выявления магии скорейскими постами
+                        logger.info('Созданный пост %s' % pprint.pformat(comment))
                         print(created_post)
         except PostDoesNotExist:
             pass
@@ -86,6 +92,9 @@ class BaseUpdater:
 
     def update_post(self, author, permlink):
         """ Обновляет пост по автору и пермлинку """
+        # Временно, для выявления магии скорейскими постами
+        logger.info('Update post: %s %s' % (author, permlink))
+
         post = self.rpc.get_content({
             'permlink': permlink,
             'author': author
