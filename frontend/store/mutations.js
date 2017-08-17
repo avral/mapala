@@ -75,11 +75,11 @@ export default {
   SET_LOCATION_NAME (state, name) {
     state.postForm.meta.location.name = name
   },
-  SET_LOCATION_LAT (state, name) {
-    state.postForm.meta.location.name = name
+  SET_LOCATION_LAT (state, lat) {
+    state.postForm.meta.location.lat = lat
   },
-  SET_LOCATION_LNG (state, name) {
-    state.postForm.meta.location.name = name
+  SET_LOCATION_LNG (state, lng) {
+    state.postForm.meta.location.lng = lng
   },
   SET_GROUP_META (state, name) {
     state.postForm.meta.group = name

@@ -25,11 +25,6 @@
             :disabled="isEditForm"
           )
 
-        span.form-group__message(
-          v-if="!$v.postForm.meta.location.name.required && $v.postForm.meta.location.name.$dirty"
-          )
-          | {{ $t('field_is_required') }}
-
         div.search_location
           gmap-autocomplete(
             class="search_field",
@@ -117,11 +112,6 @@ export default {
       },
       body: {
         required
-      },
-      meta: {
-        location: {
-          name: { required }
-        }
       }
     }
   },
@@ -219,13 +209,17 @@ export default {
       this.$v.postForm.$touch()
     },
     isFormValid () {
+      if (!this.postForm.meta.location.name) {
+        this.$notify({ message: 'Location field is required', type: 'warning' })
+        return false
+      }
+
       return !this.$v.postForm.$invalid
     },
     setPlace (place) {
-      this.SET_LOCATION_NAME(place.position_text)
+      this.SET_LOCATION_NAME(place.formatted_address)
       this.SET_LOCATION_LAT(place.geometry.location.lat())
       this.SET_LOCATION_LNG(place.geometry.location.lng())
-      this.$v.postForm.meta.location.name.$touch()
     }
   },
   created () {
