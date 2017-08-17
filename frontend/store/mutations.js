@@ -68,5 +68,20 @@ export default {
   },
   SET_GROUP_TITLE (state, title) {
     state.group.title = title
+  },
+  SET_GROUP_NAME (state, name) {
+    state.group.name = name
+  },
+  SET_LOCATION_NAME (state, name) {
+    state.postForm.meta.location.name = name
+  },
+  SET_LOCATION_LAT (state, name) {
+    state.postForm.meta.location.name = name
+  },
+  SET_LOCATION_LNG (state, name) {
+    state.postForm.meta.location.name = name
+  },
+  SET_GROUP_META (state, name) {
+    state.postForm.meta.group = name
   }
 }

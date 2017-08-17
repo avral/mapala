@@ -8,7 +8,7 @@
           <p>{{ group.title }}</p>
         </div>
 
-        <router-link :to="{ name: 'add', params: { user: auth.user.username }}"
+        <router-link :to="{ path: '/rnd/create' }"
                      class="add_post_to_group">
 
           <div class="av_wrap">
@@ -33,7 +33,7 @@
 <script>
   import auth from '../auth'
   import MugenScroll from 'vue-mugen-scroll'
-  import { mapActions, mapState } from 'vuex'
+  import { mapActions, mapState, mapMutations } from 'vuex'
   import PostMap from '../base/PostMap.vue'
   import PostList from '../post/post-list.vue'
   import UserProfile from '../user/UserProfile.vue'
@@ -57,6 +57,7 @@
     },
     methods: {
       ...mapActions(['fetch_group_info']),
+      ...mapMutations(['SET_GROUP_META']),
 
       nextPosts () {
         this.$store.dispatch('nextPosts')
@@ -97,8 +98,12 @@
       user () {
         return this.$route.params.user
       },
-      isMobile() {
+      isMobile () {
         return this.detectmob()
+      },
+
+      groupName () {
+        return this.group.name
       }
     },
     //TODO Костыль, в ближайшее время перенести хранение ключей в VUEX, логику блокчейн в отдельный модуль, и хуки роутинга тоже отдельно!!!
@@ -142,7 +147,9 @@
       }
     },
     created () {
-      this.fetch_group_info(this.$route.nane)
+      this.fetch_group_info(this.$route.name).then(() => this.setRight())
+
+      this.SET_GROUP_META(this.$route.name)
     },
     components: {
       MugenScroll,

@@ -35,7 +35,7 @@
 
 <script>
 import {googleMapStyles} from '../main'
-import {Marker} from '../services'
+import {Marker, Group} from '../services'
 
 export default {
   data() {
@@ -72,9 +72,6 @@ export default {
       icon: `http://${location.host}/static/icon-marker-3.png`,
     }
   },
-  created() {
-
-  },
   computed: {
     pages () {
       return this.$store.state.posts.data
@@ -84,24 +81,31 @@ export default {
     }
   },
   methods: {
-    fetchMarkers() {
-      var map = this.$refs.mmm.$mapObject
-      let bounds = map.getBounds()
+    fetchMarkers () {
+      const map = this.$refs.mmm.$mapObject
+      const bounds = map.getBounds()
       this.mapOptions.zoomControlOptions.position = google.maps.ControlPosition.TOP_RIGHT
       this.mapOptions.streetViewControlOptions.position = google.maps.ControlPosition.TOP_CENTER
 
-      let bbox = [
+      const bbox = [
         bounds.b.b,
         bounds.f.b,
         bounds.b.f,
         bounds.f.f
       ].join()
 
-			Marker.get({bbox: bbox}).then(res => {
-        this.markers = res.body.results
-			})
+      //  TODO костыль, жизнь боль.
+      if (this.$route.name === 'rnd') {
+        Group.markers({ group: this.$route.name, bbox: bbox }).then(res => {
+          this.markers = res.body.results
+        })
+      } else {
+        Marker.get({ bbox: bbox }).then(res => {
+          this.markers = res.body.results
+        })
+      }
     },
-    openInfoWindow(marker) {
+    openInfoWindow (marker) {
       this.infoWindow.opened = true
 
       this.infoWindow.content = `<h3>${marker.title}</h3><p>${marker.body}</p>`
@@ -113,8 +117,8 @@ export default {
         lng: Number(marker.position.longitude)
       }
     },
-    setNewCenter(){
-      function getRandomInt(min, max) {
+    setNewCenter () {
+      function getRandomInt (min, max) {
         min = Math.ceil(min)
         max = Math.floor(max)
         return Math.floor(Math.random() * (max - min)) + min

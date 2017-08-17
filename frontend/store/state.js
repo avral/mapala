@@ -23,6 +23,7 @@ export default {
   },
 
   group: {
+    name: '',
     logo: '',
     title: ''
   },
@@ -35,8 +36,11 @@ export default {
     meta: {
       image: [],
       location: {
-        name: ''
+        name: '',
+        lat: '',
+        lng: ''
       },
+      group: 'rnd',
       tags: []
     }
   }

@@ -17,7 +17,19 @@ export default [
   {
     path: '/rnd',
     name: 'rnd',
-    component: GroupIndex
+    component: GroupIndex,
+    children: [
+      {
+        path: 'create',
+        name: 'create',
+        meta: {
+          isModal: true
+        },
+        components: {
+          modal: CreatePost
+        }
+      }
+    ]
   },
   {
     path: '/dacom',

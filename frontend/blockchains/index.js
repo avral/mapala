@@ -71,14 +71,15 @@ export default {
       // TODO Добавить автоинкремент для пермлинка, если он повторяется
       return Promise.reject('Post with this title already exists')
     }
-
     return this.updatePost(context, post)
   },
 
-  updatePost(context, post) {
+  updatePost (context, post) {
     return new Promise((resolve, reject) => {
       this.checkValidKey(context, reject)
       const tr = new TransactionBuilder()
+
+      post.permlink = this.getPermlink(post.title)
 
       tr.add_type_operation('comment', {
         parent_author: '',
@@ -97,7 +98,7 @@ export default {
     })
   },
 
-  createComment(context, comm) {
+  createComment (context, comm) {
     return new Promise((resolve, reject) => {
       this.checkValidKey(context, reject)
 
@@ -109,7 +110,7 @@ export default {
         permlink: comm.permlink.replace('.', '-'),
         title: '',
         body: comm.body,
-        json_metadata: this.getJsonMeta(),
+        json_metadata: this.getJsonMeta()
       })
 
       this.signTr(tr).then(tr => {
@@ -120,7 +121,7 @@ export default {
     })
   },
 
-  vote(page) {
+  vote (page) {
     return new Promise((resolve, reject) => {
       steem.broadcast.vote(
         this.current.wif, this.current.blockchain_username, page.author.bc_username, page.permlink, 10000, function(err, result) {
@@ -140,7 +141,7 @@ export default {
     })
   },
 
-  getJsonMeta(meta = {}) {
+  getJsonMeta (meta = {}) {
     meta.app = 'mapala/1.0'
     meta.format = 'html'
 
@@ -153,7 +154,7 @@ export default {
     return JSON.stringify(meta)
   },
 
-  setBlockchain(blockchain) {
+  setBlockchain (blockchain) {
     // HACK: На данный момент решено менять блокчейн по локали:
     // en -> steemil, ru -> golos
     if (blockchain === undefined) {

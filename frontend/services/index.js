@@ -8,8 +8,9 @@ export const http = vue.http
 export const Tag = vue.resource('/api/tags{/id}/')
 export const Comment = vue.resource('/api/comments{/id}/')
 export const BlockChain = vue.resource('/api/blockchains{/id}/')
-export const Marker = vue.resource('/api/markers{/id}/')
-
+export const Marker = vue.resource('/api/markers{/id}/', {}, {
+  query: { method: 'GET', url: '/api/markers{/bbox}{/identifier}/' }
+})
 
 export const UserBlockChain = vue.resource('/api/user-blockchains{/id}/', {}, {
   'getNameByPostingKey': {
@@ -38,13 +39,16 @@ export const User = vue.resource('/api/users{/username}/', {}, {
   'setPassword': { method: 'POST', url: '/api/users/set_password/' },
   'resetPassword': { method: 'POST', url: '/api/users/reset_password/' },
   'existngSignUp': { method: 'POST', url: '/existng-sign-up/' },
-  'setAvatar': { method: 'POST', url: '/api/users{/username}/set_avatar/'},
-  'removeAvatar': { method: 'POST', url: '/api/users{/username}/remove_avatar/'},
-  'initialBlockchains': { method: 'GET', url: '/api/users{/username}/initial_blockchains/'},
+  'setAvatar': { method: 'POST', url: '/api/users{/username}/set_avatar/' },
+  'removeAvatar': { method: 'POST', url: '/api/users{/username}/remove_avatar/' },
+  'initialBlockchains': { method: 'GET', url: '/api/users{/username}/initial_blockchains/' },
+  'markers': { method: 'GET', url: '/api/users{/username}/markers/' }
 })
 
 export const Image = vue.resource('/api/images{/id}/', {}, {
   'upload': { method: 'POST', url: '/post_image/' }
 })
 
-export const Group = vue.resource('/api/groups{/name}/')
+export const Group = vue.resource('/api/groups{/name}/', {}, {
+  'markers': { method: 'GET', url: '/api/markers/' }
+})

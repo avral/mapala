@@ -126,7 +126,14 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setPostSavingStateTo', 'hideModal', 'redirectBackPath']),
+    ...mapMutations([
+      'setPostSavingStateTo',
+      'hideModal',
+      'redirectBackPath',
+      'SET_LOCATION_NAME',
+      'SET_LOCATION_LNG',
+      'SET_LOCATION_LAT'
+    ]),
 
     handleClose (tag) {
       this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1)
@@ -199,7 +206,6 @@ export default {
     },
     submit () {
       if (this.isFormValid()) {
-        this.setPostSavingStateTo(true)
         if (this.isEditForm) {
           this.$emit('updatePost')
         } else {
@@ -216,9 +222,10 @@ export default {
       return !this.$v.postForm.$invalid
     },
     setPlace (place) {
-      this.postForm.meta.location.name = place.formatted_address
-      this.postForm.meta.location.lat = place.geometry.location.lat()
-      this.postForm.meta.location.lng = place.geometry.location.lng()
+      this.SET_LOCATION_NAME(place.position_text)
+      this.SET_LOCATION_LAT(place.geometry.location.lat())
+      this.SET_LOCATION_LNG(place.geometry.location.lng())
+      this.$v.postForm.meta.location.name.$touch()
     }
   },
   created () {
@@ -232,9 +239,6 @@ export default {
         this.postForm.meta.location.lng = res.body.position.longitude
       })
     }
-  },
-  mounted () {
-    console.log(this.isEditForm)
   },
   components: {
     quillEditor

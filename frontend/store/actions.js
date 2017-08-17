@@ -1,7 +1,8 @@
 import { Page, Comment, User, Group } from '../services'
 
 export default {
-  getModal ({commit}, data) {
+  getModal ({ commit }, data) {
+    console.log(data)
     commit('showModal')
     commit('setModal', data)
   },
@@ -60,6 +61,7 @@ export default {
   },
 
   fetch_group_posts ({ commit, state }) {
+    console.log('test1')
     commit('resetRange')
     commit('resetPage')
     commit('resetTags')
@@ -69,7 +71,7 @@ export default {
     params.group = 'rnd' // Дичь, убрать.
 
     Page.get(params).then(res => {
-      console.log(res)
+      console.log('test2')
       let posts = res.body.results
       if (state.posts.page > 1) {
         posts = state.posts.data.concat(posts)
@@ -84,9 +86,9 @@ export default {
   },
   fetch_group_info ({ dispatch, commit }, group_name) {
     Group.get({ name: group_name }).then((response) => {
-      console.log(response.data[0].title)
-      commit('SET_GROUP_LOGO', response.data[0].logo)
-      commit('SET_GROUP_TITLE', response.data[0].title)
+      commit('SET_GROUP_NAME', response.data.name)
+      commit('SET_GROUP_LOGO', response.data.logo)
+      commit('SET_GROUP_TITLE', response.data.title)
 
       dispatch('fetch_group_posts')
     })

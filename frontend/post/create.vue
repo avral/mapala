@@ -11,12 +11,15 @@
     computed: mapState(['postForm']),
 
     methods: {
-      ...mapMutations(['resetPostForm', 'setPostSavingStateTo']),
+      ...mapMutations(['resetPostForm', 'setPostSavingStateTo', 'addPost']),
 
       async createPost () {
         try {
-          await bc.createPost(this, this.postForm)
+          this.setPostSavingStateTo(true)
+          const { body } = await bc.createPost(this, this.postForm)
+
           this.setPostSavingStateTo(false)
+          this.addPost(body)
 
           this.$parent.closeModal()
           this.resetPostForm()

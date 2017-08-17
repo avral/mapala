@@ -44,7 +44,7 @@ export default {
 		}
 	},
 	methods: {
-      fetchUser() {
+      fetchUser () {
           User.get({username: this.$route.params.user}).then(res => {
               this.user = res.body
           })
@@ -55,7 +55,7 @@ export default {
         this.fetchUser()
       },
 	},
-	created() {
+	created () {
       this.fetchUser()
 	}
 }
