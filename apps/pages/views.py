@@ -249,6 +249,10 @@ class MarkerViewSet(viewsets.ModelViewSet):
         qs = Page.on_bc.filter(has_point=True).order_by('id')
 
         bbox = self.request.GET.get('bbox')
+        group = self.request.GET.get('group')
+
+        if group is not None:
+            qs = qs.filter(meta__group=group)
 
         if bbox is not None:
             box = bbox.split(',')
