@@ -37,8 +37,8 @@ class BaseUpdater:
                     created_post = self.upgrade_post(post)
                     if created_post is not None:
                         # Временно, для выявления магии скорейскими постами
-                        logger.info('Созданный пост %s' % pprint.pformat(comment))
-                        print(created_post)
+                        if self.blockchain.name == 'steemit':
+                            logger.info('Созданный пост %s' % pprint.pformat(comment))
         except PostDoesNotExist:
             pass
 
@@ -93,7 +93,8 @@ class BaseUpdater:
     def update_post(self, author, permlink):
         """ Обновляет пост по автору и пермлинку """
         # Временно, для выявления магии скорейскими постами
-        logger.info('Update post: %s %s' % (author, permlink))
+        if self.blockchain.name == 'steemit':
+            logger.info('Update post: %s %s' % (author, permlink))
 
         post = self.rpc.get_content({
             'permlink': permlink,
