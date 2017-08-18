@@ -26,15 +26,11 @@ INSTALLED_APPS = [
     'apps.pages',
     'apps.auth_api',
     'apps.groups',
-    'pagedown',
-    'tagulous',
     'mptt',
-    'draceditor',
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.vk',
-    'steem',
+    # 'pagedown',
+    # 'tagulous',
+    # 'draceditor',
+    # 'steem',
 ]
 
 AUTH_USER_MODEL = 'auth_api.User'
@@ -117,7 +113,6 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 AUTHENTICATION_BACKENDS = [
-    'allauth.account.auth_backends.AuthenticationBackend',
     'backend.authentication.EmailAsUsernameBackend',
     'django.contrib.auth.backends.ModelBackend',
     'rest_framework.authentication.TokenAuthentication'
@@ -148,17 +143,6 @@ JWT_AUTH = {
     'JWT_VERIFY_EXPIRATION': False,
 
     'JWT_RESPONSE_PAYLOAD_HANDLER': 'apps.auth_api.utils.jwt_response_payload_handler',
-}
-
-##################
-###  TAGULOUS  ###
-##################
-
-SERIALIZATION_MODULES = {
-    'xml':    'tagulous.serializers.xml_serializer',
-    'json':   'tagulous.serializers.json',
-    'python': 'tagulous.serializers.python',
-    'yaml':   'tagulous.serializers.pyyaml',
 }
 
 APPEND_SLASH = True

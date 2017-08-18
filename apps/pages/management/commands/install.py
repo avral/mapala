@@ -6,3 +6,14 @@
 # Получить все теги
 #for tag in set(t for t in chain.from_iterable([i.meta['tags'] for i in Page.objects.filter(meta__tags__isnull=False)])):
 #    print(tag)
+
+from piston.steem import Steem
+
+
+s = Steem('wss://steemd.steemit.com')
+
+p = s.get_content({'author': 'acro999', 'permlink': '1'})
+print(p.export())
+
+
+exit()

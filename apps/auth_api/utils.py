@@ -1,4 +1,4 @@
-from steembase.account import PrivateKey
+from pistonbase.account import PrivateKey
 
 from rest_framework_jwt.settings import api_settings
 
