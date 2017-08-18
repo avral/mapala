@@ -5,6 +5,8 @@ from redislite import Redis
 from piston.steem import Steem
 from piston.blockchain import Blockchain
 from django.core.management.base import BaseCommand
+from django.db.utils import InterfaceError
+from django import db
 
 from backend import settings
 from apps.blockchains.sync import BaseUpdater
@@ -58,6 +60,11 @@ class Command(BaseCommand):
                 # TODO запилить асинихронность
                 # pool.apply_async(to_do, [op])
 
+                to_do(op)
+            except InterfaceError:
+                # При 2х одновременно запущенных блокчейнах
+                # TODO Сделать одним прощессом все блокчейны
+                db.connection.close()
                 to_do(op)
             except KeyboardInterrupt:
                 break
