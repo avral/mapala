@@ -43,7 +43,8 @@ class BaseUpdater:
             pass
 
     def vote(self, vote):
-        if Page.objects.filter(permlink=vote['permlink']).exists():
+        if (Page.on_bc.filter(permlink=vote['permlink']).exists() and
+                UserBlockChain.on_bc.filter(username=vote['author'])):
             # Обновляем каждый пост по которому кто то голосует
             self.update_post(vote['author'], vote['permlink'])
 
