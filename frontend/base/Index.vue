@@ -104,7 +104,6 @@ export default {
         // getPosts(params = {}) {
         //     if (!this.next_page) { return }
         //         this.loading = true
-
         //         params.page = this.next_page
 
         //         // Пока только посты с гео поинтом
@@ -215,6 +214,7 @@ export default {
 </script>
 
 <style>
+
     .hideScroll {
         overflow-y: hidden;
     }
@@ -235,7 +235,6 @@ export default {
     .tapeMobile {
         margin-left: 0!important;
     }
-
 
     .el-popover {
       border-radius: 5px !important;
