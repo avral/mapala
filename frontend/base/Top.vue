@@ -12,6 +12,9 @@
         <label for="eng" @click="cahngeLang('en')">eng/steem</label>
       </div>
 
+      <popover></popover>
+
+
       <router-link v-if="auth.isAuth" :to="'/'+auth.user.username" >
         <div class="user">
           <span class="user_name">
@@ -65,6 +68,7 @@ import bc from '../blockchains'
 import {detectmob} from '../utils'
 import * as localStore from 'store'
 import moment from 'moment'
+import popover from './__parts/popover.vue'
 
 import { mixin as onClickOutside } from 'vue-on-click-outside'
 
@@ -119,9 +123,10 @@ export default {
     this.locale = Vue.config.lang
   },
 
- components: {
-  'vf-icon': icon,
- },
+  components: {
+    'vf-icon': icon,
+    popover
+  }
 }
 </script>
 

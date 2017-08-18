@@ -1,6 +1,7 @@
 // ready translated locales
 export default {
   en: {
+    poster: 'Poster',
     add_post_to_group: 'Add a post to ',
     letters: 'letters',
     title_must_have_at_least: 'Title must have at least',
@@ -110,6 +111,7 @@ export default {
     add_key: 'Add, please, the PRIVATE posting key in your account settings',
   },
   ru: {
+    poster: 'Афиша',
     add_key: 'Добавьте, пожалуйста, ПРИВАТНЫЙ постинг ключ в настройках аккаунта',
     add_post_to_group: 'Добавить пост в ',
     letters: 'символов',
