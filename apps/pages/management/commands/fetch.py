@@ -70,7 +70,7 @@ class Command(BaseCommand):
             except KeyboardInterrupt:
                 break
             except:
-                logger.exception('Update err: %s' % pprint.pformat(op))
+                logger.exception('Handle op err: %s' % pprint.pformat(op))
 
             block_num = int(op['block_num'])
 

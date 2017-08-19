@@ -1,5 +1,4 @@
 import logging
-import pprint
 
 from piston.steem import Steem
 from piston.post import Post
@@ -34,11 +33,8 @@ class BaseUpdater:
                 self.upgrade_comment(post)
             else:
                 if post.parent_permlink == APP_FETCH_FROM:
-                    created_post = self.upgrade_post(post)
-                    if created_post is not None:
-                        # Временно, для выявления магии скорейскими постами
-                        if self.blockchain.name == 'steemit':
-                            logger.info('Созданный пост %s' % pprint.pformat(comment))
+                    self.upgrade_post(post)
+
         except PostDoesNotExist:
             pass
 
@@ -93,10 +89,6 @@ class BaseUpdater:
 
     def update_post(self, author, permlink):
         """ Обновляет пост по автору и пермлинку """
-        # Временно, для выявления магии скорейскими постами
-        if self.blockchain.name == 'steemit':
-            logger.info('Update post: %s %s' % (author, permlink))
-
         post = self.rpc.get_content({
             'permlink': permlink,
             'author': author
@@ -135,7 +127,11 @@ class BaseUpdater:
         else:
             post['defaults']['has_point'] = False
 
-        post, _ = Page.objects.update_or_create(**post)
+        post, created = Page.objects.update_or_create(**post)
+
+        if created:
+            logger.info('Created post in {}: {}/{}'
+                        .format(post.blockchain, post.author, post.permlink))
 
         return post
 
