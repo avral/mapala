@@ -238,7 +238,7 @@ def register(request):
 
     if slz.is_valid():
         password = slz.validated_data['password']
-        bc_username = slz.validated_data['bc_username'].lower()
+        bc_username = slz.validated_data['bc_username']
 
         # Регистрируем юзера в блокчейне, пока GOLOS
         api = Api('http://144.217.94.119:8093')

@@ -20,11 +20,16 @@ class UserRegiserBaseSerializer(serializers.Serializer):
         if User.objects.filter(username=username).exists():
             raise ValidationError('Username already exist')
 
-        return data
+        return username
 
 
 class UserRegiserSerializer(UserRegiserBaseSerializer):
     bc_username = serializers.CharField()
+
+    def validate_bc_username(self, data):
+        bc_username = data.lower()
+
+        return bc_username
 
 
 class ExistUserRegiserSerializer(UserRegiserBaseSerializer):
@@ -33,7 +38,7 @@ class ExistUserRegiserSerializer(UserRegiserBaseSerializer):
     def validate_wif(self, data):
         try:
             PrivateKey(data).pubkey
-        except ValueError:
+        except (ValueError, AssertionError):
             raise serializers.ValidationError('Невалидный постинг ключ')
 
         return data
