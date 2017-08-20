@@ -19,7 +19,7 @@ export default {
             && !window.location.host.includes('develop')) ? 'mapala': 'testing',
 
   init() {
-    ChainConfig.expire_in_secs = 30
+    // ChainConfig.expire_in_secs = 30
     BlockChain.get().then(res => {
       for (let bc of res.body) {
         this.blockchains[bc.name] = bc
