@@ -254,7 +254,7 @@ def register(request):
 
         new_user = api(
             'create_account_with_keys',
-            'mapala',
+            'mapala.faucet',  # Регистратор
             bc_username,
             json.dumps({'app': settings.FRONTEND_APP_NAME}),
             keys['owner'][0],
