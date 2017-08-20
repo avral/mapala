@@ -265,6 +265,7 @@ def register(request):
         )
 
         if 'error' in new_user:
+            logger.error('Ошибка создания юзера golos: %s' % new_user['error'])
             return Response('Invalid blockchain username',
                             status=status.HTTP_400_BAD_REQUEST)
 
