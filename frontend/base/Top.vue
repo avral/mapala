@@ -1,58 +1,61 @@
 <template>
   <div>
     <header class="main_header">
-      <router-link class="main_logo" v-bind:class="{ main_logoMobile: detectmob() }" :to="'/'">
-        <img src="../assets/MapalaLogo.png"><span>MAPALA</span>
-      </router-link>
 
-      <div class="change_lang">
-        <input type="radio" value="ru" id="rus" v-model="locale">
-        <label for="rus" @click="cahngeLang('ru')">rus/golos</label>
-        <input type="radio" value="en" id="eng" v-model="locale">
-        <label for="eng" @click="cahngeLang('en')">eng/steem</label>
+      <div class="top_left_block">
+        <router-link class="main_logo" v-bind:class="{ main_logoMobile: detectmob() }" :to="'/'">
+          <img src="../assets/MapalaLogo.png"><span>MAPALA</span>
+        </router-link>
+
+        <div class="change_lang">
+          <input type="radio" value="ru" id="rus" v-model="locale">
+          <label for="rus" @click="cahngeLang('ru')">rus/golos</label>
+          <input type="radio" value="en" id="eng" v-model="locale">
+          <label for="eng" @click="cahngeLang('en')">eng/steem</label>
+        </div>
       </div>
 
-      <popover></popover>
-
-
-      <router-link v-if="auth.isAuth" :to="'/'+auth.user.username" >
-        <div class="user">
-          <span class="user_name">
-            {{auth.user.username}}
-          </span>
-          <img v-if="auth.user.has_avatar" class="user_logo" :src="auth.user.avatar">
-          <img v-if="!auth.user.has_avatar" class="no_avatar" src="../assets/icon-profile-w.svg">
-        </div>
-      </router-link>
-
-      <div class="divider"></div>
-
-      <router-link v-if="!auth.isAuth" class="login" :to="{name: 'login'}">
-        {{ $t('log_in') }}
-      </router-link>
-
-      <div v-on-click-outside="menuClose">
-        <div v-if="auth.isAuth" @click="menuOpen" class="open_menu">{{ $t('menu') }}</div>
-        <div v-if="auth.isAuth" :class="{active : menu_opened, user_menuMobile: detectmob() }" class="user_menu">
-
-          <router-link class="wal" :to="{name: 'userWallet', params: {user: auth.user.username}}" >
-            <i class="purce"></i>
-            <span class="txt_i">{{ $t('my_wallett') }}</span>
-            <span class="amount">{{ auth.balance }}</span>
+      <div class="top-right-block">
+        <popover></popover>
+        <div class="username_wrapper">
+          <router-link v-if="auth.isAuth" :to="'/'+auth.user.username" >
+            <div class="user">
+              <span class="user_name">
+                {{auth.user.username}}
+              </span>
+              <img v-if="auth.user.has_avatar" class="user_logo" :src="auth.user.avatar">
+              <img v-if="!auth.user.has_avatar" class="no_avatar" src="../assets/icon-profile-w.svg">
+            </div>
           </router-link>
-          <div class="divd"></div>
-          <div class="mn">
-            <router-link class="m_item" :to="{name: 'userSettings', params: {user: auth.user.username}}" >
-              {{ $t('setting') }}
+        </div>
+
+        <div class="divider"></div>
+
+        <router-link v-if="!auth.isAuth" class="login" :to="{name: 'login'}">
+          {{ $t('log_in') }}
+        </router-link>
+
+        <div class="right_button" v-on-click-outside="menuClose">
+          <div v-if="auth.isAuth" @click="menuOpen" class="open_menu">{{ $t('menu') }}</div>
+          <div v-if="auth.isAuth" :class="{active : menu_opened, user_menuMobile: detectmob() }" class="user_menu">
+
+            <router-link class="wal" :to="{name: 'userWallet', params: {user: auth.user.username}}" >
+              <i class="purce"></i>
+              <span class="txt_i">{{ $t('my_wallett') }}</span>
+              <span class="amount">{{ auth.balance }}</span>
             </router-link>
+            <div class="divd"></div>
+            <div class="mn">
+              <router-link class="m_item" :to="{name: 'userSettings', params: {user: auth.user.username}}" >
+                {{ $t('setting') }}
+              </router-link>
 
-            <router-link class="m_item" :to="'/ico/'">
-              ICO
-            </router-link>
+              <router-link class="m_item" :to="'/ico/'">
+                ICO
+              </router-link>
 
-            <!-- <a class="m_item" href="">FAQ</a> -->
-
-            <a href="" v-if="auth.isAuth" class="m_item" @click="logout">{{ $t("log_out") }}</a>
+              <a href="" v-if="auth.isAuth" class="m_item" @click="logout">{{ $t("log_out") }}</a>
+            </div>
           </div>
         </div>
       </div>
@@ -133,48 +136,57 @@ export default {
 <style lang="scss" scoped>
 .main_header{
   width: 100%;
+  width: -moz-available;
+  width: -webkit-fill-available;
   height: 42px;
-  background-image: linear-gradient(to bottom, #5d7394, #4b5e7a);
+  background-image: linear-gradient(180deg,#5d7394,#4b5e7a);
   position: fixed;
   z-index: 100;
   top: 0;
   left: 0;
   display: flex;
+  justify-content: space-between;
   align-items: center;
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+.top_left_block {
+  display: flex;
+  flex-wrap: wrap;
 }
 .main_logo{
-  display: block;
-  // width: 85px;
-  height: 34px;
-  margin-left: 30px;
+  display: flex;
+  height: 42px;
+  margin-left: 0;
+  justify-content: center;
+  align-items: center;
+  padding-right: 20px;
+  margin-right: 20px;
 }
 .main_logoMobile {
   margin-left: 0!important;
 }
 .main_logo img{
-  // display: block;
   height: 34px;
+  margin-right: 6px;
 }
 
 .main_header .user{
-  right: 100px;
+  right: 0;
   top: 0;
-  position: absolute;
+  position: relative;
   display: flex;
   align-items: center;
   height: 100%;
-  padding: 0 17px 0 0;
-  // padding-right: 100px;
+  padding: 0;
+  line-height: 42px;
 }
 .main_header a {
   color: #fff;
   text-decoration: none;
 }
-.main_header .main_logo span {
-  padding-left: 5px;
-  position: absolute;
-  top: 30%;
-}
+
 .main_header .user_name{
   color: #fff;
   font-size: 14px;
@@ -205,19 +217,20 @@ export default {
 
 .main_header .open_menu{
   color: #88ade0;
-  font: 700 14px 'PT Sans';
+  font: 700 14px PT Sans;
   display: flex;
   align-items: center;
-  width: 99px;
-  padding-left: 8px;
+  width: 70px;
+  padding-left: 0;
   height: 100%;
-  position: absolute;
+  position: relative;
+  line-height: 42px;
   right: 0;
   top: 0;
   box-sizing: border-box;
   background: url(../assets/icon-menu.svg) no-repeat 53px center;
   cursor: pointer;
-  transition: color 200ms ease;
+  transition: color .2s ease;
 }
 
 .main_header .open_menu:hover{
@@ -253,12 +266,13 @@ export default {
 
 .main_header .divider{
   width: 1px;
-  position: absolute;
-  top: 0;
-  right: 100px;
   background: #4d5169;
-  height: 100%;
-  box-shadow: 0 -2px 7px 0px #2a2c3e;
+  height: 42px;
+  box-shadow: 0 -2px 7px 0 #2a2c3e;
+}
+
+.right_button {
+  padding-left: 20px;
 }
 
 .user_menu.active{
@@ -351,7 +365,12 @@ export default {
 }
 
 .change_lang{
-  margin-left: 80px;
+  margin: 0;
+  height: 42px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 20px;
 }
 
 .change_lang .lab{
@@ -364,14 +383,19 @@ export default {
 }
 
 .change_lang label{
-  font: 700 14px/58px 'PT Sans';
-  letter-spacing: 0.3px;
-  color: white;
+  font: 700 14px/58px PT Sans;
+  letter-spacing: .3px;
+  color: #fff;
   opacity: 0.5;
   padding-left: 35px;
-  margin-left: 20px;
+  margin-left: 0;
   cursor: pointer;
   position: relative;
+  height: 42px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-right: 15px;
 }
 
 .change_lang label:before{
@@ -379,14 +403,19 @@ export default {
   height: 25px;
   position: absolute;
   display: block;
-  content: '';
+  content: "";
   background-color: #eaeaea;
   background-repeat: no-repeat;
   border-radius: 50%;
-  top: -3px;
   left: 0;
 }
 
+.top-right-block {
+  display: flex;
+}
+.top-right-block .username_wrapper {
+  padding: 0 20px;
+}
 .change_lang [type="radio"]:checked + label{
   opacity: 1;
 }

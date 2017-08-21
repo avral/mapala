@@ -94,6 +94,7 @@ export default {
   }
   .poster__Button {
     margin-left: 10px;
+    display: flex;
   }
 
   .poster__Button .el-button {
