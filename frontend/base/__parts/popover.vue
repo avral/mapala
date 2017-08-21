@@ -12,7 +12,7 @@
 
         <ul style="margin: 0;padding: 0;">
           <li style="list-style: none;font-size: 12px;color: #6984a8;">
-            <router-link :to="{ path: '/rnd' }" class="poster_city_link">Ростов-на-Дону</router-link>
+            <router-link :to="{ path: '/rnd' }" class="poster_link">Ростов-на-Дону</router-link>
           </li>
         </ul>
       </div>
@@ -22,17 +22,29 @@
 
         <ul style="margin: 0;padding: 0;">
           <li style="list-style: none;font-size: 12px;color: #6984a8;">
-            <a class="poster_city_link"></a>
+            <a class="poster_link"></a>
           </li>
         </ul>
       </div>
 
       <div class="poster__Column">
         <h4 style="">Чат</h4>
+
+        <ul v-for="city in cities" style="margin: 0;padding: 0;">
+          <li style="list-style: none;font-size: 12px;color: #6984a8;">
+            <a :href="city.chat_link" class="poster_link">{{ city.city }}</a>
+          </li>
+        </ul>
       </div>
 
       <div class="poster__Column">
         <h4 style="">Группа Мапала</h4>
+
+        <ul v-for="city in cities" style="margin: 0;padding: 0;">
+          <li style="list-style: none;font-size: 12px;color: #6984a8;">
+            <a :href="city.chanel_link" class="poster_link">{{ city.city }}</a>
+          </li>
+        </ul>
       </div>
     </el-popover>
 
@@ -49,10 +61,13 @@
 
 <script>
 import { mapState, mapActions, mapMutations } from 'vuex'
+import { Group } from '../../services'
 
 export default {
   mounted () {
-
+    Group.get().then(response => {
+      this.cities = response.data
+    })
   },
 
   data () {
@@ -73,7 +88,8 @@ export default {
         date: '2016-05-03',
         name: 'Jack',
         address: 'New York City'
-      }]
+      }],
+      cities: {}
     }
   },
 
