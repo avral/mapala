@@ -238,7 +238,7 @@ def register(request):
 
     if slz.is_valid():
         password = slz.validated_data['password']
-        bc_username = slz.validated_data['bc_username'].lower()
+        bc_username = slz.validated_data['bc_username']
 
         # Регистрируем юзера в блокчейне, пока GOLOS
         api = Api('http://144.217.94.119:8093')
@@ -254,7 +254,7 @@ def register(request):
 
         new_user = api(
             'create_account_with_keys',
-            'mapala',
+            'mapala.faucet',  # Регистратор
             bc_username,
             json.dumps({'app': settings.FRONTEND_APP_NAME}),
             keys['owner'][0],
@@ -265,6 +265,7 @@ def register(request):
         )
 
         if 'error' in new_user:
+            logger.error('Ошибка создания юзера golos: %s' % new_user['error'])
             return Response('Invalid blockchain username',
                             status=status.HTTP_400_BAD_REQUEST)
 
