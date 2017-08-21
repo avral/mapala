@@ -240,9 +240,9 @@ export default {
       border-radius: 5px !important;
       background-color: #5D7293 !important;
       border: none;
-      justify-content: space-around !important;
+      justify-content: space-between;
       display: flex;
-      padding: 10px;
+      padding: 10px 20px;
       padding-bottom: 20px;
     }
 
@@ -250,7 +250,7 @@ export default {
       display: flex;
       flex-direction: column;
       align-items: flex-start;
-      width: 80px;
+      width: 90px;
     }
 
     .poster__Column h4 {
@@ -260,7 +260,6 @@ export default {
       line-height: 1.5;
       text-align: left;
       color: #ec9eb5;
-      padding-left: 5px;
     }
 
     .el-popover .popper__arrow{
@@ -299,18 +298,18 @@ export default {
     }
 
 
-  .poster_city_link {
+  .poster_link {
     transition: .4s ease-out;
     width: 100%;
     cursor: pointer;
     display: block;
     border-radius: 5px;
     text-align: left;
-    padding: 3px 0 3px 5px;
+    padding: 3px 1px 3px 1px;
     text-decoration: none;
     color: #8DAFE1 !important;
   }
-  .poster_city_link:hover {
+  .poster_link:hover {
     background-color: #4c6282;
   }
 </style>
