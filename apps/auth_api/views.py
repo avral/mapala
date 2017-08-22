@@ -241,7 +241,7 @@ def register(request):
         bc_username = slz.validated_data['bc_username']
 
         # Регистрируем юзера в блокчейне, пока GOLOS
-        api = Api('http://144.217.94.119:8093')
+        api = Api('http://217.182.175.117:8093')
         api('unlock', settings.BITSHARES_PASS)
 
         if api.user_exists(bc_username):
