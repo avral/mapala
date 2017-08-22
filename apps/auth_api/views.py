@@ -1,12 +1,14 @@
 import io
-import json
 import logging
 import requests
 from PIL import Image, ImageOps
 
+from piston.exceptions import AccountExistsException
+from pistonbase.account import PasswordKey
 from django.core.files.base import ContentFile
 from django.core.exceptions import ObjectDoesNotExist
 from pistonbase.account import PrivateKey
+from piston.steem import Steem
 
 from rest_framework import viewsets, status
 from rest_framework.response import Response
@@ -20,10 +22,9 @@ from rest_framework.decorators import (
 )
 
 from backend import settings
+from apps.common.golos import Golos
 from apps.common.utils import is_eng
-from apps.blockchains.sync import BaseUpdater
 from apps.blockchains.data_bases import BlockChainDB
-from apps.blockchains.api import Api
 from apps.pages.models import Page, Comment
 from apps.auth_api.permissions import IsOwnerOrReadOnly, IsOwnerBlockchainOrReadOnly
 from apps.auth_api.models import User, BlockChain, UserBlockChain
@@ -232,6 +233,7 @@ class UserBlockChainViewSet(viewsets.ModelViewSet):
 @permission_classes((AllowAny,))
 def register(request):
     if settings.LOCALE == 'en':
+        # Регистрируем юзера в блокчейне, пока GOLOS
         raise ValueError('Registration for existing steemit accounts only')
 
     slz = UserRegiserSerializer(data=request.data)
@@ -240,32 +242,23 @@ def register(request):
         password = slz.validated_data['password']
         bc_username = slz.validated_data['bc_username']
 
-        # Регистрируем юзера в блокчейне, пока GOLOS
-        api = Api('http://217.182.175.117:8093')
-        api('unlock', settings.BITSHARES_PASS)
-
-        if api.user_exists(bc_username):
-            raise ValidationError('Username exist in blockchain')
-
-        keys = {role: api(
-                'get_private_key_from_password',
-                bc_username, role, password)['result']
-                for role in ['owner', 'active', 'posting', 'memo']}
-
-        new_user = api(
-            'create_account_with_keys',
-            'mapala.faucet',  # Регистратор
-            bc_username,
-            json.dumps({'app': settings.FRONTEND_APP_NAME}),
-            keys['owner'][0],
-            keys['active'][0],
-            keys['posting'][0],
-            keys['memo'][0],
-            True
+        golos = Golos(
+            BlockChain.current().wss,
+            keys=[settings.REGISTRAR['wif']]
         )
 
-        if 'error' in new_user:
-            logger.error('Ошибка создания юзера golos: %s' % new_user['error'])
+        if golos.rpc.get_account(bc_username) is not None:
+            raise ValidationError('Username exist in blockchain')
+
+        try:
+            golos.create_account(
+                bc_username,
+                password=password,
+                creator=settings.REGISTRAR['name'],
+                storekeys=False,
+            )['operations'][0][1]
+        except Exception as e:
+            logger.exception('Ошибка создания юзера golos')
             return Response('Invalid blockchain username',
                             status=status.HTTP_400_BAD_REQUEST)
 
@@ -288,8 +281,9 @@ def register(request):
         result = jwt_response_by_user(user)
 
         # Возвращаем постинг ключ при успешной регистрации
-        result['posting_key'] = keys['posting'][1]
-
+        result['posting_key'] = str(
+            PasswordKey(bc_username, password, role="posting").get_private()
+        )
         return Response(result)
     else:
         return Response(slz._errors, status=status.HTTP_400_BAD_REQUEST)
