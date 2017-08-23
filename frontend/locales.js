@@ -1,6 +1,9 @@
 // ready translated locales
 export default {
   en: {
+    city: 'City',
+    chat: 'Chat',
+    mapala_group: 'Mapala Group',
     poster: 'Poster',
     add_post_to_group: 'Add a post to ',
     letters: 'letters',
@@ -111,6 +114,9 @@ export default {
     add_key: 'Add, please, the PRIVATE posting key in your account settings',
   },
   ru: {
+    city: 'Город',
+    chat: 'Чат',
+    mapala_group: 'Группа Мапала',
     poster: 'Афиша',
     add_key: 'Добавьте, пожалуйста, ПРИВАТНЫЙ постинг ключ в настройках аккаунта',
     add_post_to_group: 'Добавить пост в ',

@@ -7,28 +7,28 @@
       trigger="click">
 
       <div class="poster__Column">
-        <h4 style="">Город</h4>
+        <h4 style="">{{ $t('city') }}</h4>
         <!--<div class="el-transfer-panel__filter el-input el-input&#45;&#45;small"><i class="el-input__icon el-icon-search"></i><input autocomplete="off" placeholder="Поиск" size="small" icon="search" type="text" rows="2" validateevent="true" class="el-input__inner"></div>-->
 
-        <ul style="margin: 0;padding: 0;">
-          <li style="list-style: none;font-size: 12px;color: #6984a8;">
-            <router-link :to="{ path: '/rnd' }" class="poster_link">Ростов-на-Дону</router-link>
+        <ul v-for="city in cities" style="margin: 0;padding: 0;">
+          <li style="list-style: none;font-size: 12px;color:#8DAFE1;padding: 3px 1px 3px 1px;">
+            {{ city.city }}
           </li>
         </ul>
       </div>
 
       <div class="poster__Column">
-        <h4 style="">Афиша</h4>
+        <h4 style="">{{ $t('poster') }}</h4>
 
-        <ul style="margin: 0;padding: 0;">
+        <ul v-for="city in cities" style="margin: 0;padding: 0;">
           <li style="list-style: none;font-size: 12px;color: #6984a8;">
-            <a class="poster_link"></a>
+            <a :href="city.chanel_link" class="poster_link">{{ city.city }}</a>
           </li>
         </ul>
       </div>
 
       <div class="poster__Column">
-        <h4 style="">Чат</h4>
+        <h4 style="">{{ $t('chat') }}</h4>
 
         <ul v-for="city in cities" style="margin: 0;padding: 0;">
           <li style="list-style: none;font-size: 12px;color: #6984a8;">
@@ -38,11 +38,11 @@
       </div>
 
       <div class="poster__Column">
-        <h4 style="">Группа Мапала</h4>
+        <h4 style="">{{ $t('mapala_group') }}</h4>
 
         <ul v-for="city in cities" style="margin: 0;padding: 0;">
           <li style="list-style: none;font-size: 12px;color: #6984a8;">
-            <a :href="city.chanel_link" class="poster_link">{{ city.city }}</a>
+            <router-link :to="{ path: '/' + city.name }" class="poster_link">{{ city.city }}</router-link>
           </li>
         </ul>
       </div>
