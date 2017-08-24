@@ -17,7 +17,7 @@
 
       <div class="top-right-block">
         <popover></popover>
-        <div class="username_wrapper">
+        <div v-if="auth.isAuth" class="username_wrapper">
           <router-link v-if="auth.isAuth" :to="'/'+auth.user.username" >
             <div class="user">
               <span class="user_name">
@@ -35,7 +35,7 @@
           {{ $t('log_in') }}
         </router-link>
 
-        <div class="right_button" v-on-click-outside="menuClose">
+        <div v-if="auth.isAuth" class="right_button" v-on-click-outside="menuClose">
           <div v-if="auth.isAuth" @click="menuOpen" class="open_menu">{{ $t('menu') }}</div>
           <div v-if="auth.isAuth" :class="{active : menu_opened, user_menuMobile: detectmob() }" class="user_menu">
 
@@ -243,20 +243,19 @@ export default {
 
 .main_header .login{
   color: #88ade0;
-  font: 700 14px 'PT Sans';
-  display: flex;
+  font: 700 14px PT Sans;
+  display: block;
   align-items: center;
-  width: 99px;
-  padding-left: 8px;
-  height: 100%;
-  position: absolute;
-  right: 0;
-  top: 0;
+  width: 70px;
+  padding-left: 7px;
+  height: 102%;
+  line-height: 42px;
   box-sizing: border-box;
   background: url(../assets/icon-login.svg) no-repeat 53px center;
   cursor: pointer;
-  transition: color 200ms ease;
+  transition: color .2s ease;
   text-decoration: none;
+  margin-left: 10px;
 }
 
 .main_header .login:hover{
