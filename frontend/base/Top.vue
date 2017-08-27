@@ -16,6 +16,11 @@
       </div>
 
       <div class="top-right-block">
+
+        <a href="https://fest.mapala.net" class="el-button mapala-fest-link">
+          <span>MapalaFest</span>
+        </a>
+
         <popover></popover>
         <div v-if="auth.isAuth" class="username_wrapper">
           <router-link v-if="auth.isAuth" :to="'/'+auth.user.username" >
@@ -153,7 +158,6 @@ export default {
 
 .top_left_block {
   display: flex;
-  flex-wrap: wrap;
 }
 .main_logo{
   display: flex;
@@ -422,4 +426,53 @@ export default {
   background-image: url(../assets/icon-checked-blue.svg);
 }
 
+@media screen and (max-width: 600px) {
+  .username_wrapper {
+    display: none;
+  }
+
+  .top_left_block {
+    flex: 1;
+  }
+
+  .top-right-block {
+    justify-content: space-between;
+  }
+
+}
+
+
+@media screen and (max-width: 767px) {
+  .change_lang {
+    display: none;
+  }
+
+  .top_left_block {
+    flex: 0.5;
+  }
+
+  .top-right-block {
+    flex: 1;
+    justify-content: space-around;
+  }
+}
+
+.mapala-fest-link {
+  display: flex;
+  align-items: center;
+  background: transparent !important;
+  border: none !important;
+  font-size: 12px !important;
+}
+
+.mapala-fest-link span {
+  color: #fff;
+  font-style: oblique;
+}
+
+@media screen and (max-width: 500px) {
+  .mapala-fest-link {
+    display: none;
+  }
+}
 </style>
