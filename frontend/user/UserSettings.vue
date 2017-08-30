@@ -57,6 +57,12 @@
             @blur="hideKey($event, blockchains.current)"
             v-model="blockchains.current.wif" :class="blockchains.current.key_valid ? 'icon_good' : 'icon_edit'">
     </div>
+
+    <div class="inpt_w">
+      
+      <el-checkbox v-model="locomotive" @change="loco_update()">Участвовать в паравозике</el-checkbox>
+    </div>
+
         <!--
         <div v-if="keyInValid && blockchains.current.address_prefix == 'GLS'" class="el-form-item__error">Вы ввели публичный ключ. Добавьте, пожалуйста, ПРИВАТНЫЙ постинг ключ в настройках аккаунта. <a href="http://mapala.net/mapala/privet-beta-ili-kak-opublikovatx-post-na-novoij-mapala" target="_blank">Инструкция</a></div>
         -->
@@ -90,19 +96,19 @@
 
     import blockchains from '../blockchains'
     import auth from '../auth'
-    import {User, BlockChain} from '../services'
-
+    import {User, BlockChain, Locomotive} from '../services'
 
     export default {
         name: 'Profile',
         data () {
             return {
-                auth: auth,
-                blockchains: blockchains,
-                error: false,
-                edit_av: false,
-                old_password: '',
-                new_password: '',
+              locomotive: false,
+              auth: auth,
+              blockchains: blockchains,
+              error: false,
+              edit_av: false,
+              old_password: '',
+              new_password: '',
             }
         },
         computed: {
@@ -110,7 +116,19 @@
             //    return this.blockchains.checkGolosKey()
             //}
         },
+      created() {
+        Locomotive.get().then(res => this.locomotive = res.body)
+      },
         methods: {
+          loco_update() {
+            if (this.locomotive) {
+              Locomotive.save({wif: blockchains.current.wif}).this(res => {
+                console.log(res.body)
+              })
+            } else {
+              Locomotive.delete().then(res => console.log(res.body))
+            }
+          },
             updatePassword() {
                 if (!this.old_password) { return }
                     User.setPassword({old_password: this.old_password, new_password: this.new_password}).then(res => {

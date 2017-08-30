@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     'django_filters',
     'backend',
     'apps.pages',
+    'apps.locomotive',
     'apps.auth_api',
     'apps.groups',
     'mptt',
