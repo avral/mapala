@@ -16,8 +16,13 @@
       </div>
 
       <div class="top-right-block">
+
+        <a href="https://fest.mapala.net" class="el-button mapala-fest-link">
+          <span>MapalaFest</span>
+        </a>
+
         <popover></popover>
-        <div class="username_wrapper">
+        <div v-if="auth.isAuth" class="username_wrapper">
           <router-link v-if="auth.isAuth" :to="'/'+auth.user.username" >
             <div class="user">
               <span class="user_name">
@@ -35,7 +40,7 @@
           {{ $t('log_in') }}
         </router-link>
 
-        <div class="right_button" v-on-click-outside="menuClose">
+        <div v-if="auth.isAuth" class="right_button" v-on-click-outside="menuClose">
           <div v-if="auth.isAuth" @click="menuOpen" class="open_menu">{{ $t('menu') }}</div>
           <div v-if="auth.isAuth" :class="{active : menu_opened, user_menuMobile: detectmob() }" class="user_menu">
 
@@ -153,7 +158,6 @@ export default {
 
 .top_left_block {
   display: flex;
-  flex-wrap: wrap;
 }
 .main_logo{
   display: flex;
@@ -243,20 +247,19 @@ export default {
 
 .main_header .login{
   color: #88ade0;
-  font: 700 14px 'PT Sans';
-  display: flex;
+  font: 700 14px PT Sans;
+  display: block;
   align-items: center;
-  width: 99px;
-  padding-left: 8px;
-  height: 100%;
-  position: absolute;
-  right: 0;
-  top: 0;
+  width: 70px;
+  padding-left: 7px;
+  height: 102%;
+  line-height: 42px;
   box-sizing: border-box;
   background: url(../assets/icon-login.svg) no-repeat 53px center;
   cursor: pointer;
-  transition: color 200ms ease;
+  transition: color .2s ease;
   text-decoration: none;
+  margin-left: 10px;
 }
 
 .main_header .login:hover{
@@ -423,4 +426,53 @@ export default {
   background-image: url(../assets/icon-checked-blue.svg);
 }
 
+@media screen and (max-width: 600px) {
+  .username_wrapper {
+    display: none;
+  }
+
+  .top_left_block {
+    flex: 1;
+  }
+
+  .top-right-block {
+    justify-content: space-between;
+  }
+
+}
+
+
+@media screen and (max-width: 767px) {
+  .change_lang {
+    display: none;
+  }
+
+  .top_left_block {
+    flex: 0.5;
+  }
+
+  .top-right-block {
+    flex: 1;
+    justify-content: space-around;
+  }
+}
+
+.mapala-fest-link {
+  display: flex;
+  align-items: center;
+  background: transparent !important;
+  border: none !important;
+  font-size: 12px !important;
+}
+
+.mapala-fest-link span {
+  color: #fff;
+  font-style: oblique;
+}
+
+@media screen and (max-width: 500px) {
+  .mapala-fest-link {
+    display: none;
+  }
+}
 </style>

@@ -119,4 +119,11 @@ export default {
     font-size: 12px !important;
     color: #8DAFE1 !important;
   }
-</style scoped>
+
+  @media screen and (max-width: 900px) {
+    .poster__Button {
+      display: none;
+    }
+  }
+
+</style>
