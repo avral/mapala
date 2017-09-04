@@ -1,4 +1,5 @@
 import logging
+import json
 from concurrent.futures import ThreadPoolExecutor
 
 from piston.steem import Steem
@@ -19,6 +20,13 @@ from apps.locomotive.models import LocoMember
 
 
 logger = logging.getLogger('mapala.fetch')
+
+with open('./apps/pages/management/commands/ban.json') as data_file:
+    BAN_LIST = json.load(data_file)
+
+
+class BannedAccount(Exception):
+    pass
 
 
 class BaseUpdater:
@@ -41,6 +49,8 @@ class BaseUpdater:
 
         except PostDoesNotExist:
             pass
+        except BannedAccount:
+            logger.warning('banned account %s' % post.author)
 
     def upvote(self, member, vote):
         op = operations.Vote(
@@ -233,6 +243,12 @@ class BaseUpdater:
         )[0]
 
     def get_author(self, username):
+        print(1)
+        if username in BAN_LIST and self.blockchain.name == 'golos':
+            raise BannedAccount()
+
+        print(2)
+
         try:
             user_bc = UserBlockChain.objects.get(
                 username=username.lower(),
