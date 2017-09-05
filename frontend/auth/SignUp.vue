@@ -29,20 +29,24 @@
                 </div>
                 -->
             </div>
+            <vue-recaptcha ref="recaptcha" sitekey="6LfKfS8UAAAAAHEecRYjwgsL7p2SDXriEC5m0Otc" @verify="success"></vue-recaptcha>
             <el-button class="submit-button" :loading="loading" @click="signUp">{{ $t('sign_in') }}</el-button>
         </div>
     </form>
 </template>
 
 <script>
-    import Vue from 'vue';
+  import VueRecaptcha from 'vue-recaptcha'
+    import Vue from 'vue'
     import auth from '../auth'
     import bc from '../blockchains'
     import {User, http} from '../services'
 
     export default {
+      components: { VueRecaptcha },
         data() {
             return {
+              recaptcha: '',
               bc: bc,
               loading: false,
                 username: '',
@@ -54,10 +58,14 @@
             }
         },
         methods: {
+          success(res) {
+            this.recaptcha = res
+          },
             signUp() {
                 let creds = {
                     username: this.username,
                     password: this.password,
+                    g_recaptcha_response: this.recaptcha
                 }
 
                 if (this.golosAlreadyReg === true) {
@@ -67,6 +75,7 @@
                     creds.bc_username = this.bc_username
                     auth.signUp(this, creds, {name: 'index'})
                 }
+              this.$refs.recaptcha.reset()
             },
 
         // TODO Сделать подсказки по доступности логина/блокчейн юзернейма

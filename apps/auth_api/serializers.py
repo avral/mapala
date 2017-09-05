@@ -4,10 +4,11 @@ from rest_framework import serializers
 from rest_framework.serializers import ValidationError
 
 from apps.common.utils import is_eng
+from apps.common.mixins import ReCapchaMixin
 from apps.auth_api.models import User, BlockChain, UserBlockChain
 
 
-class UserRegiserBaseSerializer(serializers.Serializer):
+class UserRegiserBaseSerializer(ReCapchaMixin, serializers.Serializer):
     username = serializers.RegexField('^[\d\w.-]+$')
     password = serializers.CharField()
 

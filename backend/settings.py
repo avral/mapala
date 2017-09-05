@@ -149,6 +149,8 @@ JWT_AUTH = {
 APPEND_SLASH = True
 
 
+GR_CAPTCHA_URL = 'https://www.google.com/recaptcha/api/siteverify'
+
 # Prerender
 PRERENDER_UA_REGEX = """
     Ask Jeeves|baiduspider|twitterbot|facebookexternalhit|rogerbot|linkedinbot|embedly|
