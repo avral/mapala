@@ -20,14 +20,9 @@
                 </div>
             </div>
             <div v-else>
-                <h1>Регистрация в голосе временно недоступна, вы можете зарегистрироваться самостоятельно на:
-                  <a href="https://golos.io">Golos.io</a>
-                </h1>
-                <!--
                 <div class="inpt_w">
                     <input type="text" placeholder="Желаемый Golos.io username" v-model="bc_username" class="inpt i-user"><label></label>
                 </div>
-                -->
             </div>
             <vue-recaptcha ref="recaptcha" sitekey="6LfKfS8UAAAAAHEecRYjwgsL7p2SDXriEC5m0Otc" @verify="success"></vue-recaptcha>
             <el-button class="submit-button" :loading="loading" @click="signUp">{{ $t('sign_in') }}</el-button>
