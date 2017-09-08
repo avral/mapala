@@ -58,7 +58,7 @@
             v-model="blockchains.current.wif" :class="blockchains.current.key_valid ? 'icon_good' : 'icon_edit'">
     </div>
 
-    <div class="inpt_w">
+    <div class="inpt_w" v-if="blockchains.current.key_valid">
       
       <el-checkbox v-model="locomotive" @change="loco_update()">Участвовать в паравозике</el-checkbox>
     </div>
