@@ -9,7 +9,7 @@
           <div v-on:click="switch_edit_avatar()" class="round_av" :class="{ edit_av : edit_av }">
             <i class="ic delete" @click="removeAvatar"></i>
             <i class="ic edit" @click="$refs.avatarInput.click()">
-              <input ref="avatarInput" @change="setAvatar" hidden type="file">
+            <input ref="avatarInput" @change="setAvatar" hidden type="file">
           </i>
 
           <i class="close_edit"></i>
@@ -122,7 +122,7 @@
         methods: {
           loco_update() {
             if (this.locomotive) {
-              Locomotive.save({wif: blockchains.current.wif}).this(res => {
+              Locomotive.save({wif: blockchains.current.wif}).then(res => {
                 console.log(res.body)
               })
             } else {
