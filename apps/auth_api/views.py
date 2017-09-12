@@ -23,7 +23,7 @@ from rest_framework.decorators import (
 
 from backend import settings
 from apps.common.golos import Golos
-from apps.common.utils import is_eng
+from apps.common.utils import is_eng, get_client_ip
 from apps.blockchains.data_bases import BlockChainDB
 from apps.pages.models import Page, Comment
 from apps.auth_api.permissions import IsOwnerOrReadOnly, IsOwnerBlockchainOrReadOnly
@@ -262,6 +262,9 @@ def register(request):
             return Response('Invalid blockchain username',
                             status=status.HTTP_400_BAD_REQUEST)
 
+        logger.info('Registration {} from {}'.format(
+                slz.validated_data['username'], get_client_ip(request)))
+
         user = User.objects.create_user(
             username=slz.validated_data['username'],
             password=password,
@@ -336,6 +339,9 @@ def register_existing_user(request):
         requests.get(
             'http://alfa.mapala.net/api/v1/site/create_user?user=%s'
             % mapala_username)
+
+        logger.info('Registration {} from {}'
+                    .format(username, get_client_ip(request)))
 
         return Response(jwt_response_by_user(user))
     else:
