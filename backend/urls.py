@@ -1,20 +1,15 @@
-import re
 import django
 import logging
 import requests
 
-from django.views.decorators.cache import cache_page
-from django.template.loader import render_to_string
 from django.conf import settings
 from django.contrib import admin
 from django.conf.urls import url, include
 from django.http import HttpResponse
 
-from robot_detection import is_robot
 from rest_framework.routers import DefaultRouter
 from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token
 
-from backend.settings import PRERENDER_PROXY, PRERENDER_UA_REGEX
 from apps.locomotive.views import LocoView
 from apps.auth import urls as auth_urls
 from apps.pages import views as page_views
@@ -49,24 +44,6 @@ if settings.DEBUG:
     )
 
 
-def ssr(request):
-    """ HACK Рендерим страничку для робота """
-    user_agent = request.META.get('HTTP_USER_AGENT', '')
-
-    if re.search(PRERENDER_UA_REGEX, user_agent, re.I) and user_agent:
-        url = PRERENDER_PROXY + request.build_absolute_uri()
-
-        try:
-            html = requests.get(url, allow_redirects=False).text
-        except requests.exceptions.ConnectionError:
-            logger.warning('Prerender connection err: %s' % url)
-            return HttpResponse(status=500)
-    else:
-        html = render_to_string('base.html')
-
-    return HttpResponse(html)
-
-
 def alfa(request):
     alfa_url = 'http://alfa.mapala.net' + request.get_full_path()
 
@@ -94,8 +71,4 @@ urlpatterns += [
 
     # Паравозик
     url(r'^api/locomotive/', LocoView.as_view()),
-
-    # Vue on frontend
-    # url(r'^', TemplateView.as_view(template_name='base.html'))
-    url(r'^', ssr)
 ]
