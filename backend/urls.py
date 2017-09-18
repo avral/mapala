@@ -54,19 +54,17 @@ def alfa(request):
 urlpatterns += [
     url(r'^admin/', admin.site.urls),
 
-    # DACom Auth
-    url(r'^auth/', include(auth_urls)),
-
-    url(r'^api-auth/', obtain_jwt_token),
-    url(r'^api-auth-refresh/', refresh_jwt_token),
+    # TODO перенести в модуль авторизации
+    url(r'^api/auth/login/', obtain_jwt_token),
+    url(r'^api/auth/refresh/', refresh_jwt_token),
+    url(r'^api/auth/sign-up/', auth_views.register),
+    url(r'^api/auth/existng-sign-up/', auth_views.register_existing_user),
 
     # TODO Вынести в ресурс картинок
-    url(r'^post_image/', page_views.post_image),
+    url(r'^api/images/', page_views.post_image),
 
     url(r'^api/v1/', alfa),
 
-    url(r'^sign-up/', auth_views.register),
-    url(r'^existng-sign-up/', auth_views.register_existing_user),
     url(r'^api/', include(router.urls)),
 
     # Паравозик
