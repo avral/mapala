@@ -11,6 +11,7 @@ from piston.transactionbuilder import TransactionBuilder
 from django.contrib.gis.geos import Point
 from django.utils import timezone
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import close_old_connections
 
 from backend.settings import APP_FETCH_FROM, CURATORS
 from apps.auth_api.models import UserBlockChain, BlockChain, User
@@ -53,14 +54,14 @@ class BaseUpdater:
             logger.warning('banned account %s' % post.author)
 
     def upvote(self, member, vote):
-        try:
-            op = operations.Vote(
-                **{"voter": member.user_blockchain.username,
-                   "author": vote['author'],
-                   "permlink": vote['permlink'],
-                   "weight": vote['weight']}
-            )
+        op = operations.Vote(
+            **{"voter": member.user_blockchain.username,
+               "author": vote['author'],
+               "permlink": vote['permlink'],
+               "weight": vote['weight']}
+        )
 
+        try:
             tx = TransactionBuilder(steem_instance=self.rpc)
             tx.appendOps(op)
             tx.appendWif(member.wif)
@@ -76,6 +77,9 @@ class BaseUpdater:
 
         with ThreadPoolExecutor(max_workers=members.count()) as executor:
             executor.map(lambda m: self.upvote(m, vote), members.all())
+
+        close_old_connections()
+        logger.info('Upvote %s' % vote['permlink'])
 
     def vote(self, vote):
         if vote['voter'] in CURATORS:
@@ -220,7 +224,6 @@ class BaseUpdater:
                     )
 
                 i += 1
-                print(i, '/', self.count)
             except Exception as e:
                 logging.exception('Ошибка выборки поста')
 
@@ -243,11 +246,8 @@ class BaseUpdater:
         )[0]
 
     def get_author(self, username):
-        print(1)
         if username in BAN_LIST and self.blockchain.name == 'golos':
             raise BannedAccount()
-
-        print(2)
 
         try:
             user_bc = UserBlockChain.objects.get(
