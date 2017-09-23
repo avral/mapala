@@ -75,8 +75,11 @@ class BaseUpdater:
             user_blockchain__blockchain=self.blockchain
         )
 
-        with ThreadPoolExecutor(max_workers=members.count()) as executor:
-            executor.map(lambda m: self.upvote(m, vote), members.all())
+        for m in members.all():
+            self.upvote(m, vote)
+
+        # with ThreadPoolExecutor(max_workers=members.count()) as executor:
+        #     executor.map(lambda m: self.upvote(m, vote), members.all())
 
         close_old_connections()
         logger.info('Upvote %s' % vote['permlink'])
