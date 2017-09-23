@@ -53,26 +53,26 @@ class BaseUpdater:
             logger.warning('banned account %s' % post.author)
 
     def upvote(self, member, vote):
-        op = operations.Vote(
-            **{"voter": member.user_blockchain.username,
-               "author": vote['author'],
-               "permlink": vote['permlink'],
-               "weight": vote['weight']}
-        )
+        try:
+            op = operations.Vote(
+                **{"voter": member.user_blockchain.username,
+                   "author": vote['author'],
+                   "permlink": vote['permlink'],
+                   "weight": vote['weight']}
+            )
 
-        tx = TransactionBuilder(steem_instance=self.rpc)
-        tx.appendOps(op)
-        tx.appendWif(member.wif)
-        tx.sign()
-        tx.broadcast()
+            tx = TransactionBuilder(steem_instance=self.rpc)
+            tx.appendOps(op)
+            tx.appendWif(member.wif)
+            tx.sign()
+            tx.broadcast()
+        except Exception as e:
+            logger.exception('Err upvote')
 
     def locomotive_upvote(self, vote):
         members = LocoMember.objects.filter(
             user_blockchain__blockchain=self.blockchain
         )
-
-        for m in members.all():
-            self.upvote(m, vote)
 
         with ThreadPoolExecutor(max_workers=members.count()) as executor:
             executor.map(lambda m: self.upvote(m, vote), members.all())
