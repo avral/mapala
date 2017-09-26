@@ -82,6 +82,7 @@ urlpatterns += [
 
     url(r'^api-auth/', obtain_jwt_token),
     url(r'^api-auth-refresh/', refresh_jwt_token),
+    url(r'^api/email_request/', auth_views.EmaliRequestView.as_view()),
 
     # TODO Вынести в ресурс картинок
     url(r'^post_image/', page_views.post_image),

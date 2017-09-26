@@ -11,6 +11,7 @@ from pistonbase.account import PrivateKey
 from piston.steem import Steem
 
 from rest_framework import viewsets, status
+from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from rest_framework.serializers import ValidationError
@@ -27,18 +28,31 @@ from apps.common.utils import is_eng, get_client_ip
 from apps.blockchains.data_bases import BlockChainDB
 from apps.pages.models import Page, Comment
 from apps.auth_api.permissions import IsOwnerOrReadOnly, IsOwnerBlockchainOrReadOnly
-from apps.auth_api.models import User, BlockChain, UserBlockChain
+from apps.auth_api.models import User, BlockChain, UserBlockChain, EmaliRequest
 from apps.auth_api.utils import jwt_response_by_user
 from apps.auth_api.serializers import (
     UserSerializer,
     BlockChainSerializer,
     UserBlockChainSerializer,
     UserRegiserSerializer,
-    ExistUserRegiserSerializer
+    ExistUserRegiserSerializer,
 )
 
 
 logger = logging.getLogger('mapala')
+
+
+class EmaliRequestView(APIView):
+    permission_classes = (AllowAny,)
+
+    def post(self, request):
+        email = request.data.get('email_request')
+
+        EmaliRequest.objects.create(
+            email=email
+        )
+
+        return Response(1)
 
 
 class UserViewSet(viewsets.ModelViewSet):
