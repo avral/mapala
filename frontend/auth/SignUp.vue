@@ -23,10 +23,12 @@
                 <p>
                   Мы меняем логику регистрации аккаунтов в блокчейне, в связи с этим регистрация временно приостановлена.
                   Оставьте свой e-mail и мы уведомим вас о возобновлении регистрации.
-                  Или ознакомтесь с этой инструкцией
+                  <br>
+                  <br>
+                  Или ознакомтесь с 
                   <a
                     href="https://mapala.net/mapala.girl/registracziya-na-mapalanet-c-samostoyatelxnoij-registraczieij-na-golosio/"
-                    target="_blank">этой инструкцией
+                    target="_blank">инструкцией
                   </a>
                 </p>
 
