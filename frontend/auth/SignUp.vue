@@ -36,6 +36,7 @@
 
 <script>
   import VueRecaptcha from 'vue-recaptcha'
+  import {showErrors} from '../utils'
     import Vue from 'vue'
     import auth from '../auth'
     import bc from '../blockchains'
@@ -72,10 +73,12 @@
                     creds.wif = this.wif
                     auth.existngSignUp(this, creds, {name: 'index'})
                 } else {
-                  EmailRequest.save({email_request: this.email_request}).then(res => {
+                  EmailRequest.save({email_request: this.email_request, g_recaptcha_response: this.recaptcha}).then(res => {
                     this.$alert('Вы получите письмо сразу после возобновления регистрации', 'Спасибо', {confirmButtonText: 'OK'})
                   }, err => {
-                    this.$notify({title: 'Error', message: 'Почта уже добавлена', type: 'warning'})
+                    console.log(err)
+                    showErrors(err.body, this)
+                    //this.$notify({title: 'Error', message: 'Почта уже добавлена', type: 'warning'})
                   })
                 }
               this.$refs.recaptcha.reset()
