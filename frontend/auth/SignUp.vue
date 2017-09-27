@@ -20,8 +20,16 @@
                 </div>
             </div>
             <div v-else>
-                <h4>Мы мененяем логику регистрации аккаунтов в блокчейне, в связи с этим регистрация временно приостановлена.
-                    Оставьте свой e-mail и мы уведомим вас о возобновлении регистрации.</h4>
+                <p>
+                  Мы меняем логику регистрации аккаунтов в блокчейне, в связи с этим регистрация временно приостановлена.
+                  Оставьте свой e-mail и мы уведомим вас о возобновлении регистрации.
+                  Или ознакомтесь с этой инструкцией
+                  <a
+                    href="https://mapala.net/mapala.girl/registracziya-na-mapalanet-c-samostoyatelxnoij-registraczieij-na-golosio/"
+                    target="_blank">этой инструкцией
+                  </a>
+                </p>
+
                 <div class="inpt_w">
                     <input type="email" placeholder="email" v-model="email_request" class="inpt i-user"><label></label>
                     <!-- <input type="text" placeholder="Желаемый Golos.io username" v-model="bc_username" class="inpt i-user"><label></label>
