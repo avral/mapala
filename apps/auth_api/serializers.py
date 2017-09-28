@@ -1,13 +1,13 @@
-from pistonbase.account import PrivateKey
-
 from rest_framework import serializers
 from rest_framework.serializers import ValidationError
 
 from apps.common.utils import is_eng
+from apps.common.mixins import ReCapchaMixin
+from apps.common.serializers import WifSerializer
 from apps.auth_api.models import User, BlockChain, UserBlockChain
 
 
-class UserRegiserBaseSerializer(serializers.Serializer):
+class UserRegiserBaseSerializer(ReCapchaMixin, serializers.Serializer):
     username = serializers.RegexField('^[\d\w.-]+$')
     password = serializers.CharField()
 
@@ -32,16 +32,8 @@ class UserRegiserSerializer(UserRegiserBaseSerializer):
         return bc_username
 
 
-class ExistUserRegiserSerializer(UserRegiserBaseSerializer):
-    wif = serializers.CharField()
-
-    def validate_wif(self, data):
-        try:
-            PrivateKey(data).pubkey
-        except (ValueError, AssertionError):
-            raise serializers.ValidationError('Невалидный постинг ключ')
-
-        return data
+class ExistUserRegiserSerializer(WifSerializer, UserRegiserBaseSerializer):
+    pass
 
 
 class UserSerializer(serializers.ModelSerializer):

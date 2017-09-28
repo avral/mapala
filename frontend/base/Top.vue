@@ -17,10 +17,6 @@
 
       <div class="top-right-block">
 
-        <a href="https://fest.mapala.net" class="el-button mapala-fest-link">
-          <span>MapalaFest</span>
-        </a>
-
         <popover></popover>
         <div v-if="auth.isAuth" class="username_wrapper">
           <router-link v-if="auth.isAuth" :to="'/'+auth.user.username" >

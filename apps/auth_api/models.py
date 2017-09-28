@@ -12,6 +12,10 @@ LOCALE_CHOICES = (
 )
 
 
+class EmaliRequest(models.Model):
+    email = models.CharField(max_length=200, unique=True)
+
+
 class UserManager(BaseUserManager):
     use_in_migrations = True
 

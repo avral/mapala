@@ -1,6 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
+from apps.common.serializers import WifSerializer
 from apps.auth_api.models import BlockChain, UserBlockChain
 from apps.locomotive.models import LocoMember
 
@@ -20,7 +21,11 @@ class LocoView(APIView):
         if self._member_exists(request):
             return Response('Already exists')
 
-        wif = request.data['wif']
+        slz = WifSerializer(data=request.data)
+        slz.is_valid(raise_exception=True)
+
+        wif = slz.validated_data['wif']
+
         user_bc = UserBlockChain.on_bc.get(user=request.user)
 
         LocoMember.objects.create(

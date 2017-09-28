@@ -10,7 +10,9 @@ from django.core.exceptions import ObjectDoesNotExist
 from pistonbase.account import PrivateKey
 from piston.steem import Steem
 
+from django.db import IntegrityError
 from rest_framework import viewsets, status
+from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from rest_framework.serializers import ValidationError
@@ -23,22 +25,41 @@ from rest_framework.decorators import (
 
 from backend import settings
 from apps.common.golos import Golos
-from apps.common.utils import is_eng
+from apps.common.utils import is_eng, get_client_ip
+from apps.common.mixins import ReCapchaMixin
 from apps.blockchains.data_bases import BlockChainDB
 from apps.pages.models import Page, Comment
 from apps.auth_api.permissions import IsOwnerOrReadOnly, IsOwnerBlockchainOrReadOnly
-from apps.auth_api.models import User, BlockChain, UserBlockChain
+from apps.auth_api.models import User, BlockChain, UserBlockChain, EmaliRequest
 from apps.auth_api.utils import jwt_response_by_user
 from apps.auth_api.serializers import (
     UserSerializer,
     BlockChainSerializer,
     UserBlockChainSerializer,
     UserRegiserSerializer,
-    ExistUserRegiserSerializer
+    ExistUserRegiserSerializer,
 )
 
 
 logger = logging.getLogger('mapala')
+
+
+class EmaliRequestView(APIView):
+    permission_classes = (AllowAny,)
+
+    def post(self, request):
+        # Валидация рекапчи
+        slz = ReCapchaMixin(data=request.data)
+        slz.is_valid(raise_exception=True)
+
+        try:
+            EmaliRequest.objects.create(
+                email=request.data.get('email_request')
+            )
+        except IntegrityError:
+            return Response('Email already exists', status.HTTP_400_BAD_REQUEST)
+
+        return Response('OK')
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -262,6 +283,9 @@ def register(request):
             return Response('Invalid blockchain username',
                             status=status.HTTP_400_BAD_REQUEST)
 
+        logger.info('Registration {} from {}'.format(
+                slz.validated_data['username'], get_client_ip(request)))
+
         user = User.objects.create_user(
             username=slz.validated_data['username'],
             password=password,
@@ -336,6 +360,9 @@ def register_existing_user(request):
         requests.get(
             'http://alfa.mapala.net/api/v1/site/create_user?user=%s'
             % mapala_username)
+
+        logger.info('Registration {} from {}'
+                    .format(username, get_client_ip(request)))
 
         return Response(jwt_response_by_user(user))
     else:

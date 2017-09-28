@@ -1,4 +1,5 @@
 import logging
+import json
 from concurrent.futures import ThreadPoolExecutor
 
 from piston.steem import Steem
@@ -10,6 +11,7 @@ from piston.transactionbuilder import TransactionBuilder
 from django.contrib.gis.geos import Point
 from django.utils import timezone
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import close_old_connections
 
 from backend.settings import APP_FETCH_FROM, CURATORS
 from apps.auth_api.models import UserBlockChain, BlockChain, User
@@ -19,6 +21,13 @@ from apps.locomotive.models import LocoMember
 
 
 logger = logging.getLogger('mapala.fetch')
+
+with open('./apps/pages/management/commands/ban.json') as data_file:
+    BAN_LIST = json.load(data_file)
+
+
+class BannedAccount(Exception):
+    pass
 
 
 class BaseUpdater:
@@ -41,6 +50,8 @@ class BaseUpdater:
 
         except PostDoesNotExist:
             pass
+        except BannedAccount:
+            logger.warning('banned account %s' % post.author)
 
     def upvote(self, member, vote):
         op = operations.Vote(
@@ -50,11 +61,14 @@ class BaseUpdater:
                "weight": vote['weight']}
         )
 
-        tx = TransactionBuilder(steem_instance=self.rpc)
-        tx.appendOps(op)
-        tx.appendWif(member.wif)
-        tx.sign()
-        tx.broadcast()
+        try:
+            tx = TransactionBuilder(steem_instance=self.rpc)
+            tx.appendOps(op)
+            tx.appendWif(member.wif)
+            tx.sign()
+            tx.broadcast()
+        except Exception as e:
+            logger.exception('Err upvote')
 
     def locomotive_upvote(self, vote):
         members = LocoMember.objects.filter(
@@ -64,8 +78,11 @@ class BaseUpdater:
         for m in members.all():
             self.upvote(m, vote)
 
-        with ThreadPoolExecutor(max_workers=members.count()) as executor:
-            executor.map(lambda m: self.upvote(m, vote), members.all())
+        # with ThreadPoolExecutor(max_workers=members.count()) as executor:
+        #     executor.map(lambda m: self.upvote(m, vote), members.all())
+
+        close_old_connections()
+        logger.info('Upvote %s' % vote['permlink'])
 
     def vote(self, vote):
         if vote['voter'] in CURATORS:
@@ -210,7 +227,6 @@ class BaseUpdater:
                     )
 
                 i += 1
-                print(i, '/', self.count)
             except Exception as e:
                 logging.exception('Ошибка выборки поста')
 
@@ -233,6 +249,9 @@ class BaseUpdater:
         )[0]
 
     def get_author(self, username):
+        if username in BAN_LIST and self.blockchain.name == 'golos':
+            raise BannedAccount()
+
         try:
             user_bc = UserBlockChain.objects.get(
                 username=username.lower(),
