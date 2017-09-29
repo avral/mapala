@@ -15,6 +15,7 @@ from apps.auth import urls as auth_urls
 from apps.pages import views as page_views
 from apps.groups import views as groups_views
 from apps.auth_api import views as auth_views
+from apps.passcode import views as pass_views
 
 
 logger = logging.getLogger('mapala')
@@ -28,6 +29,7 @@ router.register('blockchains', auth_views.BlockChainViewSet)
 router.register('user-blockchains', auth_views.UserBlockChainViewSet, base_name='user_blockchains')
 router.register('markers', page_views.MarkerViewSet, base_name='markers')
 router.register('groups', groups_views.GroupViewSet)
+router.register('pass-request', pass_views.PassRequestViewSet)
 
 
 urlpatterns = []

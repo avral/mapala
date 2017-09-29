@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'apps.locomotive',
     'apps.auth_api',
     'apps.groups',
+    'apps.passcode',
     'mptt',
     # 'pagedown',
     # 'tagulous',

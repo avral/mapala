@@ -259,7 +259,7 @@ def register(request):
 
     slz = UserRegiserSerializer(data=request.data)
 
-    if slz.is_valid():
+    if slz.is_valid(raise_exception=True):
         password = slz.validated_data['password']
         bc_username = slz.validated_data['bc_username']
 
@@ -309,8 +309,6 @@ def register(request):
             PasswordKey(bc_username, password, role="posting").get_private()
         )
         return Response(result)
-    else:
-        return Response(slz._errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['POST'])
