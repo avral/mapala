@@ -112,6 +112,9 @@ export default {
     history: 'History',
     blog: 'Blog',
     add_key: 'Add, please, the PRIVATE posting key in your account settings',
+    telephone: 'Telephone',
+    verify_phone: 'Get an SMS',
+    sms_code: 'SMS code',
   },
   ru: {
     city: 'Город',
@@ -224,6 +227,9 @@ export default {
     update: 'Обновить',
     user_blog: 'Блог пользователя',
     wallet: 'Кошелек',
-    weekly_revenues: 'Поступления за неделю'
+    weekly_revenues: 'Поступления за неделю',
+    telephone: 'Телефон',
+    verify_phone: 'Получить смс',
+    sms_code: 'SMS код',
   }
 }
