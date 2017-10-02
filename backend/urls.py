@@ -1,3 +1,4 @@
+import re
 import django
 import logging
 import requests
@@ -6,6 +7,9 @@ from django.conf import settings
 from django.contrib import admin
 from django.conf.urls import url, include
 from django.http import HttpResponse
+from django.template.loader import render_to_string
+from backend.settings import PRERENDER_PROXY, PRERENDER_UA_REGEX
+
 
 from rest_framework.routers import DefaultRouter
 from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token
@@ -53,23 +57,47 @@ def alfa(request):
     return HttpResponse(r.content, content_type=r.headers['content-type'])
 
 
+def ssr(request):
+    """ HACK Рендерим страничку для робота """
+    user_agent = request.META.get('HTTP_USER_AGENT', '')
+
+    if re.search(PRERENDER_UA_REGEX, user_agent, re.I) and user_agent:
+        url = PRERENDER_PROXY + request.build_absolute_uri()
+
+        try:
+            html = requests.get(url, allow_redirects=False).text
+        except requests.exceptions.ConnectionError:
+            logger.warning('Prerender connection err: %s' % url)
+            return HttpResponse(status=500)
+    else:
+        html = render_to_string('base.html')
+
+    return HttpResponse(html)
+
+
 urlpatterns += [
     url(r'^admin/', admin.site.urls),
 
-    # TODO перенести в модуль авторизации
-    url(r'^api/auth/login/', obtain_jwt_token),
-    url(r'^api/auth/refresh/', refresh_jwt_token),
-    url(r'^api/auth/sign-up/', auth_views.register),
-    url(r'^api/auth/existng-sign-up/', auth_views.register_existing_user),
+    # DACom Auth
+    url(r'^auth/', include(auth_urls)),
+
+    url(r'^api-auth/', obtain_jwt_token),
+    url(r'^api-auth-refresh/', refresh_jwt_token),
     url(r'^api/email_request/', auth_views.EmaliRequestView.as_view()),
 
     # TODO Вынести в ресурс картинок
-    url(r'^api/images/', page_views.post_image),
+    url(r'^post_image/', page_views.post_image),
 
     url(r'^api/v1/', alfa),
 
+    url(r'^sign-up/', auth_views.register),
+    url(r'^existng-sign-up/', auth_views.register_existing_user),
     url(r'^api/', include(router.urls)),
 
     # Паравозик
     url(r'^api/locomotive/', LocoView.as_view()),
+
+    # Vue on frontend
+    # url(r'^', TemplateView.as_view(template_name='base.html'))
+    url(r'^', ssr)
 ]
