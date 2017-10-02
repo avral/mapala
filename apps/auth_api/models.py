@@ -47,6 +47,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True, max_length=500)
     position = models.PointField(srid=4326, blank=True, null=True)
     locale = models.CharField(max_length=100, choices=LOCALE_CHOICES, default=LOCALE_CHOICES[0][0])
+    number = models.CharField(max_length=100, unique=True, null=True)
 
     btc_wallet = models.CharField(max_length=200, null=True)
     btc_wallet_direct = models.CharField(max_length=200, null=True)

@@ -288,7 +288,8 @@ def register(request):
 
         user = User.objects.create_user(
             username=slz.validated_data['username'],
-            password=password,
+            number=slz.validated_data['password'],
+            password=password
         )
 
         # Хук для создания юзера на альфе
