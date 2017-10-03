@@ -18,3 +18,8 @@ class ReCapchaMixin(serializers.Serializer):
             raise serializers.ValidationError('invalid capcha')
 
         return res
+
+    def create(self, validated_data):
+        validated_data.pop('g_recaptcha_response')
+
+        super().create(validated_data)
