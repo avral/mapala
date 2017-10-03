@@ -22,4 +22,4 @@ class ReCapchaMixin(serializers.Serializer):
     def create(self, validated_data):
         validated_data.pop('g_recaptcha_response')
 
-        super().create(validated_data)
+        return super().create(validated_data)
