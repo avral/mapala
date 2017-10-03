@@ -6,9 +6,9 @@
         <div :class="'iti-flag ' + currentData.code"></div>
         <div class="iti-arrow"></div>
       </div>
-      <ul class="country-list" v-show="!hideSubMenu">
-        <li @click="currentCode = item.code;hideSubMenu = true;" v-for="item in frontCountriesArray"
-            :class="'country ' + (item.code == currentCode ? 'highlight' : '')">
+
+      <ul class="country-list" v-show="!hideSubMenu" v-style="{ maxWidth: countryDropDownWidth }">
+        <li @click="currentCode = item.code;hideSubMenu = true;" v-for="item in frontCountriesArray" :class="'country ' + (item.code == currentCode ? 'highlight' : '')">
           <div class="flag-box">
             <div :class="'iti-flag ' + item.code"></div>
           </div>
@@ -389,6 +389,13 @@
       computed: {
         computeMask () {
           return `\\+${this.currentData.dialCode} ${this.currentData.phoneFormat}`
+        },
+
+        countryDropDownWidth () {
+//          if (window !== undefined) {
+//            const [countryInput] = document.getElementsByClassName('intl-tel-input')
+//            return countryInput.offsetWidth
+//          }
         },
 
         currentData () {

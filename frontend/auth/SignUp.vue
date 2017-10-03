@@ -41,7 +41,7 @@
 
             </div>
             <vue-recaptcha v-show="!isPhoneVerified" ref="recaptcha" sitekey="6LfKfS8UAAAAAHEecRYjwgsL7p2SDXriEC5m0Otc" @verify="success"></vue-recaptcha>
-            <el-button class="submit-button" :disabled="isSubmitDisabled" :loading="loading" @click="signUp" v-text="buttonText"></el-button>
+            <el-button class="submit-button" :disabled="!isSubmitAllowed" :loading="loading" @click="signUp" v-text="buttonText"></el-button>
 
         </div>
     </form>
@@ -82,8 +82,8 @@
       buttonText () {
         return this.isPhoneVerified || this.golosAlreadyReg ? this.$t('sign_in') : this.$t('verify_phone')
       },
-      isSubmitDisabled () {
-        return !this.isPhoneValid
+      isSubmitAllowed () {
+        return this.golosAlreadyReg || (this.isPhoneValid && this.recaptcha)
       }
     },
     methods: {
