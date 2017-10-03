@@ -2,16 +2,17 @@ from datetime import datetime, timedelta
 
 from rest_framework import serializers
 
+from apps.common.mixins import ReCapchaMixin
 from apps.auth_api.models import User
 from apps.passcode.models import PassRequest
 
 
-class PassRequestSerializer(serializers.ModelSerializer):
+class PassRequestSerializer(ReCapchaMixin, serializers.ModelSerializer):
     number = serializers.CharField()
 
     class Meta:
         model = PassRequest
-        fields = 'id', 'number'
+        fields = 'id', 'number', 'g_recaptcha_response'
 
     def validate_number(self, data):
         if User.objects.filter(number=data).exists():

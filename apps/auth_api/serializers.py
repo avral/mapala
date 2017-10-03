@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from rest_framework.serializers import ValidationError
 
+from apps.blockchains.sync import BaseUpdater
 from apps.common.utils import is_eng
 from apps.common.mixins import ReCapchaMixin
 from apps.common.serializers import WifSerializer
@@ -8,7 +9,7 @@ from apps.auth_api.models import User, BlockChain, UserBlockChain
 from apps.passcode.serializers import PassRequestValidateSerializer
 
 
-class UserRegiserBaseSerializer(ReCapchaMixin, serializers.Serializer):
+class UserRegiserBaseSerializer(serializers.Serializer):
     username = serializers.RegexField('^[\d\w.-]+$')
     password = serializers.CharField()
 
@@ -31,10 +32,18 @@ class UserRegiserSerializer(PassRequestValidateSerializer,
     def validate_bc_username(self, data):
         bc_username = data.lower()
 
+        bc = BaseUpdater().rpc.rpc
+
+        if bc.get_account(bc_username) is not None:
+            raise serializers.ValidationError('Username exist in blockchain')
+
         return bc_username
 
 
-class ExistUserRegiserSerializer(WifSerializer, UserRegiserBaseSerializer):
+class ExistUserRegiserSerializer(
+        ReCapchaMixin,
+        WifSerializer,
+        UserRegiserBaseSerializer):
     pass
 
 
