@@ -5,6 +5,9 @@ vue.use(resource)
 
 export const http = vue.http
 
+export const Verifier = vue.resource('/api/pass-request/', {}, {
+  'phone': { method: 'POST', url: '/api/pass-request/' }
+})
 export const Locomotive = vue.resource('/api/locomotive/')
 export const EmailRequest = vue.resource('/api/email_request/')
 export const Tag = vue.resource('/api/tags{/id}/')

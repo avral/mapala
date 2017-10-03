@@ -144,6 +144,20 @@
   background-image: url('../assets/icon-pass.svg');
 }
 
+.login-form .i-phone + label:before{
+  background-image: url('../assets/icon-phone.svg');
+  background-size: contain;
+  width: 24px;
+  margin-left: 8px;
+}
+
+  .login-form .i-sms + label:before{
+  background-image: url('../assets/icon-sms.svg');
+  background-size: contain;
+  width: 24px;
+  margin-left: 8px;
+}
+
 .login-form .i-key + label:before{
   background-image: url('../assets/icon-key.svg');
 }
