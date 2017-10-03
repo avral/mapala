@@ -23,24 +23,30 @@
         </li>
       </ul>
     </div>
-    <input type="tel" v-bind:value="value" class="form-control inpt" autocomplete="off" :placeholder="currentData.phoneFormat">
+    <!--<input type="tel" v-bind:value="value" class="form-control inpt" autocomplete="off" :placeholder="currentData.phoneFormat">-->
+    <div class="inpt_w">
+      <masked-input class="inpt i-phone" v-model="value" :mask="computeMask" :placeholder="$t('telephone')" @input="rawVal = arguments[1]"/><label></label>
+    </div>
+
   </div>
 </template>
 <script>
+  import MaskedInput from 'vue-masked-input'
+
   export default (function() {
     const countries = {
-      "af":{"code":"af","name":"Afghanistan (‫افغانستان‬‎)","dialCode":93,"phoneFormat":"070 123 4567"},
-      "al":{"code":"al","name":"Albania (Shqipëri)","dialCode":355,"phoneFormat":"066 123 4567"},
-      "dz":{"code":"dz","name":"Algeria (‫الجزائر‬‎)","dialCode":213,"phoneFormat":"0551 23 45 67"},
-      "as":{"code":"as","name":"American Samoa","dialCode":1684,"phoneFormat":"(684) 733-1234"},
-      "ad":{"code":"ad","name":"Andorra","dialCode":376,"phoneFormat":"312 345"},
-      "ao":{"code":"ao","name":"Angola","dialCode":244,"phoneFormat":"923 123 456"},
-      "ai":{"code":"ai","name":"Anguilla","dialCode":1264,"phoneFormat":"(264) 235-1234"},
-      "ag":{"code":"ag","name":"Antigua and Barbuda","dialCode":1268,"phoneFormat":"(268) 464-1234"},
-      "ar":{"code":"ar","name":"Argentina","dialCode":54,"phoneFormat":"011 15-2345-6789"},
-      "am":{"code":"am","name":"Armenia (Հայաստան)","dialCode":374,"phoneFormat":"077 123456"},
-      "aw":{"code":"aw","name":"Aruba","dialCode":297,"phoneFormat":"560 1234"},
-      "au":{"code":"au","name":"Australia","dialCode":61,"phoneFormat":"0412 345 678"},
+      "af":{"code":"af","name":"Afghanistan (‫افغانستان‬‎)","dialCode":93,"phoneFormat":"111 111 1111"},
+      "al":{"code":"al","name":"Albania (Shqipëri)","dialCode":355,"phoneFormat":"111 111 1111"},
+      "dz":{"code":"dz","name":"Algeria (‫الجزائر‬‎)","dialCode":213,"phoneFormat":"1111 11 11 11"},
+      "as":{"code":"as","name":"American Samoa","dialCode":1684,"phoneFormat":"(111) 111-1111"},
+      "ad":{"code":"ad","name":"Andorra","dialCode":376,"phoneFormat":"111 111"},
+      "ao":{"code":"ao","name":"Angola","dialCode":244,"phoneFormat":"111 111 111"},
+      "ai":{"code":"ai","name":"Anguilla","dialCode":1264,"phoneFormat":"(111) 111-1111"},
+      "ag":{"code":"ag","name":"Antigua and Barbuda","dialCode":1268,"phoneFormat":"(111) 111-1111"},
+      "ar":{"code":"ar","name":"Argentina","dialCode":54,"phoneFormat":"111 11-1111-1111"},
+      "am":{"code":"am","name":"Armenia (Հայաստան)","dialCode":374,"phoneFormat":"111 111111"},
+      "aw":{"code":"aw","name":"Aruba","dialCode":297,"phoneFormat":"111 1111"},
+      "au":{"code":"au","name":"Australia","dialCode":61,"phoneFormat":"1111 111 111"},
       "at":{"code":"at","name":"Austria (Österreich)","dialCode":43,"phoneFormat":"0664 123456"},
       "az":{"code":"az","name":"Azerbaijan (Azərbaycan)","dialCode":994,"phoneFormat":"040 123 45 67"},
       "bs":{"code":"bs","name":"Bahamas","dialCode":1242,"phoneFormat":"(242) 359-1234"},
@@ -68,9 +74,9 @@
       "ca":{"code":"ca","name":"Canada","dialCode":1,"phoneFormat":"(204) 234-5678"},
       "cv":{"code":"cv","name":"Cape Verde (Kabu Verdi)","dialCode":238,"phoneFormat":"991 12 34"},
       "bq":{"code":"bq","name":"Caribbean Netherlands","dialCode":599,"phoneFormat":"318 1234"},
-      "ky":{"code":"ky","name":"Cayman Islands","dialCode":1345,"phoneFormat":"(345) 323-1234"},
+      "ky":{"code":"ky","name":"Cayman Islands","dialCode":1345,"phoneFormat":"(345) 111-1111"},
       "cf":{"code":"cf","name":"Central African Republic (République centrafricaine)","dialCode":236,"phoneFormat":"70 01 23 45"},
-      "td":{"code":"td","name":"Chad (Tchad)","dialCode":235,"phoneFormat":"63 01 23 45"},
+      "td":{"code":"td","name":"Chad (Tchad)","dialCode":235,"phoneFormat":"11 11 11 11"},
       "cl":{"code":"cl","name":"Chile","dialCode":56,"phoneFormat":"09 6123 4567"},
       "cn":{"code":"cn","name":"China (中国)","dialCode":86,"phoneFormat":"131 2345 6789"},
       "cx":{"code":"cx","name":"Christmas Island","dialCode":61,"phoneFormat":"0412 345 678"},
@@ -205,7 +211,7 @@
       "qa":{"code":"qa","name":"Qatar (‫قطر‬‎)","dialCode":974,"phoneFormat":"3312 3456"},
       "re":{"code":"re","name":"Réunion (La Réunion)","dialCode":262,"phoneFormat":"0692 12 34 56"},
       "ro":{"code":"ro","name":"Romania (România)","dialCode":40,"phoneFormat":"0712 345 678"},
-      "ru":{"code":"ru","name":"Russia (Россия)","dialCode":7,"phoneFormat":"8 (912) 345-67-89"},
+      "ru":{"code":"ru","name":"Russia (Россия)","dialCode":7,"phoneFormat":"(111) 111-11-11"},
       "rw":{"code":"rw","name":"Rwanda","dialCode":250,"phoneFormat":"0720 123 456"},
       "bl":{"code":"bl","name":"Saint Barthélemy (Saint-Barthélemy)","dialCode":590,"phoneFormat":"0690 30-1234"},
       "sh":{"code":"sh","name":"Saint Helena","dialCode":290,"phoneFormat":"51234"},
@@ -258,7 +264,7 @@
       "gb":{"code":"gb","name":"United Kingdom","dialCode":44,"phoneFormat":"07400 123456"},
       "vi":{"code":"vi","name":"U.S. Virgin Islands","dialCode":1340,"phoneFormat":"(340) 642-1234"},
       "ug":{"code":"ug","name":"Uganda","dialCode":256,"phoneFormat":"0712 345678"},
-      "ua":{"code":"ua","name":"Ukraine (Україна)","dialCode":380,"phoneFormat":"039 123 4567"},
+      "ua":{"code":"ua","name":"Ukraine (Україна)","dialCode":380,"phoneFormat":"(11) 111 1111"},
       "ae":{"code":"ae","name":"United Arab Emirates (‫الإمارات العربية المتحدة‬‎)","dialCode":971,"phoneFormat":"050 123 4567"},
       "uy":{"code":"uy","name":"Uruguay","dialCode":598,"phoneFormat":"094 231 234"},
       "uz":{"code":"uz","name":"Uzbekistan (Oʻzbekiston)","dialCode":998,"phoneFormat":"8 91 234 56 78"},
@@ -296,15 +302,20 @@
         return {
           currentCode: this.countryCode,
           hideSubMenu: true,
-          value: ''
+          value: '',
+          rawVal: ''
         }
       },
       computed: {
-        currentData() {
+        computeMask () {
+          return `\\+${this.currentData.dialCode} ${this.currentData.phoneFormat}`
+        },
+
+        currentData () {
           return countries[this.currentCode];
         },
 
-        frontCountriesArray() {
+        frontCountriesArray () {
           const toFrontCodes = {};
 
           this.toFront.forEach((code) => {
@@ -319,7 +330,7 @@
           return toFrontCodes;
         },
 
-        countriesArray() {
+        countriesArray () {
           const countryCopie = {...countries};
 
           this.toFront.forEach((code) => {
@@ -328,6 +339,16 @@
 
           return countryCopie;
         }
+      },
+
+      watch: {
+        'rawVal' () {
+          this.$emit('phoneNumberChanged', this.value)
+        }
+      },
+
+      components: {
+        MaskedInput
       }
     };
   }());
@@ -362,7 +383,6 @@
     position: relative;
     z-index: 0;
     margin-top: 0 !important;
-    margin-bottom: 0 !important;
     padding-right: 36px;
     margin-right: 0; }
   .intl-tel-input .flag-container {
@@ -397,7 +417,7 @@
     border-bottom: 4px solid #555; }
   .intl-tel-input .country-list {
     position: absolute;
-    z-index: 2;
+    z-index: 9999;
     list-style: none;
     text-align: left;
     padding: 0;
@@ -407,7 +427,9 @@
     border: 1px solid #CCC;
     white-space: nowrap;
     max-height: 200px;
-    overflow-y: scroll; }
+    overflow-y: scroll;
+    right: 1px;
+    width: 707%;}
   .intl-tel-input .country-list.dropup {
     bottom: 100%;
     margin-bottom: -1px; }
@@ -436,8 +458,8 @@
     padding-left: 52px;
     margin-left: 0; }
   .intl-tel-input.allow-dropdown .flag-container, .intl-tel-input.separate-dial-code .flag-container {
-    right: auto;
-    left: 0; }
+    right: 0;
+    left: auto; }
   .intl-tel-input.allow-dropdown .selected-flag, .intl-tel-input.separate-dial-code .selected-flag {
     width: 46px; }
   .intl-tel-input.allow-dropdown .flag-container:hover {

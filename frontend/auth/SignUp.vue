@@ -26,13 +26,13 @@
                     <input type="text" placeholder="Желаемый Golos.io username" v-model="bc_username" class="inpt i-user"><label></label>
                 </div>
 
-              <div class="inpt_w">
-                <masked-input class="inpt i-phone" v-model="phone" mask="\+ 1 (111) 111-11-111" :placeholder="$t('telephone')" @input="rawVal = arguments[1]"/><label></label>
-              </div>
-
               <!--<div class="inpt_w">-->
-                <!--<country-input></country-input>-->
+                <!--<masked-input class="inpt i-phone" v-model="phone" mask="\+ 1 (111) 111-11-111" :placeholder="$t('telephone')" @input="rawVal = arguments[1]"/><label></label>-->
               <!--</div>-->
+
+              <div class="inpt_w">
+                <country-input @phoneNumberChanged="updatePhoneNumber"></country-input>
+              </div>
 
               <div class="inpt_w" v-if="isSmsCodeInputVisible">
                 <input v-model="pass_code" :placeholder="$t('sms_code')" type="text" class="inpt i-sms"><label></label>
@@ -101,17 +101,20 @@
           creds.wif = this.wif
           auth.existngSignUp(this, creds, { name: 'index' })
         } else if (!this.isPhoneVerified) {
-          Verifier.phone({ number: this.phone }).then(() => {
+          Verifier.phone({
+            number: this.rawVal,
+            g_recaptcha_response: this.recaptcha
+          }).then(() => {
             this.isSmsCodeInputVisible = true
             this.isPhoneVerified = true
-          })
+          }).catch(error => showErrors(error.data, this))
         } else if (this.isPhoneVerified) {
           auth.signUp(this, {
             username: this.username,
             bc_username: this.bc_username,
             password: this.password,
             g_recaptcha_response: this.recaptcha,
-            number: this.phone,
+            number: this.rawVal,
             passcode: this.pass_code
           }, { name: 'index' })
         }
@@ -135,11 +138,14 @@
         User.get({username: this.username}).then(res => {
           this.config.userExists = true
         })
+      },
+      updatePhoneNumber (phone) {
+        this.rawVal = phone
       }
     },
     watch: {
       'rawVal' () {
-        this.rawVal.replace(/_/g, '').length >= 10 ? this.isPhoneValid = true : this.isPhoneValid = false
+        this.rawVal.indexOf('_') === -1 ? this.isPhoneValid = true : this.isPhoneValid = false
       }
     }
   }
