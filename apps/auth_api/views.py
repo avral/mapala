@@ -268,9 +268,6 @@ def register(request):
             keys=[settings.REGISTRAR['wif']]
         )
 
-        if golos.rpc.get_account(bc_username) is not None:
-            raise ValidationError('Username exist in blockchain')
-
         try:
             golos.create_account(
                 bc_username,
