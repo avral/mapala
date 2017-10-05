@@ -285,7 +285,7 @@ def register(request):
 
         user = User.objects.create_user(
             username=slz.validated_data['username'],
-            number=slz.validated_data['password'],
+            number=slz.validated_data['number'],
             password=password
         )
 

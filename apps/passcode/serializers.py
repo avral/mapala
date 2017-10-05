@@ -37,8 +37,8 @@ class PassRequestValidateSerializer(serializers.Serializer):
     passcode = serializers.CharField()
 
     def validate(self, data):
-        # Код активен в течении двух минут
-        active_time = datetime.now() - timedelta(minutes=2)
+        # Код активен в течении четырех минут
+        active_time = datetime.now() - timedelta(minutes=4)
 
         if not PassRequest.objects.filter(
             number=data['number'],
