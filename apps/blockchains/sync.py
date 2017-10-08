@@ -1,23 +1,20 @@
-import logging
 import json
-from concurrent.futures import ThreadPoolExecutor
+import logging
+from multiprocessing import Process
 
 from piston.steem import Steem
 from piston.post import Post
 from piston.exceptions import PostDoesNotExist
-from pistonbase import operations
-from piston.transactionbuilder import TransactionBuilder
 
 from django.contrib.gis.geos import Point
 from django.utils import timezone
 from django.core.exceptions import ObjectDoesNotExist
-from django.db import close_old_connections
 
 from backend.settings import APP_FETCH_FROM, CURATORS
+from apps.locomotive.core import locomotive_upvote
 from apps.auth_api.models import UserBlockChain, BlockChain, User
 from apps.pages.models import Page, Comment
 from apps.blockchains.data_bases import BlockChainDB
-from apps.locomotive.models import LocoMember
 
 
 logger = logging.getLogger('mapala.fetch')
@@ -53,45 +50,14 @@ class BaseUpdater:
         except BannedAccount:
             logger.warning('banned account %s' % post.author)
 
-    def upvote(self, member, vote):
-        op = operations.Vote(
-            **{"voter": member.user_blockchain.username,
-               "author": vote['author'],
-               "permlink": vote['permlink'],
-               "weight": vote['weight']}
-        )
-
-        try:
-            tx = TransactionBuilder(steem_instance=self.rpc)
-            tx.appendOps(op)
-            tx.appendWif(member.wif)
-            tx.sign()
-            tx.broadcast()
-        except Exception as e:
-            logger.exception('Err upvote')
-
-    def locomotive_upvote(self, vote):
-        members = LocoMember.objects.filter(
-            user_blockchain__blockchain=self.blockchain
-        )
-
-        for m in members.all():
-            self.upvote(m, vote)
-
-        # with ThreadPoolExecutor(max_workers=members.count()) as executor:
-        #     executor.map(lambda m: self.upvote(m, vote), members.all())
-
-        close_old_connections()
-        logger.info('Upvote %s' % vote['permlink'])
-
     def vote(self, vote):
-        if vote['voter'] in CURATORS:
-            self.locomotive_upvote(vote)
-
         if (Page.on_bc.filter(permlink=vote['permlink']).exists() and
                 UserBlockChain.on_bc.filter(username=vote['author'])):
             # Обновляем каждый пост по которому кто то голосует
             self.update_post(vote['author'], vote['permlink'])
+
+        if vote['voter'] in CURATORS:
+            Process(target=locomotive_upvote, args=(vote,)).start()
 
     def upgrade_comment(self, comm):
         author = self.get_author(comm.parent_author)
