@@ -1,9 +1,11 @@
 import logging
 
 from pistonbase import operations
+from pistonapi.exceptions import AlreadyVotedSimilarily, OnlyVoteOnceEvery3Seconds
 from piston.transactionbuilder import TransactionBuilder
 
 
+from apps.common.utils import ScheduleArray
 from apps.locomotive.models import LocoMember
 
 
@@ -18,8 +20,10 @@ def locomotive_upvote(vote):
         user_blockchain__blockchain=updater.blockchain
     )
 
+    sch_queue = ScheduleArray((i, 0) for i in members.all())
+
     done = 0
-    for member in members.all():
+    for member in sch_queue:
         op = operations.Vote(
             **{"voter": member.user_blockchain.username,
                "author": vote['author'],
@@ -35,6 +39,11 @@ def locomotive_upvote(vote):
             tx.broadcast()
 
             done += 1
+        except OnlyVoteOnceEvery3Seconds:
+            # Добавляем обратно в список, на повтор через 3 сек
+            sch_queue.append(member, 3)
+        except AlreadyVotedSimilarily:
+            pass
         except Exception as e:
             logger.exception('Err upvote')
 
