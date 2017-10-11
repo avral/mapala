@@ -6,9 +6,8 @@ from PIL import Image, ImageOps
 from piston.exceptions import AccountExistsException
 from pistonbase.account import PasswordKey
 from django.core.files.base import ContentFile
-from django.core.exceptions import ObjectDoesNotExist, AccountExistsException
+from django.core.exceptions import ObjectDoesNotExist
 from pistonbase.account import PrivateKey
-from piston.steem import Steem
 
 from django.db import IntegrityError
 from rest_framework import viewsets, status
