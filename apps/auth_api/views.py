@@ -6,7 +6,7 @@ from PIL import Image, ImageOps
 from piston.exceptions import AccountExistsException
 from pistonbase.account import PasswordKey
 from django.core.files.base import ContentFile
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, AccountExistsException
 from pistonbase.account import PrivateKey
 from piston.steem import Steem
 
@@ -275,6 +275,9 @@ def register(request):
                 creator=settings.REGISTRAR['name'],
                 storekeys=False,
             )['operations'][0][1]
+        except AccountExistsException:
+            return Response('Blockchain account name already exists',
+                            status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             logger.exception('Ошибка создания юзера golos')
             return Response('Invalid blockchain username',
