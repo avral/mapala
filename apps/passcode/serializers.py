@@ -8,12 +8,8 @@ from apps.auth_api.models import User
 from apps.passcode.models import PassRequest
 
 
-class PassRequestSerializer(ReCapchaMixin, serializers.ModelSerializer):
+class NumberSerializer(serializers.Serializer):
     number = serializers.CharField()
-
-    class Meta:
-        model = PassRequest
-        fields = 'id', 'number', 'g_recaptcha_response'
 
     def validate_number(self, number):
         number = format_number(parse(number), PhoneNumberFormat.E164)
@@ -23,20 +19,31 @@ class PassRequestSerializer(ReCapchaMixin, serializers.ModelSerializer):
                 'User with this phone already exists: %s' %
                 User.objects.get(number=number).username)
 
+        return number
+
+
+class PassRequestSerializer(ReCapchaMixin,
+                            NumberSerializer,
+                            serializers.ModelSerializer):
+
+    def validate(self, data):
         # Отправить код можно только раз в 5 минут.
         active_time = datetime.now() - timedelta(minutes=5)
 
         if PassRequest.objects.filter(
-                number=number,
+                number=data['number'],
                 created_at__gt=active_time):
 
             raise serializers.ValidationError('SMS can be sent in 5 minutes')
 
-        return number
+        return data
+
+    class Meta:
+        model = PassRequest
+        fields = 'id', 'number', 'g_recaptcha_response'
 
 
-class PassRequestValidateSerializer(serializers.Serializer):
-    number = serializers.CharField()
+class PassRequestValidateSerializer(NumberSerializer):
     passcode = serializers.CharField()
 
     def validate(self, data):

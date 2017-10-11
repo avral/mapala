@@ -25,8 +25,8 @@ class UserRegiserBaseSerializer(serializers.Serializer):
         return username
 
 
-class UserRegiserSerializer(PassRequestValidateSerializer,
-                            UserRegiserBaseSerializer):
+class UserRegiserSerializer(UserRegiserBaseSerializer,
+                            PassRequestValidateSerializer):
     bc_username = serializers.CharField()
 
     def validate_bc_username(self, data):
