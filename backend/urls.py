@@ -7,11 +7,11 @@ from django.contrib import admin
 from django.conf.urls import url, include
 from django.http import HttpResponse
 
+
 from rest_framework.routers import DefaultRouter
 from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token
 
 from apps.locomotive.views import LocoView
-from apps.auth import urls as auth_urls
 from apps.pages import views as page_views
 from apps.groups import views as groups_views
 from apps.auth_api import views as auth_views

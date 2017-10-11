@@ -2,10 +2,12 @@ from random import randint
 
 from django.db import models
 
+from apps.auth_api.models import User
 from apps.common.twilio import twilio
 
 
 class PassRequest(models.Model):
+    user = models.ForeignKey(User, null=True)
     number = models.CharField(max_length=100, null=True)
     code = models.IntegerField(null=True)
 
@@ -20,8 +22,7 @@ class PassRequest(models.Model):
 
             twilio.messages.create(
                 to=self.number,
-                #from_="Mapala",
-                from_='+46769437584',
+                from_='Mapala',
                 body='Hello from Mapala! Your code: %s' % self.code
             )
 

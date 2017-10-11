@@ -6,7 +6,7 @@ from PIL import Image, ImageOps
 from piston.exceptions import AccountExistsException
 from pistonbase.account import PasswordKey
 from django.core.files.base import ContentFile
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, AccountExistsException
 from pistonbase.account import PrivateKey
 from piston.steem import Steem
 
@@ -268,9 +268,6 @@ def register(request):
             keys=[settings.REGISTRAR['wif']]
         )
 
-        if golos.rpc.get_account(bc_username) is not None:
-            raise ValidationError('Username exist in blockchain')
-
         try:
             golos.create_account(
                 bc_username,
@@ -278,6 +275,9 @@ def register(request):
                 creator=settings.REGISTRAR['name'],
                 storekeys=False,
             )['operations'][0][1]
+        except AccountExistsException:
+            return Response('Blockchain account name already exists',
+                            status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             logger.exception('Ошибка создания юзера golos')
             return Response('Invalid blockchain username',
@@ -288,7 +288,8 @@ def register(request):
 
         user = User.objects.create_user(
             username=slz.validated_data['username'],
-            password=password,
+            number=slz.validated_data['number'],
+            password=password
         )
 
         # Хук для создания юзера на альфе
