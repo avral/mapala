@@ -41,7 +41,6 @@ class UserRegiserSerializer(UserRegiserBaseSerializer,
 
 
 class ExistUserRegiserSerializer(
-        ReCapchaMixin,
         WifSerializer,
         UserRegiserBaseSerializer):
     pass
