@@ -81,8 +81,6 @@ def deploy():
         run('git pull origin %s --no-edit' % env.brunch)
         with source_virtualenv():
             run('source .env/bin/activate && pip install -r requirements.txt')
-            run('npm install')
-            run('npm run build')
             run('./manage collectstatic --noinput')
             run('./manage migrate')
 
