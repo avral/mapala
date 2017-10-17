@@ -57,7 +57,8 @@ class BaseUpdater:
             self.update_post(vote['author'], vote['permlink'])
 
         if vote['voter'] in CURATORS:
-            Process(target=locomotive_upvote, args=(vote,)).start()
+            # В одном потоке работает паравозик
+            locomotive_upvote(vote)
 
     def upgrade_comment(self, comm):
         author = self.get_author(comm.parent_author)
