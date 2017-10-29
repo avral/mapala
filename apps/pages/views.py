@@ -56,6 +56,7 @@ class PageFilter(filters.FilterSet):
 class PageViewSet(MultiSerializerViewSetMixin, viewsets.ModelViewSet):
     filter_class = PageFilter
     filter_fields = 'author__username', 'has_point', 'created_at'
+    ordering_fields = 'total_payout_value',
     lookup_value_regex = '[A-Za-z0-9.@_*-]+'
     pagination_class = _CustomPageViewSetPagination
     permission_classes = IsOwnerOrReadOnly,
